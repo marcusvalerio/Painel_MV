@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#06060a" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)">
+<title>MV — Painel</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;400;600;700&family=DM+Sans:wght@300;400;500&family=Titillium+Web:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── TOKENS ── */
+:root {
+  --orange: #ED4B00;
+  --orange2: #ff6a20;
+  --ease: cubic-bezier(.16,1,.3,1);
+  --radius: 14px;
+  --radius-sm: 8px;
+}
+
+/* LIGHT */
+:root {
+  --bg: #f5f5f7;
+  --bg2: #ffffff;
+  --bg3: #ebebed;
+  --text: #1a1a1f;
+  --muted: #6e6e80;
+  --subtle: #b0b0be;
+  --border: rgba(0,0,0,.08);
+  --glass: rgba(255,255,255,.7);
+  --glass-border: rgba(0,0,0,.08);
+  --glass-blur: blur(20px) saturate(180%);
+  --card-shadow: 0 2px 20px rgba(0,0,0,.08);
+  --nav-bg: rgba(245,245,247,.8);
+  --tag-bg: rgba(0,0,0,.06);
+}
+
+/* DARK */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #06060a;
+    --bg2: #111116;
+    --bg3: #1a1a22;
+    --text: #f0eff5;
+    --muted: #7a7990;
+    --subtle: #3a3a4a;
+    --border: rgba(255,255,255,.08);
+    --glass: rgba(255,255,255,.04);
+    --glass-border: rgba(255,255,255,.10);
+    --card-shadow: 0 8px 40px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.06);
+    --nav-bg: rgba(6,6,10,.7);
+    --tag-bg: rgba(255,255,255,.07);
+  }
+}
+
+html, body {
+  height: 100%; overflow: hidden;
+  background: var(--bg); color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px; line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── LAYOUT ── */
+.app {
+  display: flex; flex-direction: column;
+  height: 100svh; position: relative;
+}
+
+.screen {
+  display: none; flex: 1; overflow-y: auto;
+  padding: 0 0 90px 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+.screen.active { display: flex; flex-direction: column; }
+
+/* ── NOISE (dark only) ── */
+@media (prefers-color-scheme: dark) {
+  .app::before {
+    content: ''; position: fixed; inset: 0;
+    pointer-events: none; z-index: 0; opacity: .025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 180px 180px; mix-blend-mode: overlay;
+  }
+}
+
+/* ── TOP BAR ── */
+.topbar {
+  position: sticky; top: 0; z-index: 50;
+  padding: env(safe-area-inset-top, 44px) 1.25rem .9rem;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: flex-end; justify-content: space-between;
+}
+
+@media (prefers-color-scheme: dark) {
+  .topbar {
+    background: rgba(6,6,10,.85);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+  }
+}
+
+.topbar-title {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 600; font-size: 1.4rem;
+  letter-spacing: .02em; text-transform: uppercase;
+  color: var(--text);
+}
+
+.topbar-title span { color: var(--orange); }
+
+.topbar-action {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: var(--orange); color: white; border: none;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem; cursor: pointer; flex-shrink: 0;
+  box-shadow: 0 4px 16px rgba(237,75,0,.35);
+  transition: transform .2s var(--ease);
+}
+
+.topbar-action:hover { transform: scale(1.08); }
+
+/* ── CARDS ── */
+.card {
+  background: var(--bg2);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+  position: relative;
+}
+
+@media (prefers-color-scheme: dark) {
+  .card {
+    background: var(--glass);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+  }
+  .card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.1), transparent);
+  }
+}
+
+/* ── TAGS ── */
+.tag {
+  display: inline-flex; align-items: center;
+  padding: .2rem .65rem;
+  border-radius: 100px;
+  font-family: 'Titillium Web', sans-serif;
+  font-size: .6rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  background: var(--tag-bg); color: var(--muted);
+}
+
+.tag.orange { background: rgba(237,75,0,.12); color: var(--orange); }
+.tag.green  { background: rgba(52,199,89,.12); color: #34c759; }
+.tag.blue   { background: rgba(10,132,255,.12); color: #0a84ff; }
+.tag.yellow { background: rgba(255,214,10,.15); color: #b8860b; }
+@media (prefers-color-scheme: dark) {
+  .tag.yellow { color: #ffd60a; }
+}
+.tag.red    { background: rgba(255,59,48,.12); color: #ff3b30; }
+.tag.purple { background: rgba(175,82,222,.12); color: #af52de; }
+
+/* ── BOTTOM NAV ── */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+  padding: .6rem 1rem calc(.6rem + env(safe-area-inset-bottom, 16px));
+  background: var(--nav-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-top: 1px solid var(--glass-border);
+}
+
+@media (prefers-color-scheme: dark) {
+  .bottom-nav {
+    box-shadow: 0 -1px 0 rgba(255,255,255,.06), inset 0 1px 0 rgba(255,255,255,.04);
+  }
+}
+
+.nav-inner {
+  display: flex; align-items: center; justify-content: space-around;
+  background: var(--bg3);
+  border-radius: 100px; padding: .35rem .4rem;
+  border: 1px solid var(--border);
+}
+
+@media (prefers-color-scheme: dark) {
+  .nav-inner {
+    background: rgba(255,255,255,.04);
+    border-color: rgba(255,255,255,.08);
+  }
+}
+
+.nav-btn {
+  display: flex; flex-direction: column; align-items: center; gap: .2rem;
+  padding: .5rem .9rem; border-radius: 100px; border: none;
+  background: transparent; cursor: pointer; transition: all .25s var(--ease);
+  min-width: 56px;
+}
+
+.nav-btn.active {
+  background: var(--bg2);
+  box-shadow: 0 2px 12px rgba(0,0,0,.1);
+}
+
+@media (prefers-color-scheme: dark) {
+  .nav-btn.active {
+    background: rgba(255,255,255,.1);
+    box-shadow: 0 2px 12px rgba(0,0,0,.4);
+  }
+}
+
+.nav-icon {
+  font-size: 1.15rem; line-height: 1;
+  filter: grayscale(1) opacity(.4);
+  transition: filter .2s;
+}
+
+.nav-btn.active .nav-icon { filter: none; }
+
+.nav-label {
+  font-family: 'Titillium Web', sans-serif;
+  font-size: .55rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--subtle); transition: color .2s;
+}
+
+.nav-btn.active .nav-label { color: var(--orange); }
+
+/* ── SCREEN CONTENT ── */
+.content { padding: 1.25rem; flex: 1; }
+
+/* ── INÍCIO ── */
+.inicio-greeting {
+  margin-bottom: 1.5rem;
+}
+
+.inicio-greeting-sub {
+  font-family: 'Titillium Web', sans-serif;
+  font-size: .65rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--orange); margin-bottom: .3rem;
+}
+
+.inicio-greeting-title {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 200; font-size: 1.8rem; text-transform: uppercase; letter-spacing: .02em;
+  color: var(--text);
+}
+
+.inicio-greeting-title b { font-weight: 700; }
+
+.summary-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: 1.25rem;
+}
+
+.summary-card {
+  padding: 1.1rem 1rem;
+  border-radius: var(--radius);
+  background: var(--bg2); border: 1px solid var(--border);
+  box-shadow: var(--card-shadow); position: relative; overflow: hidden;
+}
+
+@media (prefers-color-scheme: dark) {
+  .summary-card {
+    background: var(--glass);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+  }
+}
+
+.summary-card-num {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700; font-size: 2rem; line-height: 1;
+  color: var(--orange); margin-bottom: .2rem;
+}
+
+.summary-card-label {
+  font-family: 'Titillium Web', sans-serif;
+  font-size: .62rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--muted);
+}
+
+.section-label {
+  font-family: 'Titillium Web', sans-serif;
+  font-size: .62rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: .75rem; margin-top: 1.25rem;
+}
+
+/* ── PRAZO BAR ── */
+.prazo-bar-wrap { margin-top: .6rem; }
+.prazo-bar-bg {
+  height: 3px; background: var(--border); border-radius: 2px; overflow: hidden;
+}
+.prazo-bar-fill {
+  height: 100%; border-radius: 2px;
+  transition: width .5s var(--ease);
+}
+
+/* ── CLIENT CARD ── */
+.client-card {
+  padding: 1rem 1.1rem; margin-bottom: .65rem;
+  border-radius: var(--radius);
+  background: var(--bg2); border: 1px solid var(--border);
+  box-shadow: var(--card-shadow); position: relative; overflow: hidden;
+  cursor: pointer; transition: transform .15s var(--ease);
+}
+
+.client-card:active { transform: scale(.98); }
+
+@media (prefers-color-scheme: dark) {
+  .client-card {
+    background: var(--glass);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+  }
+  .client-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent);
+  }
+}
+
+.client-card-header {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: .5rem;
+  margin-bottom: .6rem;
+}
+
+.client-card-name {
+  font-family: 'Titillium Web', sans-serif;
+  font-size: .9rem; font-weight: 700; color: var(--text);
+}
+
+.client-card-date {
+  font-size: .75rem; color: var(--muted); font-weight: 300; margin-top: .1rem;
+}
+
+.client-card-tags { display: flex; flex-wrap: wrap; gap: .35rem; margin-bottom: .65rem; }
+
+.client-card-footer {
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+.prazo-text {
+  font-family: 'Titillium Web', sans-serif;
+  font-size: .62rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--muted);
+}
+
+.prazo-text.urgent { color: #ff3b30; }
+.prazo-text.ok { color: #34c759; }
+
+/* ── MODAL ── */
+.modal-overlay {
+  display: none; position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,.5); backdrop-filter: blur(8px);
+  align-items: flex-end; justify-content: center;
+}
+
+.modal-overlay.show { display: flex; }
+
+.modal {
+  background: var(--bg2); border-radius: 20px 20px 0 0;
+  border: 1px solid var(--border); border-bottom: none;
+  width: 100%; max-width: 560px; max-height: 90svh;
+  overflow-y: auto; padding: 0;
+  animation: slideUp .35s var(--ease) forwards;
+}
+
+@media (prefers-color-scheme: dark) {
+  .modal {
+    background: #16161e;
+    border-color: rgba(255,255,255,.1);
+  }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+.modal-handle {
+  width: 36px; height: 4px; border-radius: 2px;
+  background: var(--subtle); margin: .75rem auto .5rem;
+}
+
+.modal-header {
+  padding: .5rem 1.25rem 1rem;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+.modal-title {
+  font-family: 'Titillium Web', sans-serif;
+  font-size: 1rem; font-weight: 700; color: var(--text);
+}
+
+.modal-close {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--tag-bg); border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .8rem; color: var(--muted); transition: background .2s;
+}
+
+.modal-close:hover { background: var(--border); }
+
+.modal-body { padding: 1.25rem; }
+
+.form-field { margin-bottom: 1.1rem; }
+
+.form-field label {
+  display: block;
+  font-family: 'Titillium Web', sans-serif;
+  font-size: .62rem; font-weight: 700; letter-spacing: .15em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: .4rem;
+}
+
+.form-field input,
+.form-field select {
+  width: 100%;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: .75rem .9rem;
+  font-family: 'DM Sans', sans-serif; font-size: .9rem; color: var(--text);
+  outline: none; appearance: none; -webkit-appearance: none;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.form-field input:focus,
+.form-field select:focus {
+  border-color: rgba(237,75,0,.5);
+  box-shadow: 0 0 0 3px rgba(237,75,0,.1);
+}
+
+.form-field input::placeholder { color: var(--subtle); }
+
+.tags-select { display: flex; flex-wrap: wrap; gap: .4rem; }
+
+.tag-toggle {
+  padding: .35rem .8rem;
+  border: 1px solid var(--border); border-radius: 100px;
+  font-family: 'Titillium Web', sans-serif;
+  font-size: .62rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--muted); background: var(--bg3); cursor: pointer; transition: all .2s;
+}
+
+.tag-toggle.selected {
+  background: var(--orange); border-color: var(--orange); color: white;
+}
+
+.btn-submit {
+  width: 100%; padding: .9rem;
+  background: var(--orange); color: white; border: none;
+  border-radius: var(--radius-sm); cursor: pointer;
+  font-family: 'Titillium Web', sans-serif;
+  font-size: .8rem; font-weight: 700; letter-spacing: .15em; text-transform: uppercase;
+  box-shadow: 0 4px 20px rgba(237,75,0,.3);
+  transition: all .2s var(--ease); margin-top: .5rem;
+}
+
+.btn-submit:hover { background: var(--orange2); transform: translateY(-1px); }
+
+/* ── AGENDA ── */
+.cal-header {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;
+}
+
+.cal-month {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 400; font-size: 1.1rem; text-transform: uppercase; letter-spacing: .05em;
+  color: var(--text);
+}
+
+.cal-nav { display: flex; gap: .4rem; }
+
+.cal-nav-btn {
+  width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--border);
+  background: var(--bg2); color: var(--muted); cursor: pointer;
+  display: flex; align-items: center; justify-content: center; font-size: .8rem;
+  transition: all .2s;
+}
+
+.cal-nav-btn:hover { border-color: var(--orange); color: var(--orange); }
+
+.cal-grid {
+  display: grid; grid-template-columns: repeat(7,1fr); gap: .2rem; margin-bottom: 1rem;
+}
+
+.cal-day-label {
+  text-align: center;
+  font-family: 'Titillium Web', sans-serif;
+  font-size: .58rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--subtle); padding: .3rem 0;
+}
+
+.cal-day {
+  aspect-ratio: 1; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: .82rem; font-weight: 400; color: var(--muted); cursor: pointer;
+  transition: all .2s; position: relative;
+}
+
+.cal-day:hover { background: var(--tag-bg); color: var(--text); }
+.cal-day.today { background: var(--orange); color: white; font-weight: 700; }
+.cal-day.has-event::after {
+  content: ''; position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%);
+  width: 4px; height: 4px; border-radius: 50%; background: var(--orange);
+}
+.cal-day.today.has-event::after { background: white; }
+.cal-day.other-month { opacity: .3; }
+
+.event-item {
+  padding: .85rem 1rem; border-radius: var(--radius-sm);
+  background: var(--bg2); border: 1px solid var(--border);
+  margin-bottom: .5rem; display: flex; align-items: center; gap: .75rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  .event-item { background: var(--glass); }
+}
+
+.event-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--orange); flex-shrink: 0;
+}
+
+.event-name {
+  font-size: .88rem; font-weight: 500; color: var(--text); flex: 1;
+}
+
+.event-time {
+  font-family: 'Titillium Web', sans-serif;
+  font-size: .62rem; font-weight: 700; letter-spacing: .08em;
+  color: var(--muted);
+}
+
+/* ── NOTAS ── */
+.nota-card {
+  padding: 1rem; border-radius: var(--radius);
+  background: var(--bg2); border: 1px solid var(--border);
+  box-shadow: var(--card-shadow); margin-bottom: .65rem; cursor: pointer;
+  transition: transform .15s;
+}
+
+.nota-card:active { transform: scale(.98); }
+
+@media (prefers-color-scheme: dark) {
+  .nota-card { background: var(--glass); }
+}
+
+.nota-card-name {
+  font-family: 'Titillium Web', sans-serif;
+  font-size: .88rem; font-weight: 700; color: var(--text); margin-bottom: .3rem;
+}
+
+.nota-card-preview {
+  font-size: .8rem; font-weight: 300; color: var(--muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.nota-card-date {
+  font-family: 'Titillium Web', sans-serif;
+  font-size: .58rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--subtle); margin-top: .5rem;
+}
+
+/* NOTA EDITOR */
+.nota-editor {
+  display: none; flex-direction: column; height: 100%;
+}
+
+.nota-editor.show { display: flex; }
+
+.nota-editor-header {
+  display: flex; align-items: center; gap: .75rem;
+  padding: .75rem 1.25rem; border-bottom: 1px solid var(--border);
+}
+
+.btn-back-nota {
+  background: none; border: none; cursor: pointer;
+  color: var(--orange); font-size: .85rem;
+  font-family: 'Titillium Web', sans-serif; font-weight: 700; letter-spacing: .08em;
+}
+
+.nota-editor-title {
+  font-family: 'Titillium Web', sans-serif;
+  font-size: .9rem; font-weight: 700; color: var(--text); flex: 1;
+}
+
+.nota-editor-body {
+  flex: 1; padding: 1.25rem;
+  font-size: .95rem; font-weight: 300; color: var(--text);
+  line-height: 1.7; border: none; background: transparent; resize: none; outline: none;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* EMPTY STATE */
+.empty-state {
+  text-align: center; padding: 3rem 1.5rem;
+}
+
+.empty-icon { font-size: 2.5rem; margin-bottom: .75rem; opacity: .4; }
+
+.empty-text {
+  font-size: .88rem; font-weight: 300; color: var(--muted); line-height: 1.6;
+}
+
+/* DIVIDER */
+.divider { height: 1px; background: var(--border); margin: 1rem 0; }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ── INÍCIO ── -->
+  <div class="screen active" id="screen-inicio">
+    <div class="topbar">
+      <div class="topbar-title">MV <span>·</span> Painel</div>
+    </div>
+    <div class="content">
+      <div class="inicio-greeting">
+        <div class="inicio-greeting-sub" id="greeting-time">Bom dia</div>
+        <div class="inicio-greeting-title">Marcus <b>Valério</b></div>
+      </div>
+
+      <div class="summary-grid" id="summary-grid">
+        <div class="summary-card">
+          <div class="summary-card-num" id="sum-briefings">0</div>
+          <div class="summary-card-label">Briefings</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-card-num" id="sum-propostas">0</div>
+          <div class="summary-card-label">Propostas</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-card-num" id="sum-andamento">0</div>
+          <div class="summary-card-label">Em andamento</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-card-num" id="sum-urgentes">0</div>
+          <div class="summary-card-label">Urgentes</div>
+        </div>
+      </div>
+
+      <div class="section-label">Prazos próximos</div>
+      <div id="inicio-prazos">
+        <div class="empty-state">
+          <div class="empty-icon">📋</div>
+          <div class="empty-text">Nenhum prazo no momento.</div>
+        </div>
+      </div>
+
+      <div class="section-label">Próximos eventos</div>
+      <div id="inicio-eventos">
+        <div class="empty-state">
+          <div class="empty-icon">📅</div>
+          <div class="empty-text">Nenhum evento agendado.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── BRIEFINGS ── -->
+  <div class="screen" id="screen-briefings">
+    <div class="topbar">
+      <div class="topbar-title">Briefings</div>
+      <button class="topbar-action" onclick="openModal('modal-briefing')">+</button>
+    </div>
+    <div class="content">
+      <div id="briefings-list">
+        <div class="empty-state">
+          <div class="empty-icon">📨</div>
+          <div class="empty-text">Nenhum briefing cadastrado.<br>Toque em + para adicionar.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PROPOSTAS ── -->
+  <div class="screen" id="screen-propostas">
+    <div class="topbar">
+      <div class="topbar-title">Propostas</div>
+      <button class="topbar-action" onclick="openModal('modal-proposta')">+</button>
+    </div>
+    <div class="content">
+      <div class="section-label">Aguardando resposta</div>
+      <div id="propostas-aguardando"></div>
+      <div class="section-label">Em avaliação</div>
+      <div id="propostas-avaliacao"></div>
+      <div class="section-label">Entregues</div>
+      <div id="propostas-entregues"></div>
+      <div id="propostas-empty" class="empty-state">
+        <div class="empty-icon">📤</div>
+        <div class="empty-text">Nenhuma proposta ainda.<br>Toque em + para adicionar.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── EM ANDAMENTO ── -->
+  <div class="screen" id="screen-andamento">
+    <div class="topbar">
+      <div class="topbar-title">Em andamento</div>
+      <button class="topbar-action" onclick="openModal('modal-andamento')">+</button>
+    </div>
+    <div class="content">
+      <div id="andamento-list">
+        <div class="empty-state">
+          <div class="empty-icon">⚡</div>
+          <div class="empty-text">Nenhum projeto em andamento.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── AGENDA ── -->
+  <div class="screen" id="screen-agenda">
+    <div class="topbar">
+      <div class="topbar-title">Agenda</div>
+      <button class="topbar-action" onclick="openModal('modal-evento')">+</button>
+    </div>
+    <div class="content">
+      <div class="cal-header">
+        <div class="cal-month" id="cal-month-label"></div>
+        <div class="cal-nav">
+          <button class="cal-nav-btn" onclick="changeMonth(-1)">‹</button>
+          <button class="cal-nav-btn" onclick="changeMonth(1)">›</button>
+        </div>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+      <div class="section-label" id="cal-events-label">Eventos</div>
+      <div id="cal-events-list">
+        <div class="empty-state">
+          <div class="empty-icon">📅</div>
+          <div class="empty-text">Nenhum evento. Toque em + para adicionar.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── NOTAS ── -->
+  <div class="screen" id="screen-notas">
+    <div class="topbar">
+      <div class="topbar-title">Notas</div>
+      <button class="topbar-action" onclick="openModal('modal-nota')">+</button>
+    </div>
+    <div class="content" id="notas-content">
+      <div id="notas-list">
+        <div class="empty-state">
+          <div class="empty-icon">📝</div>
+          <div class="empty-text">Nenhuma nota ainda.<br>Toque em + para criar.</div>
+        </div>
+      </div>
+    </div>
+    <div class="nota-editor" id="nota-editor">
+      <div class="nota-editor-header">
+        <button class="btn-back-nota" onclick="closeNota()">← Voltar</button>
+        <div class="nota-editor-title" id="nota-editor-title"></div>
+        <button class="modal-close" onclick="deleteNota()">🗑</button>
+      </div>
+      <textarea class="nota-editor-body" id="nota-editor-body" placeholder="Escreva suas ideias aqui..." oninput="saveNotaContent()"></textarea>
+    </div>
+  </div>
+
+  <!-- ── BOTTOM NAV ── -->
+  <nav class="bottom-nav">
+    <div class="nav-inner">
+      <button class="nav-btn active" onclick="goTo('inicio',this)">
+        <div class="nav-icon">🏠</div>
+        <div class="nav-label">Início</div>
+      </button>
+      <button class="nav-btn" onclick="goTo('briefings',this)">
+        <div class="nav-icon">📨</div>
+        <div class="nav-label">Briefings</div>
+      </button>
+      <button class="nav-btn" onclick="goTo('propostas',this)">
+        <div class="nav-icon">📤</div>
+        <div class="nav-label">Propostas</div>
+      </button>
+      <button class="nav-btn" onclick="goTo('andamento',this)">
+        <div class="nav-icon">⚡</div>
+        <div class="nav-label">Projetos</div>
+      </button>
+      <button class="nav-btn" onclick="goTo('agenda',this)">
+        <div class="nav-icon">📅</div>
+        <div class="nav-label">Agenda</div>
+      </button>
+      <button class="nav-btn" onclick="goTo('notas',this)">
+        <div class="nav-icon">📝</div>
+        <div class="nav-label">Notas</div>
+      </button>
+    </div>
+  </nav>
+
+</div>
+
+<!-- ── MODALS ── -->
+
+<!-- Modal Briefing -->
+<div class="modal-overlay" id="modal-briefing" onclick="closeModalOutside(event,'modal-briefing')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-title">Novo Briefing</div>
+      <button class="modal-close" onclick="closeModal('modal-briefing')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-field"><label>Nome do cliente *</label><input type="text" id="b-nome" placeholder="Nome do cliente ou marca"></div>
+      <div class="form-field"><label>Data de envio *</label><input type="date" id="b-data"></div>
+      <div class="form-field">
+        <label>Serviços</label>
+        <div class="tags-select">
+          <div class="tag-toggle" onclick="toggleTag(this)">Identidade visual</div>
+          <div class="tag-toggle" onclick="toggleTag(this)">Posicionamento</div>
+          <div class="tag-toggle" onclick="toggleTag(this)">Instagram</div>
+          <div class="tag-toggle" onclick="toggleTag(this)">Tom de voz</div>
+          <div class="tag-toggle" onclick="toggleTag(this)">Conteúdo</div>
+          <div class="tag-toggle" onclick="toggleTag(this)">Proposta de valor</div>
+          <div class="tag-toggle" onclick="toggleTag(this)">Auditoria</div>
+        </div>
+      </div>
+      <button class="btn-submit" onclick="saveBriefing()">Salvar briefing</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Proposta -->
+<div class="modal-overlay" id="modal-proposta" onclick="closeModalOutside(event,'modal-proposta')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-title">Nova Proposta</div>
+      <button class="modal-close" onclick="closeModal('modal-proposta')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-field"><label>Nome do cliente *</label><input type="text" id="p-nome" placeholder="Nome do cliente ou marca"></div>
+      <div class="form-field">
+        <label>Status</label>
+        <select id="p-status">
+          <option value="entregue">Entregue</option>
+          <option value="avaliacao">Em avaliação</option>
+          <option value="aguardando">Aguardando resposta</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Serviços</label>
+        <div class="tags-select">
+          <div class="tag-toggle" onclick="toggleTag(this)">Identidade visual</div>
+          <div class="tag-toggle" onclick="toggleTag(this)">Posicionamento</div>
+          <div class="tag-toggle" onclick="toggleTag(this)">Instagram</div>
+          <div class="tag-toggle" onclick="toggleTag(this)">Tom de voz</div>
+          <div class="tag-toggle" onclick="toggleTag(this)">Conteúdo</div>
+          <div class="tag-toggle" onclick="toggleTag(this)">Proposta de valor</div>
+          <div class="tag-toggle" onclick="toggleTag(this)">Auditoria</div>
+        </div>
+      </div>
+      <button class="btn-submit" onclick="saveProposta()">Salvar proposta</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Andamento -->
+<div class="modal-overlay" id="modal-andamento" onclick="closeModalOutside(event,'modal-andamento')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-title">Novo Projeto</div>
+      <button class="modal-close" onclick="closeModal('modal-andamento')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-field"><label>Nome do cliente *</label><input type="text" id="a-nome" placeholder="Nome do cliente ou marca"></div>
+      <div class="form-field"><label>Data de início *</label><input type="date" id="a-data"></div>
+      <div class="form-field">
+        <label>Etapa atual</label>
+        <select id="a-etapa">
+          <option value="diagnostico">Diagnóstico</option>
+          <option value="identidade">Identidade visual</option>
+          <option value="estrategia">Estratégia</option>
+          <option value="conteudo">Conteúdo</option>
+          <option value="revisao">Revisão</option>
+          <option value="entrega">Entrega final</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Serviços</label>
+        <div class="tags-select">
+          <div class="tag-toggle" onclick="toggleTag(this)">Identidade visual</div>
+          <div class="tag-toggle" onclick="toggleTag(this)">Posicionamento</div>
+          <div class="tag-toggle" onclick="toggleTag(this)">Instagram</div>
+          <div class="tag-toggle" onclick="toggleTag(this)">Tom de voz</div>
+          <div class="tag-toggle" onclick="toggleTag(this)">Conteúdo</div>
+          <div class="tag-toggle" onclick="toggleTag(this)">Proposta de valor</div>
+          <div class="tag-toggle" onclick="toggleTag(this)">Auditoria</div>
+        </div>
+      </div>
+      <button class="btn-submit" onclick="saveAndamento()">Salvar projeto</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Evento -->
+<div class="modal-overlay" id="modal-evento" onclick="closeModalOutside(event,'modal-evento')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-title">Novo Evento</div>
+      <button class="modal-close" onclick="closeModal('modal-evento')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-field"><label>Título *</label><input type="text" id="e-titulo" placeholder="Ex: Reunião com cliente"></div>
+      <div class="form-field"><label>Data *</label><input type="date" id="e-data"></div>
+      <div class="form-field"><label>Horário</label><input type="time" id="e-hora"></div>
+      <button class="btn-submit" onclick="saveEvento()">Salvar evento</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Nota -->
+<div class="modal-overlay" id="modal-nota" onclick="closeModalOutside(event,'modal-nota')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-title">Nova Nota</div>
+      <button class="modal-close" onclick="closeModal('modal-nota')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-field"><label>Nome (cliente ou tema) *</label><input type="text" id="n-nome" placeholder="Ex: Matheus Personal"></div>
+      <button class="btn-submit" onclick="saveNota()">Criar nota</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── DATA ──
+let data = JSON.parse(localStorage.getItem('mv-data') || '{"briefings":[],"propostas":[],"andamento":[],"eventos":[],"notas":[]}');
+
+function save() { localStorage.setItem('mv-data', JSON.stringify(data)); }
+
+// ── UTILS ──
+function addBusinessDays(date, days) {
+  let d = new Date(date); let added = 0;
+  while (added < days) {
+    d.setDate(d.getDate() + 1);
+    if (d.getDay() !== 0 && d.getDay() !== 6) added++;
+  }
+  return d;
+}
+
+function daysUntil(dateStr) {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const target = new Date(dateStr); target.setHours(0,0,0,0);
+  return Math.round((target - today) / 86400000);
+}
+
+function formatDate(str) {
+  const d = new Date(str + 'T12:00:00');
+  return d.toLocaleDateString('pt-BR', {day:'2-digit',month:'short'});
+}
+
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
+
+// ── NAVIGATION ──
+function goTo(screen, btn) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('screen-' + screen).classList.add('active');
+  btn.classList.add('active');
+  if (screen === 'inicio') renderInicio();
+  if (screen === 'agenda') renderCalendar();
+  if (screen === 'notas') renderNotas();
+  if (screen === 'propostas') renderPropostas();
+  if (screen === 'briefings') renderBriefings();
+  if (screen === 'andamento') renderAndamento();
+}
+
+// ── MODALS ──
+function openModal(id) {
+  document.getElementById(id).classList.add('show');
+  // Set today as default date
+  const today = new Date().toISOString().split('T')[0];
+  const dateInputs = document.querySelectorAll('#' + id + ' input[type="date"]');
+  dateInputs.forEach(i => { if (!i.value) i.value = today; });
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('show');
+}
+
+function closeModalOutside(e, id) {
+  if (e.target.classList.contains('modal-overlay')) closeModal(id);
+}
+
+// ── TAG TOGGLE ──
+function toggleTag(el) { el.classList.toggle('selected'); }
+
+function getSelectedTags(modalId) {
+  return [...document.querySelectorAll('#' + modalId + ' .tag-toggle.selected')].map(t => t.textContent);
+}
+
+function resetModal(modalId) {
+  document.querySelectorAll('#' + modalId + ' input').forEach(i => i.value = '');
+  document.querySelectorAll('#' + modalId + ' .tag-toggle').forEach(t => t.classList.remove('selected'));
+  document.querySelectorAll('#' + modalId + ' select').forEach(s => s.selectedIndex = 0);
+}
+
+// ── BRIEFINGS ──
+function saveBriefing() {
+  const nome = document.getElementById('b-nome').value.trim();
+  const dataEnvio = document.getElementById('b-data').value;
+  if (!nome || !dataEnvio) return;
+  const prazo = addBusinessDays(dataEnvio + 'T12:00:00', 7).toISOString().split('T')[0];
+  const tags = getSelectedTags('modal-briefing');
+  data.briefings.push({ id: uid(), nome, dataEnvio, prazo, tags });
+  save(); closeModal('modal-briefing'); resetModal('modal-briefing'); renderBriefings(); renderInicio();
+}
+
+function renderBriefings() {
+  const el = document.getElementById('briefings-list');
+  if (!data.briefings.length) {
+    el.innerHTML = '<div class="empty-state"><div class="empty-icon">📨</div><div class="empty-text">Nenhum briefing cadastrado.<br>Toque em + para adicionar.</div></div>';
+    return;
+  }
+  el.innerHTML = data.briefings.map(b => {
+    const dias = daysUntil(b.prazo);
+    const cls = dias < 0 ? 'urgent' : dias <= 2 ? 'urgent' : 'ok';
+    const txt = dias < 0 ? `Vencido há ${Math.abs(dias)}d` : dias === 0 ? 'Vence hoje' : `${dias}d restantes`;
+    const pct = Math.max(0, Math.min(100, ((7 - Math.max(0,dias)) / 7) * 100));
+    const color = dias < 0 ? '#ff3b30' : dias <= 2 ? '#ff9500' : '#34c759';
+    const tagsHtml = b.tags.map(t => `<span class="tag">${t}</span>`).join('');
+    return `<div class="client-card">
+      <div class="client-card-header">
+        <div><div class="client-card-name">${b.nome}</div><div class="client-card-date">Enviado em ${formatDate(b.dataEnvio)}</div></div>
+        <button onclick="deleteBriefing('${b.id}')" style="background:none;border:none;color:var(--subtle);cursor:pointer;font-size:.8rem;padding:.2rem">✕</button>
+      </div>
+      ${b.tags.length ? `<div class="client-card-tags">${tagsHtml}</div>` : ''}
+      <div class="client-card-footer">
+        <span class="prazo-text ${cls}">${txt}</span>
+        <span style="font-family:'Titillium Web',sans-serif;font-size:.6rem;color:var(--muted)">Prazo: ${formatDate(b.prazo)}</span>
+      </div>
+      <div class="prazo-bar-wrap"><div class="prazo-bar-bg"><div class="prazo-bar-fill" style="width:${pct}%;background:${color}"></div></div></div>
+    </div>`;
+  }).join('');
+}
+
+function deleteBriefing(id) {
+  data.briefings = data.briefings.filter(b => b.id !== id);
+  save(); renderBriefings(); renderInicio();
+}
+
+// ── PROPOSTAS ──
+function saveProposta() {
+  const nome = document.getElementById('p-nome').value.trim();
+  const status = document.getElementById('p-status').value;
+  if (!nome) return;
+  const tags = getSelectedTags('modal-proposta');
+  data.propostas.push({ id: uid(), nome, status, tags, data: new Date().toISOString().split('T')[0] });
+  save(); closeModal('modal-proposta'); resetModal('modal-proposta'); renderPropostas();
+}
+
+function renderPropostas() {
+  const groups = { aguardando: [], avaliacao: [], entregue: [] };
+  data.propostas.forEach(p => groups[p.status]?.push(p));
+  const hasAny = data.propostas.length > 0;
+  document.getElementById('propostas-empty').style.display = hasAny ? 'none' : 'block';
+
+  ['aguardando','avaliacao','entregues'].forEach(k => {
+    const id = 'propostas-' + k;
+    const key = k === 'entregues' ? 'entregue' : k;
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = (groups[key] || []).map(p => {
+      const statusMap = { entregue: ['green','Entregue'], avaliacao: ['blue','Em avaliação'], aguardando: ['yellow','Aguardando'] };
+      const [sc, sl] = statusMap[p.status] || ['',''];
+      const tagsHtml = p.tags.map(t => `<span class="tag">${t}</span>`).join('');
+      return `<div class="client-card">
+        <div class="client-card-header">
+          <div><div class="client-card-name">${p.nome}</div><div class="client-card-date">${formatDate(p.data)}</div></div>
+          <div style="display:flex;gap:.4rem;align-items:center">
+            <span class="tag ${sc}">${sl}</span>
+            <button onclick="deleteProposta('${p.id}')" style="background:none;border:none;color:var(--subtle);cursor:pointer;font-size:.8rem">✕</button>
+          </div>
+        </div>
+        ${p.tags.length ? `<div class="client-card-tags">${tagsHtml}</div>` : ''}
+      </div>`;
+    }).join('') || '';
+  });
+}
+
+function deleteProposta(id) {
+  data.propostas = data.propostas.filter(p => p.id !== id);
+  save(); renderPropostas();
+}
+
+// ── ANDAMENTO ──
+function saveAndamento() {
+  const nome = document.getElementById('a-nome').value.trim();
+  const dataInicio = document.getElementById('a-data').value;
+  const etapa = document.getElementById('a-etapa').value;
+  if (!nome || !dataInicio) return;
+  const prazo = addBusinessDays(dataInicio + 'T12:00:00', 15).toISOString().split('T')[0];
+  const tags = getSelectedTags('modal-andamento');
+  data.andamento.push({ id: uid(), nome, dataInicio, prazo, etapa, tags });
+  save(); closeModal('modal-andamento'); resetModal('modal-andamento'); renderAndamento(); renderInicio();
+}
+
+function renderAndamento() {
+  const el = document.getElementById('andamento-list');
+  if (!data.andamento.length) {
+    el.innerHTML = '<div class="empty-state"><div class="empty-icon">⚡</div><div class="empty-text">Nenhum projeto em andamento.</div></div>';
+    return;
+  }
+  const etapaMap = { diagnostico:'Diagnóstico', identidade:'Identidade visual', estrategia:'Estratégia', conteudo:'Conteúdo', revisao:'Revisão', entrega:'Entrega final' };
+  el.innerHTML = data.andamento.map(a => {
+    const dias = daysUntil(a.prazo);
+    const cls = dias < 0 ? 'urgent' : dias <= 3 ? 'urgent' : 'ok';
+    const txt = dias < 0 ? `Vencido há ${Math.abs(dias)}d` : dias === 0 ? 'Entrega hoje' : `${dias}d para entrega`;
+    const tagsHtml = a.tags.map(t => `<span class="tag">${t}</span>`).join('');
+    return `<div class="client-card">
+      <div class="client-card-header">
+        <div><div class="client-card-name">${a.nome}</div><div class="client-card-date">Início: ${formatDate(a.dataInicio)}</div></div>
+        <div style="display:flex;gap:.4rem;align-items:center">
+          <span class="tag blue">${etapaMap[a.etapa]||a.etapa}</span>
+          <button onclick="deleteAndamento('${a.id}')" style="background:none;border:none;color:var(--subtle);cursor:pointer;font-size:.8rem">✕</button>
+        </div>
+      </div>
+      ${a.tags.length ? `<div class="client-card-tags">${tagsHtml}</div>` : ''}
+      <div class="client-card-footer">
+        <span class="prazo-text ${cls}">${txt}</span>
+        <span style="font-family:'Titillium Web',sans-serif;font-size:.6rem;color:var(--muted)">Entrega: ${formatDate(a.prazo)}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function deleteAndamento(id) {
+  data.andamento = data.andamento.filter(a => a.id !== id);
+  save(); renderAndamento(); renderInicio();
+}
+
+// ── AGENDA ──
+let calDate = new Date();
+
+function renderCalendar() {
+  const months = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  document.getElementById('cal-month-label').textContent = months[calDate.getMonth()] + ' ' + calDate.getFullYear();
+  const grid = document.getElementById('cal-grid');
+  const days = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  const today = new Date(); today.setHours(0,0,0,0);
+  const first = new Date(calDate.getFullYear(), calDate.getMonth(), 1);
+  const last = new Date(calDate.getFullYear(), calDate.getMonth()+1, 0);
+
+  let html = days.map(d => `<div class="cal-day-label">${d}</div>`).join('');
+  for (let i = 0; i < first.getDay(); i++) html += '<div></div>';
+  for (let d = 1; d <= last.getDate(); d++) {
+    const cur = new Date(calDate.getFullYear(), calDate.getMonth(), d);
+    cur.setHours(0,0,0,0);
+    const iso = cur.toISOString().split('T')[0];
+    const isToday = cur.getTime() === today.getTime();
+    const hasEv = data.eventos.some(e => e.data === iso);
+    html += `<div class="cal-day${isToday?' today':''}${hasEv?' has-event':''}" onclick="selectDay('${iso}')">${d}</div>`;
+  }
+  grid.innerHTML = html;
+  renderDayEvents(today.toISOString().split('T')[0]);
+}
+
+function changeMonth(dir) { calDate.setMonth(calDate.getMonth() + dir); renderCalendar(); }
+
+function selectDay(iso) {
+  document.querySelectorAll('.cal-day').forEach(d => d.style.outline='');
+  renderDayEvents(iso);
+}
+
+function renderDayEvents(iso) {
+  const evs = data.eventos.filter(e => e.data === iso);
+  const label = document.getElementById('cal-events-label');
+  const list = document.getElementById('cal-events-list');
+  const d = new Date(iso + 'T12:00:00');
+  label.textContent = d.toLocaleDateString('pt-BR', {weekday:'long', day:'2-digit', month:'long'});
+  if (!evs.length) {
+    list.innerHTML = '<div style="padding:.5rem 0;font-size:.85rem;color:var(--muted)">Nenhum evento neste dia.</div>';
+    return;
+  }
+  list.innerHTML = evs.map(e => `<div class="event-item">
+    <div class="event-dot"></div>
+    <div class="event-name">${e.titulo}</div>
+    <div class="event-time">${e.hora||''}</div>
+    <button onclick="deleteEvento('${e.id}')" style="background:none;border:none;color:var(--subtle);cursor:pointer;font-size:.8rem;margin-left:.5rem">✕</button>
+  </div>`).join('');
+}
+
+function saveEvento() {
+  const titulo = document.getElementById('e-titulo').value.trim();
+  const eData = document.getElementById('e-data').value;
+  const hora = document.getElementById('e-hora').value;
+  if (!titulo || !eData) return;
+  data.eventos.push({ id: uid(), titulo, data: eData, hora });
+  save(); closeModal('modal-evento'); resetModal('modal-evento'); renderCalendar();
+}
+
+function deleteEvento(id) {
+  data.eventos = data.eventos.filter(e => e.id !== id);
+  save(); renderCalendar();
+}
+
+// ── NOTAS ──
+let currentNota = null;
+
+function renderNotas() {
+  const list = document.getElementById('notas-list');
+  const content = document.getElementById('notas-content');
+  const editor = document.getElementById('nota-editor');
+  content.style.display = 'flex'; content.style.flexDirection = 'column'; content.style.flex = '1';
+  editor.classList.remove('show');
+  if (!data.notas.length) {
+    list.innerHTML = '<div class="empty-state"><div class="empty-icon">📝</div><div class="empty-text">Nenhuma nota ainda.<br>Toque em + para criar.</div></div>';
+    return;
+  }
+  list.innerHTML = data.notas.map(n => `<div class="nota-card" onclick="openNota('${n.id}')">
+    <div class="nota-card-name">${n.nome}</div>
+    <div class="nota-card-preview">${n.conteudo || 'Sem conteúdo ainda...'}</div>
+    <div class="nota-card-date">${formatDate(n.data)}</div>
+  </div>`).join('');
+}
+
+function saveNota() {
+  const nome = document.getElementById('n-nome').value.trim();
+  if (!nome) return;
+  data.notas.push({ id: uid(), nome, conteudo: '', data: new Date().toISOString().split('T')[0] });
+  save(); closeModal('modal-nota'); resetModal('modal-nota'); renderNotas();
+}
+
+function openNota(id) {
+  currentNota = data.notas.find(n => n.id === id);
+  if (!currentNota) return;
+  document.getElementById('nota-editor-title').textContent = currentNota.nome;
+  document.getElementById('nota-editor-body').value = currentNota.conteudo || '';
+  document.getElementById('notas-content').style.display = 'none';
+  document.getElementById('nota-editor').classList.add('show');
+}
+
+function closeNota() { renderNotas(); }
+
+function saveNotaContent() {
+  if (!currentNota) return;
+  currentNota.conteudo = document.getElementById('nota-editor-body').value;
+  const n = data.notas.find(n => n.id === currentNota.id);
+  if (n) n.conteudo = currentNota.conteudo;
+  save();
+}
+
+function deleteNota() {
+  if (!currentNota) return;
+  if (!confirm('Deletar esta nota?')) return;
+  data.notas = data.notas.filter(n => n.id !== currentNota.id);
+  save(); currentNota = null; renderNotas();
+}
+
+// ── INÍCIO ──
+function renderInicio() {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const h = today.getHours();
+  const greet = h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite';
+  document.getElementById('greeting-time').textContent = greet;
+  document.getElementById('sum-briefings').textContent = data.briefings.length;
+  document.getElementById('sum-propostas').textContent = data.propostas.length;
+  document.getElementById('sum-andamento').textContent = data.andamento.length;
+  const urgentes = data.briefings.filter(b => daysUntil(b.prazo) <= 2).length +
+                   data.andamento.filter(a => daysUntil(a.prazo) <= 3).length;
+  document.getElementById('sum-urgentes').textContent = urgentes;
+
+  // Prazos próximos
+  const prazos = [
+    ...data.briefings.map(b => ({ nome: b.nome, prazo: b.prazo, tipo: 'Briefing' })),
+    ...data.andamento.map(a => ({ nome: a.nome, prazo: a.prazo, tipo: 'Projeto' }))
+  ].sort((a,b) => new Date(a.prazo) - new Date(b.prazo)).slice(0,3);
+
+  const prazosEl = document.getElementById('inicio-prazos');
+  if (!prazos.length) {
+    prazosEl.innerHTML = '<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-text">Nenhum prazo no momento.</div></div>';
+  } else {
+    prazosEl.innerHTML = prazos.map(p => {
+      const dias = daysUntil(p.prazo);
+      const cls = dias < 0 ? 'urgent' : dias <= 2 ? 'urgent' : 'ok';
+      const txt = dias < 0 ? `Vencido há ${Math.abs(dias)}d` : dias === 0 ? 'Vence hoje' : `${dias}d restantes`;
+      return `<div class="event-item">
+        <div class="event-dot" style="${dias<=2?'background:#ff3b30':''}"></div>
+        <div class="event-name">${p.nome} <span style="font-size:.75rem;color:var(--muted)">(${p.tipo})</span></div>
+        <div class="prazo-text ${cls}" style="font-size:.65rem">${txt}</div>
+      </div>`;
+    }).join('');
+  }
+
+  // Próximos eventos
+  const todayStr = today.toISOString().split('T')[0];
+  const proxEvs = data.eventos.filter(e => e.data >= todayStr).sort((a,b) => a.data.localeCompare(b.data)).slice(0,3);
+  const evsEl = document.getElementById('inicio-eventos');
+  if (!proxEvs.length) {
+    evsEl.innerHTML = '<div class="empty-state"><div class="empty-icon">📅</div><div class="empty-text">Nenhum evento agendado.</div></div>';
+  } else {
+    evsEl.innerHTML = proxEvs.map(e => `<div class="event-item">
+      <div class="event-dot"></div>
+      <div class="event-name">${e.titulo}</div>
+      <div class="event-time">${formatDate(e.data)}${e.hora?' · '+e.hora:''}</div>
+    </div>`).join('');
+  }
+}
+
+// ── GREETING TIME ──
+function updateGreeting() {
+  const h = new Date().getHours();
+  const g = h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite';
+  const el = document.getElementById('greeting-time');
+  if (el) el.textContent = g;
+}
+
+// ── INIT ──
+document.addEventListener('DOMContentLoaded', () => {
+  updateGreeting();
+  renderInicio();
+  renderBriefings();
+  renderPropostas();
+  renderAndamento();
+  renderCalendar();
+  renderNotas();
+});
+</script>
+</body>
+</html>
