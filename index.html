@@ -6,9 +6,9 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#06060a" media="(prefers-color-scheme: dark)">
-<meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)">
-<title>MV — Painel</title>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;400;600;700&family=DM+Sans:wght@300;400;500&family=Titillium+Web:wght@400;600;700&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#f2f2f7" media="(prefers-color-scheme: light)">
+<title>MV · Painel</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;600;700&family=DM+Sans:wght@300;400;500&family=Titillium+Web:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -16,43 +16,57 @@
 :root {
   --orange: #ED4B00;
   --orange2: #ff6a20;
+  --blue: #0a84ff;
+  --green: #34c759;
+  --red: #ff3b30;
+  --yellow: #ff9f0a;
+  --purple: #bf5af2;
   --ease: cubic-bezier(.16,1,.3,1);
-  --radius: 14px;
-  --radius-sm: 8px;
+  --radius: 16px;
+  --radius-sm: 10px;
 }
 
-/* LIGHT */
+/* LIGHT MODE */
 :root {
-  --bg: #f5f5f7;
+  --bg: #f2f2f7;
   --bg2: #ffffff;
-  --bg3: #ebebed;
-  --text: #1a1a1f;
-  --muted: #6e6e80;
-  --subtle: #b0b0be;
-  --border: rgba(0,0,0,.08);
-  --glass: rgba(255,255,255,.7);
-  --glass-border: rgba(0,0,0,.08);
-  --glass-blur: blur(20px) saturate(180%);
-  --card-shadow: 0 2px 20px rgba(0,0,0,.08);
-  --nav-bg: rgba(245,245,247,.8);
-  --tag-bg: rgba(0,0,0,.06);
+  --bg3: #e5e5ea;
+  --text: #1c1c1e;
+  --text2: #3a3a3c;
+  --muted: #8e8e93;
+  --subtle: #c7c7cc;
+  --border: rgba(60,60,67,.12);
+  --border2: rgba(60,60,67,.06);
+  --glass: rgba(255,255,255,.72);
+  --glass-hover: rgba(255,255,255,.85);
+  --glass-border: rgba(255,255,255,.8);
+  --glass-blur: blur(28px) saturate(200%);
+  --card-shadow: 0 2px 24px rgba(0,0,0,.07), 0 1px 0 rgba(255,255,255,.9) inset;
+  --nav-bg: rgba(242,242,247,.82);
+  --tag-bg: rgba(118,118,128,.12);
+  --input-bg: rgba(118,118,128,.08);
 }
 
-/* DARK */
+/* DARK MODE */
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #06060a;
-    --bg2: #111116;
-    --bg3: #1a1a22;
-    --text: #f0eff5;
-    --muted: #7a7990;
-    --subtle: #3a3a4a;
-    --border: rgba(255,255,255,.08);
-    --glass: rgba(255,255,255,.04);
-    --glass-border: rgba(255,255,255,.10);
-    --card-shadow: 0 8px 40px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.06);
-    --nav-bg: rgba(6,6,10,.7);
-    --tag-bg: rgba(255,255,255,.07);
+    --bg2: #1c1c1e;
+    --bg3: #2c2c2e;
+    --text: #f2f2f7;
+    --text2: #ebebf5;
+    --muted: #8e8e93;
+    --subtle: #3a3a3c;
+    --border: rgba(255,255,255,.09);
+    --border2: rgba(255,255,255,.04);
+    --glass: rgba(255,255,255,.055);
+    --glass-hover: rgba(255,255,255,.09);
+    --glass-border: rgba(255,255,255,.13);
+    --glass-blur: blur(32px) saturate(220%);
+    --card-shadow: 0 8px 48px rgba(0,0,0,.7), 0 1px 0 rgba(255,255,255,.08) inset;
+    --nav-bg: rgba(6,6,10,.75);
+    --tag-bg: rgba(255,255,255,.09);
+    --input-bg: rgba(255,255,255,.07);
   }
 }
 
@@ -64,1264 +78,1165 @@ html, body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* ── LAYOUT ── */
-.app {
-  display: flex; flex-direction: column;
-  height: 100svh; position: relative;
-}
+/* ── APP SHELL ── */
+.app { display: flex; flex-direction: column; height: 100svh; position: relative; overflow: hidden; }
 
-.screen {
-  display: none; flex: 1; overflow-y: auto;
-  padding: 0 0 90px 0;
-  -webkit-overflow-scrolling: touch;
-}
-
-.screen.active { display: flex; flex-direction: column; }
-
-/* ── NOISE (dark only) ── */
+/* NOISE dark only */
 @media (prefers-color-scheme: dark) {
   .app::before {
-    content: ''; position: fixed; inset: 0;
-    pointer-events: none; z-index: 0; opacity: .025;
+    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: .022;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-size: 180px 180px; mix-blend-mode: overlay;
+    background-size: 180px; mix-blend-mode: overlay;
+  }
+  /* ambient orbs */
+  .app::after {
+    content: ''; position: fixed; pointer-events: none; z-index: 0;
+    width: 500px; height: 500px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(237,75,0,.12) 0%, transparent 70%);
+    top: -200px; right: -150px; filter: blur(60px);
   }
 }
 
-/* ── TOP BAR ── */
+/* ── SCREENS ── */
+.screen { display: none; flex: 1; overflow-y: auto; overflow-x: hidden; padding-bottom: 96px; position: relative; z-index: 1; -webkit-overflow-scrolling: touch; }
+.screen.active { display: flex; flex-direction: column; }
+
+/* ── TOPBAR ── */
 .topbar {
   position: sticky; top: 0; z-index: 50;
-  padding: env(safe-area-inset-top, 44px) 1.25rem .9rem;
-  background: var(--bg);
+  padding: max(env(safe-area-inset-top,44px), 44px) 1.25rem .85rem;
+  background: var(--nav-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   border-bottom: 1px solid var(--border);
   display: flex; align-items: flex-end; justify-content: space-between;
+  gap: .75rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  .topbar {
-    background: rgba(6,6,10,.85);
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
-  }
+.topbar-left { display: flex; align-items: center; gap: .75rem; }
+
+/* LOGO */
+.logo-mark {
+  width: 34px; height: 34px; border-radius: 9px; flex-shrink: 0;
+  background: linear-gradient(135deg, #020035 0%, var(--orange) 100%);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 12px rgba(237,75,0,.4);
+  position: relative; overflow: hidden;
+}
+.logo-mark::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,.2) 0%, transparent 60%);
+}
+.logo-mark-text {
+  font-family: 'Oswald', sans-serif; font-weight: 700; font-size: .72rem;
+  letter-spacing: .05em; color: white; position: relative; z-index: 1;
 }
 
 .topbar-title {
-  font-family: 'Oswald', sans-serif;
-  font-weight: 600; font-size: 1.4rem;
-  letter-spacing: .02em; text-transform: uppercase;
-  color: var(--text);
+  font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 1.2rem;
+  letter-spacing: .03em; text-transform: uppercase; color: var(--text);
 }
-
 .topbar-title span { color: var(--orange); }
 
 .topbar-action {
-  width: 34px; height: 34px; border-radius: 50%;
+  width: 32px; height: 32px; border-radius: 50%;
   background: var(--orange); color: white; border: none;
   display: flex; align-items: center; justify-content: center;
-  font-size: 1.2rem; cursor: pointer; flex-shrink: 0;
-  box-shadow: 0 4px 16px rgba(237,75,0,.35);
-  transition: transform .2s var(--ease);
+  font-size: 1.1rem; cursor: pointer; flex-shrink: 0;
+  box-shadow: 0 4px 16px rgba(237,75,0,.4);
+  transition: transform .2s var(--ease), box-shadow .2s;
 }
+.topbar-action:active { transform: scale(.92); }
 
-.topbar-action:hover { transform: scale(1.08); }
-
-/* ── CARDS ── */
-.card {
-  background: var(--bg2);
+/* ── GLASS CARD ── */
+.gcard {
+  background: var(--glass);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius);
-  border: 1px solid var(--border);
   box-shadow: var(--card-shadow);
-  overflow: hidden;
-  position: relative;
+  position: relative; overflow: hidden;
 }
-
+.gcard::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.35), rgba(255,255,255,.6), rgba(255,255,255,.35), transparent);
+}
 @media (prefers-color-scheme: dark) {
-  .card {
-    background: var(--glass);
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
-  }
-  .card::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,.1), transparent);
-  }
+  .gcard::before { background: linear-gradient(90deg, transparent, rgba(255,255,255,.12), rgba(255,255,255,.22), rgba(255,255,255,.12), transparent); }
+}
+/* left shine */
+.gcard::after {
+  content: ''; position: absolute; top: 0; left: 0; width: 1px; height: 60%;
+  background: linear-gradient(180deg, rgba(255,255,255,.35), transparent);
+  pointer-events: none;
 }
 
 /* ── TAGS ── */
 .tag {
-  display: inline-flex; align-items: center;
-  padding: .2rem .65rem;
-  border-radius: 100px;
-  font-family: 'Titillium Web', sans-serif;
-  font-size: .6rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  display: inline-flex; align-items: center; padding: .18rem .6rem;
+  border-radius: 100px; font-family: 'Titillium Web', sans-serif;
+  font-size: .58rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
   background: var(--tag-bg); color: var(--muted);
 }
-
-.tag.orange { background: rgba(237,75,0,.12); color: var(--orange); }
-.tag.green  { background: rgba(52,199,89,.12); color: #34c759; }
-.tag.blue   { background: rgba(10,132,255,.12); color: #0a84ff; }
-.tag.yellow { background: rgba(255,214,10,.15); color: #b8860b; }
-@media (prefers-color-scheme: dark) {
-  .tag.yellow { color: #ffd60a; }
-}
-.tag.red    { background: rgba(255,59,48,.12); color: #ff3b30; }
-.tag.purple { background: rgba(175,82,222,.12); color: #af52de; }
+.tag.orange { background: rgba(237,75,0,.13); color: var(--orange); }
+.tag.green  { background: rgba(52,199,89,.13); color: var(--green); }
+.tag.blue   { background: rgba(10,132,255,.13); color: var(--blue); }
+.tag.yellow { background: rgba(255,159,10,.13); color: var(--yellow); }
+.tag.red    { background: rgba(255,59,48,.13); color: var(--red); }
+.tag.purple { background: rgba(191,90,242,.13); color: var(--purple); }
 
 /* ── BOTTOM NAV ── */
 .bottom-nav {
   position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
-  padding: .6rem 1rem calc(.6rem + env(safe-area-inset-bottom, 16px));
+  padding: .55rem 1rem calc(.55rem + env(safe-area-inset-bottom, 12px));
   background: var(--nav-bg);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   border-top: 1px solid var(--glass-border);
 }
-
 @media (prefers-color-scheme: dark) {
-  .bottom-nav {
-    box-shadow: 0 -1px 0 rgba(255,255,255,.06), inset 0 1px 0 rgba(255,255,255,.04);
-  }
+  .bottom-nav { box-shadow: 0 -1px 0 rgba(255,255,255,.07), inset 0 1px 0 rgba(255,255,255,.04); }
 }
 
-.nav-inner {
+.nav-pill-wrap {
+  background: var(--glass);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 100px; padding: .3rem .35rem;
   display: flex; align-items: center; justify-content: space-around;
-  background: var(--bg3);
-  border-radius: 100px; padding: .35rem .4rem;
-  border: 1px solid var(--border);
+  box-shadow: var(--card-shadow);
+  position: relative; overflow: hidden;
 }
-
-@media (prefers-color-scheme: dark) {
-  .nav-inner {
-    background: rgba(255,255,255,.04);
-    border-color: rgba(255,255,255,.08);
-  }
+.nav-pill-wrap::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.5), transparent);
 }
 
 .nav-btn {
-  display: flex; flex-direction: column; align-items: center; gap: .2rem;
-  padding: .5rem .9rem; border-radius: 100px; border: none;
-  background: transparent; cursor: pointer; transition: all .25s var(--ease);
-  min-width: 56px;
+  display: flex; flex-direction: column; align-items: center; gap: .18rem;
+  padding: .45rem .7rem; border-radius: 100px; border: none;
+  background: transparent; cursor: pointer; transition: all .2s var(--ease);
+  min-width: 52px; position: relative;
 }
-
 .nav-btn.active {
-  background: var(--bg2);
-  box-shadow: 0 2px 12px rgba(0,0,0,.1);
+  background: var(--glass-hover);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 2px 10px rgba(0,0,0,.12), inset 0 1px 0 rgba(255,255,255,.3);
+  border: 1px solid var(--glass-border);
 }
-
 @media (prefers-color-scheme: dark) {
-  .nav-btn.active {
-    background: rgba(255,255,255,.1);
-    box-shadow: 0 2px 12px rgba(0,0,0,.4);
-  }
+  .nav-btn.active { box-shadow: 0 2px 12px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.1); }
 }
 
-.nav-icon {
-  font-size: 1.15rem; line-height: 1;
-  filter: grayscale(1) opacity(.4);
-  transition: filter .2s;
-}
+.nav-icon-wrap { width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; }
 
-.nav-btn.active .nav-icon { filter: none; }
+.nav-icon-wrap svg { width: 20px; height: 20px; stroke: var(--muted); fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; transition: stroke .2s; }
+.nav-btn.active .nav-icon-wrap svg { stroke: var(--orange); }
 
 .nav-label {
-  font-family: 'Titillium Web', sans-serif;
-  font-size: .55rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
-  color: var(--subtle); transition: color .2s;
+  font-family: 'Titillium Web', sans-serif; font-size: .52rem; font-weight: 700;
+  letter-spacing: .07em; text-transform: uppercase; color: var(--muted); transition: color .2s;
 }
-
 .nav-btn.active .nav-label { color: var(--orange); }
 
-/* ── SCREEN CONTENT ── */
-.content { padding: 1.25rem; flex: 1; }
+/* ── CONTENT ── */
+.content { padding: 1.1rem 1.1rem; flex: 1; }
 
-/* ── INÍCIO ── */
-.inicio-greeting {
-  margin-bottom: 1.5rem;
+/* ── SECTION LABEL ── */
+.sec-label {
+  font-family: 'Titillium Web', sans-serif; font-size: .6rem; font-weight: 700;
+  letter-spacing: .18em; text-transform: uppercase; color: var(--muted);
+  margin: 1.1rem 0 .6rem; padding-left: .1rem;
 }
 
-.inicio-greeting-sub {
-  font-family: 'Titillium Web', sans-serif;
-  font-size: .65rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase;
-  color: var(--orange); margin-bottom: .3rem;
+/* ── EMPTY STATE ── */
+.empty { text-align: center; padding: 2.5rem 1.5rem; }
+.empty-icon { font-size: 2rem; margin-bottom: .5rem; opacity: .35; }
+.empty-text { font-size: .82rem; color: var(--muted); line-height: 1.6; }
+
+/* ── HOME ── */
+.home-header { margin-bottom: 1.25rem; }
+.home-time {
+  font-family: 'Titillium Web', sans-serif; font-size: .62rem; font-weight: 700;
+  letter-spacing: .2em; text-transform: uppercase; color: var(--orange); margin-bottom: .25rem;
 }
-
-.inicio-greeting-title {
-  font-family: 'Oswald', sans-serif;
-  font-weight: 200; font-size: 1.8rem; text-transform: uppercase; letter-spacing: .02em;
-  color: var(--text);
+.home-name {
+  font-family: 'Oswald', sans-serif; font-weight: 200; font-size: 1.9rem;
+  text-transform: uppercase; letter-spacing: .02em; color: var(--text);
 }
+.home-name b { font-weight: 700; }
 
-.inicio-greeting-title b { font-weight: 700; }
-
-.summary-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: 1.25rem;
+/* POSTIT */
+.postit {
+  margin-bottom: 1.1rem; padding: .9rem 1rem;
+  border-radius: var(--radius-sm); border-left: 3px solid var(--orange);
 }
-
-.summary-card {
-  padding: 1.1rem 1rem;
-  border-radius: var(--radius);
-  background: var(--bg2); border: 1px solid var(--border);
-  box-shadow: var(--card-shadow); position: relative; overflow: hidden;
+.postit-label {
+  font-family: 'Titillium Web', sans-serif; font-size: .58rem; font-weight: 700;
+  letter-spacing: .15em; text-transform: uppercase; color: var(--orange); margin-bottom: .35rem;
 }
-
-@media (prefers-color-scheme: dark) {
-  .summary-card {
-    background: var(--glass);
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
-  }
+.postit-input {
+  width: 100%; background: none; border: none; outline: none;
+  font-family: 'DM Sans', sans-serif; font-size: .85rem; color: var(--text);
+  resize: none; min-height: 40px; line-height: 1.5;
 }
+.postit-input::placeholder { color: var(--muted); }
 
-.summary-card-num {
-  font-family: 'Oswald', sans-serif;
-  font-weight: 700; font-size: 2rem; line-height: 1;
+/* SUMMARY GRID */
+.sum-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: .65rem; margin-bottom: 1.1rem; }
+.sum-card { padding: 1rem; border-radius: var(--radius-sm); }
+.sum-num {
+  font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 2rem; line-height: 1;
   color: var(--orange); margin-bottom: .2rem;
 }
-
-.summary-card-label {
-  font-family: 'Titillium Web', sans-serif;
-  font-size: .62rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
-  color: var(--muted);
+.sum-lbl {
+  font-family: 'Titillium Web', sans-serif; font-size: .58rem; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
 }
 
-.section-label {
-  font-family: 'Titillium Web', sans-serif;
-  font-size: .62rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
-  color: var(--muted); margin-bottom: .75rem; margin-top: 1.25rem;
+/* CHARTS */
+.chart-row { display: grid; grid-template-columns: 1fr 1fr; gap: .65rem; margin-bottom: 1.1rem; }
+.chart-card { padding: 1rem; border-radius: var(--radius-sm); }
+.chart-title {
+  font-family: 'Titillium Web', sans-serif; font-size: .6rem; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: .75rem;
 }
+.bar-chart { display: flex; align-items: flex-end; gap: .3rem; height: 50px; }
+.bar-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: .2rem; }
+.bar-fill { width: 100%; border-radius: 3px 3px 0 0; background: var(--orange); opacity: .7; min-height: 3px; transition: height .5s var(--ease); }
+.bar-lbl { font-family: 'Titillium Web', sans-serif; font-size: .48rem; color: var(--muted); }
 
-/* ── PRAZO BAR ── */
-.prazo-bar-wrap { margin-top: .6rem; }
-.prazo-bar-bg {
-  height: 3px; background: var(--border); border-radius: 2px; overflow: hidden;
+.donut-wrap { display: flex; align-items: center; gap: .75rem; }
+.donut-legend { flex: 1; }
+.donut-leg-item { display: flex; align-items: center; gap: .4rem; margin-bottom: .3rem; }
+.donut-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.donut-leg-label { font-size: .65rem; color: var(--muted); }
+
+/* PIPELINE ITEM */
+.pipe-item { padding: .85rem 1rem; border-radius: var(--radius-sm); margin-bottom: .5rem; cursor: pointer; transition: transform .15s; }
+.pipe-item:active { transform: scale(.98); }
+.pipe-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: .5rem; }
+.pipe-name { font-family: 'Titillium Web', sans-serif; font-size: .88rem; font-weight: 700; color: var(--text); }
+.pipe-date { font-size: .72rem; color: var(--muted); margin-top: .1rem; }
+.pipe-tags { display: flex; flex-wrap: wrap; gap: .3rem; margin-bottom: .5rem; }
+.pipe-footer { display: flex; align-items: center; justify-content: space-between; }
+.pipe-actions { display: flex; gap: .4rem; margin-top: .6rem; }
+
+/* PRAZO */
+.prazo-bar { height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; margin-top: .5rem; }
+.prazo-fill { height: 100%; border-radius: 2px; transition: width .5s var(--ease); }
+.prazo-txt {
+  font-family: 'Titillium Web', sans-serif; font-size: .6rem; font-weight: 700;
+  letter-spacing: .07em; text-transform: uppercase;
 }
-.prazo-bar-fill {
-  height: 100%; border-radius: 2px;
-  transition: width .5s var(--ease);
+.prazo-ok { color: var(--green); }
+.prazo-warn { color: var(--yellow); }
+.prazo-urgent { color: var(--red); }
+
+/* BPP SUB-NAV */
+.sub-nav { display: flex; gap: .4rem; padding: .75rem 1.1rem 0; }
+.sub-btn {
+  padding: .4rem .9rem; border-radius: 100px; border: 1px solid var(--border);
+  background: var(--glass); font-family: 'Titillium Web', sans-serif;
+  font-size: .65rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--muted); cursor: pointer; transition: all .2s var(--ease);
+  backdrop-filter: blur(12px);
 }
-
-/* ── CLIENT CARD ── */
-.client-card {
-  padding: 1rem 1.1rem; margin-bottom: .65rem;
-  border-radius: var(--radius);
-  background: var(--bg2); border: 1px solid var(--border);
-  box-shadow: var(--card-shadow); position: relative; overflow: hidden;
-  cursor: pointer; transition: transform .15s var(--ease);
-}
-
-.client-card:active { transform: scale(.98); }
-
-@media (prefers-color-scheme: dark) {
-  .client-card {
-    background: var(--glass);
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
-  }
-  .client-card::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent);
-  }
-}
-
-.client-card-header {
-  display: flex; align-items: flex-start; justify-content: space-between; gap: .5rem;
-  margin-bottom: .6rem;
-}
-
-.client-card-name {
-  font-family: 'Titillium Web', sans-serif;
-  font-size: .9rem; font-weight: 700; color: var(--text);
-}
-
-.client-card-date {
-  font-size: .75rem; color: var(--muted); font-weight: 300; margin-top: .1rem;
-}
-
-.client-card-tags { display: flex; flex-wrap: wrap; gap: .35rem; margin-bottom: .65rem; }
-
-.client-card-footer {
-  display: flex; align-items: center; justify-content: space-between;
-}
-
-.prazo-text {
-  font-family: 'Titillium Web', sans-serif;
-  font-size: .62rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
-  color: var(--muted);
-}
-
-.prazo-text.urgent { color: #ff3b30; }
-.prazo-text.ok { color: #34c759; }
-
-/* ── MODAL ── */
-.modal-overlay {
-  display: none; position: fixed; inset: 0; z-index: 200;
-  background: rgba(0,0,0,.5); backdrop-filter: blur(8px);
-  align-items: flex-end; justify-content: center;
-}
-
-.modal-overlay.show { display: flex; }
-
-.modal {
-  background: var(--bg2); border-radius: 20px 20px 0 0;
-  border: 1px solid var(--border); border-bottom: none;
-  width: 100%; max-width: 560px; max-height: 90svh;
-  overflow-y: auto; padding: 0;
-  animation: slideUp .35s var(--ease) forwards;
-}
-
-@media (prefers-color-scheme: dark) {
-  .modal {
-    background: #16161e;
-    border-color: rgba(255,255,255,.1);
-  }
-}
-
-@keyframes slideUp {
-  from { transform: translateY(100%); }
-  to   { transform: translateY(0); }
-}
-
-.modal-handle {
-  width: 36px; height: 4px; border-radius: 2px;
-  background: var(--subtle); margin: .75rem auto .5rem;
-}
-
-.modal-header {
-  padding: .5rem 1.25rem 1rem;
-  border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: space-between;
-}
-
-.modal-title {
-  font-family: 'Titillium Web', sans-serif;
-  font-size: 1rem; font-weight: 700; color: var(--text);
-}
-
-.modal-close {
-  width: 28px; height: 28px; border-radius: 50%;
-  background: var(--tag-bg); border: none; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  font-size: .8rem; color: var(--muted); transition: background .2s;
-}
-
-.modal-close:hover { background: var(--border); }
-
-.modal-body { padding: 1.25rem; }
-
-.form-field { margin-bottom: 1.1rem; }
-
-.form-field label {
-  display: block;
-  font-family: 'Titillium Web', sans-serif;
-  font-size: .62rem; font-weight: 700; letter-spacing: .15em; text-transform: uppercase;
-  color: var(--muted); margin-bottom: .4rem;
-}
-
-.form-field input,
-.form-field select {
-  width: 100%;
-  background: var(--bg3); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); padding: .75rem .9rem;
-  font-family: 'DM Sans', sans-serif; font-size: .9rem; color: var(--text);
-  outline: none; appearance: none; -webkit-appearance: none;
-  transition: border-color .2s, box-shadow .2s;
-}
-
-.form-field input:focus,
-.form-field select:focus {
-  border-color: rgba(237,75,0,.5);
-  box-shadow: 0 0 0 3px rgba(237,75,0,.1);
-}
-
-.form-field input::placeholder { color: var(--subtle); }
-
-.tags-select { display: flex; flex-wrap: wrap; gap: .4rem; }
-
-.tag-toggle {
-  padding: .35rem .8rem;
-  border: 1px solid var(--border); border-radius: 100px;
-  font-family: 'Titillium Web', sans-serif;
-  font-size: .62rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
-  color: var(--muted); background: var(--bg3); cursor: pointer; transition: all .2s;
-}
-
-.tag-toggle.selected {
+.sub-btn.active {
   background: var(--orange); border-color: var(--orange); color: white;
+  box-shadow: 0 4px 14px rgba(237,75,0,.3);
 }
 
-.btn-submit {
-  width: 100%; padding: .9rem;
-  background: var(--orange); color: white; border: none;
-  border-radius: var(--radius-sm); cursor: pointer;
-  font-family: 'Titillium Web', sans-serif;
-  font-size: .8rem; font-weight: 700; letter-spacing: .15em; text-transform: uppercase;
-  box-shadow: 0 4px 20px rgba(237,75,0,.3);
-  transition: all .2s var(--ease); margin-top: .5rem;
+/* PIPELINE PROGRESS */
+.pipeline-vis {
+  display: flex; align-items: center; padding: 1rem 1.1rem .5rem; gap: 0;
 }
-
-.btn-submit:hover { background: var(--orange2); transform: translateY(-1px); }
-
-/* ── AGENDA ── */
-.cal-header {
-  display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;
+.pip-step {
+  display: flex; flex-direction: column; align-items: center; gap: .3rem; flex-shrink: 0;
 }
-
-.cal-month {
-  font-family: 'Oswald', sans-serif;
-  font-weight: 400; font-size: 1.1rem; text-transform: uppercase; letter-spacing: .05em;
-  color: var(--text);
+.pip-dot {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--glass); border: 1.5px solid var(--border);
+  backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .7rem; transition: all .3s var(--ease);
 }
+.pip-dot.active { background: var(--orange); border-color: var(--orange); box-shadow: 0 0 0 4px rgba(237,75,0,.15); }
+.pip-dot svg { width: 14px; height: 14px; stroke: var(--muted); fill: none; stroke-width: 2; }
+.pip-dot.active svg { stroke: white; }
+.pip-lbl { font-family: 'Titillium Web', sans-serif; font-size: .55rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.pip-lbl.active { color: var(--orange); }
+.pip-line { flex: 1; height: 1.5px; background: var(--border); margin: 0 .2rem; margin-bottom: 1.2rem; position: relative; overflow: hidden; }
+.pip-line.done::after { content: ''; position: absolute; inset: 0; background: var(--orange); }
 
-.cal-nav { display: flex; gap: .4rem; }
+/* MOVE BTN */
+.btn-move {
+  display: inline-flex; align-items: center; gap: .35rem;
+  padding: .35rem .8rem; border-radius: 100px;
+  background: rgba(237,75,0,.1); border: 1px solid rgba(237,75,0,.3);
+  color: var(--orange); font-family: 'Titillium Web', sans-serif;
+  font-size: .6rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  cursor: pointer; transition: all .2s;
+}
+.btn-move:hover { background: var(--orange); color: white; }
 
+.btn-del {
+  width: 26px; height: 26px; border-radius: 50%; border: none;
+  background: var(--tag-bg); color: var(--muted); cursor: pointer;
+  display: flex; align-items: center; justify-content: center; font-size: .7rem;
+  transition: all .2s; flex-shrink: 0;
+}
+.btn-del:hover { background: rgba(255,59,48,.15); color: var(--red); }
+
+/* CALENDAR */
+.cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: .75rem; }
+.cal-month { font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 1.05rem; text-transform: uppercase; letter-spacing: .05em; }
+.cal-nav-wrap { display: flex; gap: .35rem; }
 .cal-nav-btn {
-  width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--border);
-  background: var(--bg2); color: var(--muted); cursor: pointer;
-  display: flex; align-items: center; justify-content: center; font-size: .8rem;
-  transition: all .2s;
+  width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border);
+  background: var(--glass); backdrop-filter: blur(12px); color: var(--muted); cursor: pointer;
+  display: flex; align-items: center; justify-content: center; font-size: .8rem; transition: all .2s;
 }
-
 .cal-nav-btn:hover { border-color: var(--orange); color: var(--orange); }
-
-.cal-grid {
-  display: grid; grid-template-columns: repeat(7,1fr); gap: .2rem; margin-bottom: 1rem;
-}
-
-.cal-day-label {
-  text-align: center;
-  font-family: 'Titillium Web', sans-serif;
-  font-size: .58rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
-  color: var(--subtle); padding: .3rem 0;
-}
-
+.cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: .15rem; margin-bottom: .75rem; }
+.cal-lbl { text-align: center; font-family: 'Titillium Web', sans-serif; font-size: .55rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--subtle); padding: .25rem 0; }
 .cal-day {
   aspect-ratio: 1; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-  font-size: .82rem; font-weight: 400; color: var(--muted); cursor: pointer;
-  transition: all .2s; position: relative;
+  font-size: .8rem; color: var(--muted); cursor: pointer; transition: all .18s; position: relative;
 }
-
 .cal-day:hover { background: var(--tag-bg); color: var(--text); }
-.cal-day.today { background: var(--orange); color: white; font-weight: 700; }
-.cal-day.has-event::after {
-  content: ''; position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%);
-  width: 4px; height: 4px; border-radius: 50%; background: var(--orange);
+.cal-day.today { background: var(--orange); color: white; font-weight: 700; box-shadow: 0 0 0 3px rgba(237,75,0,.2); }
+.cal-day.selected { background: var(--glass); border: 1.5px solid var(--orange); color: var(--orange); backdrop-filter: blur(8px); }
+.cal-day.today.selected { background: var(--orange); color: white; }
+.cal-day.has-event::after { content: ''; position: absolute; bottom: 1px; left: 50%; transform: translateX(-50%); width: 4px; height: 4px; border-radius: 50%; background: var(--orange); }
+.cal-day.today.has-event::after { background: rgba(255,255,255,.8); }
+.cal-day.dim { opacity: .28; }
+.event-item { display: flex; align-items: center; gap: .65rem; padding: .75rem .9rem; border-radius: var(--radius-sm); margin-bottom: .45rem; }
+.event-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--orange); flex-shrink: 0; }
+.event-name { flex: 1; font-size: .85rem; font-weight: 500; color: var(--text); }
+.event-time { font-family: 'Titillium Web', sans-serif; font-size: .6rem; font-weight: 700; color: var(--muted); }
+
+/* NOTES */
+.nota-list-item { padding: .9rem 1rem; border-radius: var(--radius-sm); margin-bottom: .5rem; cursor: pointer; transition: transform .15s; }
+.nota-list-item:active { transform: scale(.98); }
+.nota-item-name { font-family: 'Titillium Web', sans-serif; font-size: .88rem; font-weight: 700; color: var(--text); margin-bottom: .25rem; }
+.nota-item-prev { font-size: .78rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nota-item-meta { font-family: 'Titillium Web', sans-serif; font-size: .56rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--subtle); margin-top: .4rem; }
+
+/* NOTE EDITOR */
+.nota-editor { display: none; flex-direction: column; height: 100%; }
+.nota-editor.show { display: flex; flex: 1; }
+.nota-ed-header { padding: .75rem 1.1rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: .75rem; }
+.nota-ed-title { font-family: 'Titillium Web', sans-serif; font-size: .9rem; font-weight: 700; color: var(--text); flex: 1; }
+.nota-ed-body { flex: 1; padding: 1.1rem; font-size: .92rem; color: var(--text); line-height: 1.7; border: none; background: transparent; resize: none; outline: none; font-family: 'DM Sans', sans-serif; font-weight: 300; }
+.nota-ed-body::placeholder { color: var(--muted); }
+.nota-read-toggle { display: flex; align-items: center; gap: .5rem; padding: .6rem 1.1rem; border-top: 1px solid var(--border); }
+.nota-read-toggle label { font-family: 'Titillium Web', sans-serif; font-size: .62rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.toggle-sw { position: relative; width: 36px; height: 20px; }
+.toggle-sw input { opacity: 0; width: 0; height: 0; }
+.toggle-track { position: absolute; inset: 0; border-radius: 20px; background: var(--border); cursor: pointer; transition: background .2s; }
+.toggle-sw input:checked + .toggle-track { background: var(--orange); }
+.toggle-track::after { content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: white; transition: transform .2s; box-shadow: 0 1px 4px rgba(0,0,0,.25); }
+.toggle-sw input:checked + .toggle-track::after { transform: translateX(16px); }
+.btn-back { background: none; border: none; cursor: pointer; color: var(--orange); font-family: 'Titillium Web', sans-serif; font-size: .8rem; font-weight: 700; letter-spacing: .08em; }
+
+/* INSIGHTS */
+.pyramid-wrap { margin-bottom: 1.1rem; }
+.pyramid { display: flex; flex-direction: column; align-items: center; gap: .2rem; }
+.pyr-row {
+  border-radius: 6px; display: flex; align-items: center; justify-content: center;
+  font-family: 'Titillium Web', sans-serif; font-size: .62rem; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase; color: white; text-align: center;
+  padding: .4rem .5rem; transition: transform .2s;
 }
-.cal-day.today.has-event::after { background: white; }
-.cal-day.other-month { opacity: .3; }
+.pyr-row:hover { transform: scaleX(1.02); }
 
-.event-item {
-  padding: .85rem 1rem; border-radius: var(--radius-sm);
-  background: var(--bg2); border: 1px solid var(--border);
-  margin-bottom: .5rem; display: flex; align-items: center; gap: .75rem;
+.insight-card { padding: 1.1rem; border-radius: var(--radius-sm); margin-bottom: .65rem; }
+.insight-author {
+  font-family: 'Titillium Web', sans-serif; font-size: .58rem; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--orange); margin-bottom: .5rem;
 }
+.insight-text { font-size: .88rem; font-weight: 300; color: var(--text2); line-height: 1.7; font-style: italic; }
+.insight-source { font-size: .72rem; color: var(--muted); margin-top: .5rem; }
 
-@media (prefers-color-scheme: dark) {
-  .event-item { background: var(--glass); }
+.btn-insight-day {
+  width: 100%; padding: .85rem; border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, rgba(237,75,0,.15), rgba(10,132,255,.1));
+  border: 1px solid rgba(237,75,0,.25); color: var(--orange);
+  font-family: 'Titillium Web', sans-serif; font-size: .72rem; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase; cursor: pointer; transition: all .2s;
+  margin-bottom: 1.1rem; backdrop-filter: blur(12px);
 }
+.btn-insight-day:hover { background: linear-gradient(135deg, rgba(237,75,0,.25), rgba(10,132,255,.15)); }
 
-.event-dot {
-  width: 8px; height: 8px; border-radius: 50%; background: var(--orange); flex-shrink: 0;
-}
-
-.event-name {
-  font-size: .88rem; font-weight: 500; color: var(--text); flex: 1;
-}
-
-.event-time {
-  font-family: 'Titillium Web', sans-serif;
-  font-size: .62rem; font-weight: 700; letter-spacing: .08em;
-  color: var(--muted);
-}
-
-/* ── NOTAS ── */
-.nota-card {
-  padding: 1rem; border-radius: var(--radius);
-  background: var(--bg2); border: 1px solid var(--border);
-  box-shadow: var(--card-shadow); margin-bottom: .65rem; cursor: pointer;
-  transition: transform .15s;
-}
-
-.nota-card:active { transform: scale(.98); }
-
-@media (prefers-color-scheme: dark) {
-  .nota-card { background: var(--glass); }
-}
-
-.nota-card-name {
-  font-family: 'Titillium Web', sans-serif;
-  font-size: .88rem; font-weight: 700; color: var(--text); margin-bottom: .3rem;
-}
-
-.nota-card-preview {
-  font-size: .8rem; font-weight: 300; color: var(--muted);
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-
-.nota-card-date {
-  font-family: 'Titillium Web', sans-serif;
-  font-size: .58rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
-  color: var(--subtle); margin-top: .5rem;
-}
-
-/* NOTA EDITOR */
-.nota-editor {
-  display: none; flex-direction: column; height: 100%;
-}
-
-.nota-editor.show { display: flex; }
-
-.nota-editor-header {
-  display: flex; align-items: center; gap: .75rem;
-  padding: .75rem 1.25rem; border-bottom: 1px solid var(--border);
-}
-
-.btn-back-nota {
-  background: none; border: none; cursor: pointer;
-  color: var(--orange); font-size: .85rem;
-  font-family: 'Titillium Web', sans-serif; font-weight: 700; letter-spacing: .08em;
-}
-
-.nota-editor-title {
-  font-family: 'Titillium Web', sans-serif;
-  font-size: .9rem; font-weight: 700; color: var(--text); flex: 1;
-}
-
-.nota-editor-body {
-  flex: 1; padding: 1.25rem;
-  font-size: .95rem; font-weight: 300; color: var(--text);
-  line-height: 1.7; border: none; background: transparent; resize: none; outline: none;
-  font-family: 'DM Sans', sans-serif;
-}
-
-/* EMPTY STATE */
-.empty-state {
-  text-align: center; padding: 3rem 1.5rem;
-}
-
-.empty-icon { font-size: 2.5rem; margin-bottom: .75rem; opacity: .4; }
-
-.empty-text {
-  font-size: .88rem; font-weight: 300; color: var(--muted); line-height: 1.6;
-}
-
-/* DIVIDER */
-.divider { height: 1px; background: var(--border); margin: 1rem 0; }
+/* MODAL */
+.modal-overlay { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,.45); backdrop-filter: blur(6px); align-items: flex-end; justify-content: center; }
+.modal-overlay.show { display: flex; }
+.modal { background: var(--bg2); border-radius: 20px 20px 0 0; border: 1px solid var(--border); border-bottom: none; width: 100%; max-width: 600px; max-height: 92svh; overflow-y: auto; animation: slideUp .32s var(--ease) forwards; }
+@media (prefers-color-scheme: dark) { .modal { background: #1a1a22; } }
+@keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+.modal-handle { width: 36px; height: 4px; border-radius: 2px; background: var(--subtle); margin: .7rem auto .4rem; }
+.modal-head { padding: .4rem 1.25rem .9rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.modal-title { font-family: 'Titillium Web', sans-serif; font-size: .95rem; font-weight: 700; color: var(--text); }
+.modal-close { width: 26px; height: 26px; border-radius: 50%; background: var(--tag-bg); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: .75rem; color: var(--muted); }
+.modal-body { padding: 1.1rem; }
+.ff { margin-bottom: 1rem; }
+.ff label { display: block; font-family: 'Titillium Web', sans-serif; font-size: .6rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; color: var(--muted); margin-bottom: .38rem; }
+.ff input, .ff select { width: 100%; background: var(--input-bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: .72rem .9rem; font-family: 'DM Sans', sans-serif; font-size: .9rem; color: var(--text); outline: none; appearance: none; -webkit-appearance: none; transition: border-color .2s, box-shadow .2s; }
+.ff input:focus, .ff select:focus { border-color: rgba(237,75,0,.5); box-shadow: 0 0 0 3px rgba(237,75,0,.1); }
+.ff input::placeholder { color: var(--muted); }
+.ff select option { background: var(--bg2); }
+.tag-sel { display: flex; flex-wrap: wrap; gap: .38rem; }
+.ts-btn { padding: .3rem .75rem; border: 1px solid var(--border); border-radius: 100px; font-family: 'Titillium Web', sans-serif; font-size: .6rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); background: var(--input-bg); cursor: pointer; transition: all .18s; }
+.ts-btn.on { background: var(--orange); border-color: var(--orange); color: white; }
+.btn-save { width: 100%; padding: .85rem; background: var(--orange); color: white; border: none; border-radius: var(--radius-sm); cursor: pointer; font-family: 'Titillium Web', sans-serif; font-size: .78rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; box-shadow: 0 4px 20px rgba(237,75,0,.3); transition: all .2s var(--ease); margin-top: .35rem; }
+.btn-save:active { transform: scale(.97); }
 </style>
 </head>
 <body>
-
 <div class="app">
 
-  <!-- ── INÍCIO ── -->
-  <div class="screen active" id="screen-inicio">
-    <div class="topbar">
+<!-- ══ SCREEN: HOME ══ -->
+<div class="screen active" id="sc-home">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="logo-mark"><div class="logo-mark-text">MV</div></div>
       <div class="topbar-title">MV <span>·</span> Painel</div>
     </div>
-    <div class="content">
-      <div class="inicio-greeting">
-        <div class="inicio-greeting-sub" id="greeting-time">Bom dia</div>
-        <div class="inicio-greeting-title">Marcus <b>Valério</b></div>
-      </div>
-
-      <div class="summary-grid" id="summary-grid">
-        <div class="summary-card">
-          <div class="summary-card-num" id="sum-briefings">0</div>
-          <div class="summary-card-label">Briefings</div>
-        </div>
-        <div class="summary-card">
-          <div class="summary-card-num" id="sum-propostas">0</div>
-          <div class="summary-card-label">Propostas</div>
-        </div>
-        <div class="summary-card">
-          <div class="summary-card-num" id="sum-andamento">0</div>
-          <div class="summary-card-label">Em andamento</div>
-        </div>
-        <div class="summary-card">
-          <div class="summary-card-num" id="sum-urgentes">0</div>
-          <div class="summary-card-label">Urgentes</div>
-        </div>
-      </div>
-
-      <div class="section-label">Prazos próximos</div>
-      <div id="inicio-prazos">
-        <div class="empty-state">
-          <div class="empty-icon">📋</div>
-          <div class="empty-text">Nenhum prazo no momento.</div>
-        </div>
-      </div>
-
-      <div class="section-label">Próximos eventos</div>
-      <div id="inicio-eventos">
-        <div class="empty-state">
-          <div class="empty-icon">📅</div>
-          <div class="empty-text">Nenhum evento agendado.</div>
-        </div>
-      </div>
-    </div>
   </div>
-
-  <!-- ── BRIEFINGS ── -->
-  <div class="screen" id="screen-briefings">
-    <div class="topbar">
-      <div class="topbar-title">Briefings</div>
-      <button class="topbar-action" onclick="openModal('modal-briefing')">+</button>
+  <div class="content">
+    <div class="home-header">
+      <div class="home-time" id="greeting">Bom dia</div>
+      <div class="home-name">Marcus <b>Valério</b></div>
     </div>
-    <div class="content">
-      <div id="briefings-list">
-        <div class="empty-state">
-          <div class="empty-icon">📨</div>
-          <div class="empty-text">Nenhum briefing cadastrado.<br>Toque em + para adicionar.</div>
+
+    <!-- Post-it -->
+    <div class="gcard postit">
+      <div class="postit-label">📌 Nota rápida</div>
+      <textarea class="postit-input" id="postit-input" placeholder="Anote algo importante..." rows="2" oninput="savePostit()"></textarea>
+    </div>
+
+    <!-- Summary -->
+    <div class="sum-grid">
+      <div class="gcard sum-card"><div class="sum-num" id="s-briefings">0</div><div class="sum-lbl">Briefings</div></div>
+      <div class="gcard sum-card"><div class="sum-num" id="s-propostas">0</div><div class="sum-lbl">Propostas</div></div>
+      <div class="gcard sum-card"><div class="sum-num" id="s-projetos">0</div><div class="sum-lbl">Projetos</div></div>
+      <div class="gcard sum-card"><div class="sum-num" id="s-urgentes" style="color:var(--red)">0</div><div class="sum-lbl">Urgentes</div></div>
+    </div>
+
+    <!-- Charts -->
+    <div class="chart-row">
+      <div class="gcard chart-card">
+        <div class="chart-title">Briefings / mês</div>
+        <div class="bar-chart" id="bar-chart"></div>
+      </div>
+      <div class="gcard chart-card">
+        <div class="chart-title">Serviços</div>
+        <div class="donut-wrap">
+          <svg width="52" height="52" viewBox="0 0 52 52" id="donut-svg"><circle cx="26" cy="26" r="20" fill="none" stroke="var(--border)" stroke-width="8"/></svg>
+          <div class="donut-legend" id="donut-legend"></div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- ── PROPOSTAS ── -->
-  <div class="screen" id="screen-propostas">
-    <div class="topbar">
-      <div class="topbar-title">Propostas</div>
-      <button class="topbar-action" onclick="openModal('modal-proposta')">+</button>
-    </div>
-    <div class="content">
-      <div class="section-label">Aguardando resposta</div>
-      <div id="propostas-aguardando"></div>
-      <div class="section-label">Em avaliação</div>
-      <div id="propostas-avaliacao"></div>
-      <div class="section-label">Entregues</div>
-      <div id="propostas-entregues"></div>
-      <div id="propostas-empty" class="empty-state">
-        <div class="empty-icon">📤</div>
-        <div class="empty-text">Nenhuma proposta ainda.<br>Toque em + para adicionar.</div>
-      </div>
-    </div>
-  </div>
+    <div class="sec-label">Prazos próximos</div>
+    <div id="home-prazos"><div class="empty"><div class="empty-icon">📋</div><div class="empty-text">Nenhum prazo.</div></div></div>
 
-  <!-- ── EM ANDAMENTO ── -->
-  <div class="screen" id="screen-andamento">
-    <div class="topbar">
-      <div class="topbar-title">Em andamento</div>
-      <button class="topbar-action" onclick="openModal('modal-andamento')">+</button>
-    </div>
-    <div class="content">
-      <div id="andamento-list">
-        <div class="empty-state">
-          <div class="empty-icon">⚡</div>
-          <div class="empty-text">Nenhum projeto em andamento.</div>
-        </div>
-      </div>
-    </div>
+    <div class="sec-label">Próximos eventos</div>
+    <div id="home-eventos"><div class="empty"><div class="empty-icon">📅</div><div class="empty-text">Nenhum evento.</div></div></div>
   </div>
+</div>
 
-  <!-- ── AGENDA ── -->
-  <div class="screen" id="screen-agenda">
-    <div class="topbar">
+<!-- ══ SCREEN: BPP ══ -->
+<div class="screen" id="sc-bpp">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="logo-mark"><div class="logo-mark-text">MV</div></div>
+      <div class="topbar-title" id="bpp-title">Briefings</div>
+    </div>
+    <button class="topbar-action" id="bpp-add-btn" onclick="bppAdd()">+</button>
+  </div>
+  <div class="sub-nav">
+    <button class="sub-btn active" onclick="bppTab('briefings',this)">Briefings</button>
+    <button class="sub-btn" onclick="bppTab('propostas',this)">Propostas</button>
+    <button class="sub-btn" onclick="bppTab('projetos',this)">Projetos</button>
+  </div>
+  <!-- Pipeline visual -->
+  <div class="pipeline-vis">
+    <div class="pip-step"><div class="pip-dot active" id="pip-0"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg></div><div class="pip-lbl active" id="pip-lbl-0">Briefing</div></div>
+    <div class="pip-line" id="pip-line-0"></div>
+    <div class="pip-step"><div class="pip-dot" id="pip-1"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.15 12 19.79 19.79 0 0 1 1.07 3.37a2 2 0 0 1 2-2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.82a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.01z"/></svg></div><div class="pip-lbl" id="pip-lbl-1">Proposta</div></div>
+    <div class="pip-line" id="pip-line-1"></div>
+    <div class="pip-step"><div class="pip-dot" id="pip-2"><svg viewBox="0 0 24 24"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg></div><div class="pip-lbl" id="pip-lbl-2">Projeto</div></div>
+  </div>
+  <div class="content" style="padding-top:.4rem">
+    <div id="bpp-briefings"><div class="empty"><div class="empty-icon">📨</div><div class="empty-text">Nenhum briefing. Toque em + para adicionar.</div></div></div>
+    <div id="bpp-propostas" style="display:none"><div class="empty"><div class="empty-icon">📤</div><div class="empty-text">Nenhuma proposta.</div></div></div>
+    <div id="bpp-projetos" style="display:none"><div class="empty"><div class="empty-icon">⚡</div><div class="empty-text">Nenhum projeto em andamento.</div></div></div>
+  </div>
+</div>
+
+<!-- ══ SCREEN: AGENDA ══ -->
+<div class="screen" id="sc-agenda">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="logo-mark"><div class="logo-mark-text">MV</div></div>
       <div class="topbar-title">Agenda</div>
-      <button class="topbar-action" onclick="openModal('modal-evento')">+</button>
     </div>
-    <div class="content">
-      <div class="cal-header">
-        <div class="cal-month" id="cal-month-label"></div>
-        <div class="cal-nav">
-          <button class="cal-nav-btn" onclick="changeMonth(-1)">‹</button>
-          <button class="cal-nav-btn" onclick="changeMonth(1)">›</button>
-        </div>
-      </div>
-      <div class="cal-grid" id="cal-grid"></div>
-      <div class="section-label" id="cal-events-label">Eventos</div>
-      <div id="cal-events-list">
-        <div class="empty-state">
-          <div class="empty-icon">📅</div>
-          <div class="empty-text">Nenhum evento. Toque em + para adicionar.</div>
-        </div>
-      </div>
-    </div>
+    <button class="topbar-action" onclick="openModal('m-evento')">+</button>
   </div>
+  <div class="content">
+    <div class="cal-header">
+      <div class="cal-month" id="cal-label"></div>
+      <div class="cal-nav-wrap">
+        <button class="cal-nav-btn" onclick="calMove(-1)">‹</button>
+        <button class="cal-nav-btn" onclick="calMove(1)">›</button>
+      </div>
+    </div>
+    <div class="cal-grid" id="cal-grid"></div>
+    <div class="sec-label" id="cal-day-label">Eventos</div>
+    <div id="cal-events"><div class="empty"><div class="empty-icon">📅</div><div class="empty-text">Nenhum evento neste dia.</div></div></div>
+  </div>
+</div>
 
-  <!-- ── NOTAS ── -->
-  <div class="screen" id="screen-notas">
-    <div class="topbar">
+<!-- ══ SCREEN: NOTAS ══ -->
+<div class="screen" id="sc-notas">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="logo-mark"><div class="logo-mark-text">MV</div></div>
       <div class="topbar-title">Notas</div>
-      <button class="topbar-action" onclick="openModal('modal-nota')">+</button>
     </div>
-    <div class="content" id="notas-content">
-      <div id="notas-list">
-        <div class="empty-state">
-          <div class="empty-icon">📝</div>
-          <div class="empty-text">Nenhuma nota ainda.<br>Toque em + para criar.</div>
-        </div>
-      </div>
-    </div>
-    <div class="nota-editor" id="nota-editor">
-      <div class="nota-editor-header">
-        <button class="btn-back-nota" onclick="closeNota()">← Voltar</button>
-        <div class="nota-editor-title" id="nota-editor-title"></div>
-        <button class="modal-close" onclick="deleteNota()">🗑</button>
-      </div>
-      <textarea class="nota-editor-body" id="nota-editor-body" placeholder="Escreva suas ideias aqui..." oninput="saveNotaContent()"></textarea>
+    <button class="topbar-action" onclick="openModal('m-nota')">+</button>
+  </div>
+  <div id="notas-list-view">
+    <div class="content">
+      <div id="notas-list"><div class="empty"><div class="empty-icon">📝</div><div class="empty-text">Nenhuma nota. Toque em + para criar.</div></div></div>
     </div>
   </div>
-
-  <!-- ── BOTTOM NAV ── -->
-  <nav class="bottom-nav">
-    <div class="nav-inner">
-      <button class="nav-btn active" onclick="goTo('inicio',this)">
-        <div class="nav-icon">🏠</div>
-        <div class="nav-label">Início</div>
-      </button>
-      <button class="nav-btn" onclick="goTo('briefings',this)">
-        <div class="nav-icon">📨</div>
-        <div class="nav-label">Briefings</div>
-      </button>
-      <button class="nav-btn" onclick="goTo('propostas',this)">
-        <div class="nav-icon">📤</div>
-        <div class="nav-label">Propostas</div>
-      </button>
-      <button class="nav-btn" onclick="goTo('andamento',this)">
-        <div class="nav-icon">⚡</div>
-        <div class="nav-label">Projetos</div>
-      </button>
-      <button class="nav-btn" onclick="goTo('agenda',this)">
-        <div class="nav-icon">📅</div>
-        <div class="nav-label">Agenda</div>
-      </button>
-      <button class="nav-btn" onclick="goTo('notas',this)">
-        <div class="nav-icon">📝</div>
-        <div class="nav-label">Notas</div>
-      </button>
+  <div class="nota-editor" id="nota-editor">
+    <div class="nota-ed-header">
+      <button class="btn-back" onclick="closeNota()">← Voltar</button>
+      <div class="nota-ed-title" id="ned-title"></div>
+      <button class="btn-del" onclick="deleteNota()">🗑</button>
     </div>
-  </nav>
-
-</div>
-
-<!-- ── MODALS ── -->
-
-<!-- Modal Briefing -->
-<div class="modal-overlay" id="modal-briefing" onclick="closeModalOutside(event,'modal-briefing')">
-  <div class="modal">
-    <div class="modal-handle"></div>
-    <div class="modal-header">
-      <div class="modal-title">Novo Briefing</div>
-      <button class="modal-close" onclick="closeModal('modal-briefing')">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="form-field"><label>Nome do cliente *</label><input type="text" id="b-nome" placeholder="Nome do cliente ou marca"></div>
-      <div class="form-field"><label>Data de envio *</label><input type="date" id="b-data"></div>
-      <div class="form-field">
-        <label>Serviços</label>
-        <div class="tags-select">
-          <div class="tag-toggle" onclick="toggleTag(this)">Identidade visual</div>
-          <div class="tag-toggle" onclick="toggleTag(this)">Posicionamento</div>
-          <div class="tag-toggle" onclick="toggleTag(this)">Instagram</div>
-          <div class="tag-toggle" onclick="toggleTag(this)">Tom de voz</div>
-          <div class="tag-toggle" onclick="toggleTag(this)">Conteúdo</div>
-          <div class="tag-toggle" onclick="toggleTag(this)">Proposta de valor</div>
-          <div class="tag-toggle" onclick="toggleTag(this)">Auditoria</div>
-        </div>
-      </div>
-      <button class="btn-submit" onclick="saveBriefing()">Salvar briefing</button>
+    <textarea class="nota-ed-body" id="ned-body" placeholder="Escreva suas ideias e observações..." oninput="saveNotaBody()"></textarea>
+    <div class="nota-read-toggle">
+      <label for="nota-read-sw">Revisado</label>
+      <div class="toggle-sw"><input type="checkbox" id="nota-read-sw" onchange="toggleNotaRead()"><div class="toggle-track"></div></div>
     </div>
   </div>
 </div>
 
-<!-- Modal Proposta -->
-<div class="modal-overlay" id="modal-proposta" onclick="closeModalOutside(event,'modal-proposta')">
-  <div class="modal">
-    <div class="modal-handle"></div>
-    <div class="modal-header">
-      <div class="modal-title">Nova Proposta</div>
-      <button class="modal-close" onclick="closeModal('modal-proposta')">✕</button>
+<!-- ══ SCREEN: INSIGHTS ══ -->
+<div class="screen" id="sc-insights">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="logo-mark"><div class="logo-mark-text">MV</div></div>
+      <div class="topbar-title">Insights</div>
     </div>
+  </div>
+  <div class="content">
+    <button class="btn-insight-day" onclick="showRandomInsight()">✦ Insight do dia</button>
+
+    <!-- Pirâmide -->
+    <div class="sec-label">Pirâmide do Marketing</div>
+    <div class="gcard pyramid-wrap" style="padding:1.1rem">
+      <div class="pyramid" id="pyramid"></div>
+    </div>
+
+    <div class="sec-label">Biblioteca estratégica</div>
+    <div id="insights-list"></div>
+  </div>
+</div>
+
+<!-- ══ BOTTOM NAV ══ -->
+<nav class="bottom-nav">
+  <div class="nav-pill-wrap">
+    <button class="nav-btn active" onclick="goScreen('home',this)">
+      <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg></div>
+      <div class="nav-label">Home</div>
+    </button>
+    <button class="nav-btn" onclick="goScreen('bpp',this)">
+      <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+      <div class="nav-label">BPP</div>
+    </button>
+    <button class="nav-btn" onclick="goScreen('agenda',this)">
+      <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+      <div class="nav-label">Agenda</div>
+    </button>
+    <button class="nav-btn" onclick="goScreen('notas',this)">
+      <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+      <div class="nav-label">Notas</div>
+    </button>
+    <button class="nav-btn" onclick="goScreen('insights',this)">
+      <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+      <div class="nav-label">Insights</div>
+    </button>
+  </div>
+</nav>
+</div>
+
+<!-- ══ MODALS ══ -->
+<div class="modal-overlay" id="m-briefing" onclick="closeOut(event,'m-briefing')">
+  <div class="modal"><div class="modal-handle"></div>
+    <div class="modal-head"><div class="modal-title">Novo Briefing</div><button class="modal-close" onclick="closeModal('m-briefing')">✕</button></div>
     <div class="modal-body">
-      <div class="form-field"><label>Nome do cliente *</label><input type="text" id="p-nome" placeholder="Nome do cliente ou marca"></div>
-      <div class="form-field">
-        <label>Status</label>
-        <select id="p-status">
-          <option value="entregue">Entregue</option>
-          <option value="avaliacao">Em avaliação</option>
-          <option value="aguardando">Aguardando resposta</option>
-        </select>
-      </div>
-      <div class="form-field">
-        <label>Serviços</label>
-        <div class="tags-select">
-          <div class="tag-toggle" onclick="toggleTag(this)">Identidade visual</div>
-          <div class="tag-toggle" onclick="toggleTag(this)">Posicionamento</div>
-          <div class="tag-toggle" onclick="toggleTag(this)">Instagram</div>
-          <div class="tag-toggle" onclick="toggleTag(this)">Tom de voz</div>
-          <div class="tag-toggle" onclick="toggleTag(this)">Conteúdo</div>
-          <div class="tag-toggle" onclick="toggleTag(this)">Proposta de valor</div>
-          <div class="tag-toggle" onclick="toggleTag(this)">Auditoria</div>
-        </div>
-      </div>
-      <button class="btn-submit" onclick="saveProposta()">Salvar proposta</button>
+      <div class="ff"><label>Nome do cliente *</label><input type="text" id="b-nome" placeholder="Nome ou marca"></div>
+      <div class="ff"><label>Data de envio *</label><input type="date" id="b-data"></div>
+      <div class="ff"><label>Valor estimado (R$)</label><input type="number" id="b-valor" placeholder="0"></div>
+      <div class="ff"><label>Serviços</label><div class="tag-sel" id="b-tags"></div></div>
+      <button class="btn-save" onclick="saveBriefing()">Salvar briefing</button>
     </div>
   </div>
 </div>
 
-<!-- Modal Andamento -->
-<div class="modal-overlay" id="modal-andamento" onclick="closeModalOutside(event,'modal-andamento')">
-  <div class="modal">
-    <div class="modal-handle"></div>
-    <div class="modal-header">
-      <div class="modal-title">Novo Projeto</div>
-      <button class="modal-close" onclick="closeModal('modal-andamento')">✕</button>
-    </div>
+<div class="modal-overlay" id="m-proposta" onclick="closeOut(event,'m-proposta')">
+  <div class="modal"><div class="modal-handle"></div>
+    <div class="modal-head"><div class="modal-title">Nova Proposta</div><button class="modal-close" onclick="closeModal('m-proposta')">✕</button></div>
     <div class="modal-body">
-      <div class="form-field"><label>Nome do cliente *</label><input type="text" id="a-nome" placeholder="Nome do cliente ou marca"></div>
-      <div class="form-field"><label>Data de início *</label><input type="date" id="a-data"></div>
-      <div class="form-field">
-        <label>Etapa atual</label>
-        <select id="a-etapa">
-          <option value="diagnostico">Diagnóstico</option>
-          <option value="identidade">Identidade visual</option>
-          <option value="estrategia">Estratégia</option>
-          <option value="conteudo">Conteúdo</option>
-          <option value="revisao">Revisão</option>
-          <option value="entrega">Entrega final</option>
-        </select>
-      </div>
-      <div class="form-field">
-        <label>Serviços</label>
-        <div class="tags-select">
-          <div class="tag-toggle" onclick="toggleTag(this)">Identidade visual</div>
-          <div class="tag-toggle" onclick="toggleTag(this)">Posicionamento</div>
-          <div class="tag-toggle" onclick="toggleTag(this)">Instagram</div>
-          <div class="tag-toggle" onclick="toggleTag(this)">Tom de voz</div>
-          <div class="tag-toggle" onclick="toggleTag(this)">Conteúdo</div>
-          <div class="tag-toggle" onclick="toggleTag(this)">Proposta de valor</div>
-          <div class="tag-toggle" onclick="toggleTag(this)">Auditoria</div>
-        </div>
-      </div>
-      <button class="btn-submit" onclick="saveAndamento()">Salvar projeto</button>
+      <div class="ff"><label>Nome do cliente *</label><input type="text" id="p-nome" placeholder="Nome ou marca"></div>
+      <div class="ff"><label>Status</label><select id="p-status"><option value="entregue">Entregue</option><option value="avaliacao">Em avaliação</option><option value="aguardando">Aguardando resposta</option></select></div>
+      <div class="ff"><label>Valor (R$)</label><input type="number" id="p-valor" placeholder="0"></div>
+      <div class="ff"><label>Serviços</label><div class="tag-sel" id="p-tags"></div></div>
+      <button class="btn-save" onclick="saveProposta()">Salvar proposta</button>
     </div>
   </div>
 </div>
 
-<!-- Modal Evento -->
-<div class="modal-overlay" id="modal-evento" onclick="closeModalOutside(event,'modal-evento')">
-  <div class="modal">
-    <div class="modal-handle"></div>
-    <div class="modal-header">
-      <div class="modal-title">Novo Evento</div>
-      <button class="modal-close" onclick="closeModal('modal-evento')">✕</button>
-    </div>
+<div class="modal-overlay" id="m-projeto" onclick="closeOut(event,'m-projeto')">
+  <div class="modal"><div class="modal-handle"></div>
+    <div class="modal-head"><div class="modal-title">Novo Projeto</div><button class="modal-close" onclick="closeModal('m-projeto')">✕</button></div>
     <div class="modal-body">
-      <div class="form-field"><label>Título *</label><input type="text" id="e-titulo" placeholder="Ex: Reunião com cliente"></div>
-      <div class="form-field"><label>Data *</label><input type="date" id="e-data"></div>
-      <div class="form-field"><label>Horário</label><input type="time" id="e-hora"></div>
-      <button class="btn-submit" onclick="saveEvento()">Salvar evento</button>
+      <div class="ff"><label>Nome do cliente *</label><input type="text" id="pr-nome" placeholder="Nome ou marca"></div>
+      <div class="ff"><label>Data de início *</label><input type="date" id="pr-data"></div>
+      <div class="ff"><label>Valor (R$)</label><input type="number" id="pr-valor" placeholder="0"></div>
+      <div class="ff"><label>Etapa atual</label><select id="pr-etapa"><option value="diagnostico">Diagnóstico</option><option value="identidade">Identidade visual</option><option value="estrategia">Estratégia</option><option value="conteudo">Conteúdo</option><option value="revisao">Revisão</option><option value="entrega">Entrega final</option></select></div>
+      <div class="ff"><label>Serviços</label><div class="tag-sel" id="pr-tags"></div></div>
+      <button class="btn-save" onclick="saveProjeto()">Salvar projeto</button>
     </div>
   </div>
 </div>
 
-<!-- Modal Nota -->
-<div class="modal-overlay" id="modal-nota" onclick="closeModalOutside(event,'modal-nota')">
-  <div class="modal">
-    <div class="modal-handle"></div>
-    <div class="modal-header">
-      <div class="modal-title">Nova Nota</div>
-      <button class="modal-close" onclick="closeModal('modal-nota')">✕</button>
-    </div>
+<div class="modal-overlay" id="m-evento" onclick="closeOut(event,'m-evento')">
+  <div class="modal"><div class="modal-handle"></div>
+    <div class="modal-head"><div class="modal-title">Novo Evento</div><button class="modal-close" onclick="closeModal('m-evento')">✕</button></div>
     <div class="modal-body">
-      <div class="form-field"><label>Nome (cliente ou tema) *</label><input type="text" id="n-nome" placeholder="Ex: Matheus Personal"></div>
-      <button class="btn-submit" onclick="saveNota()">Criar nota</button>
+      <div class="ff"><label>Título *</label><input type="text" id="e-titulo" placeholder="Ex: Reunião com cliente"></div>
+      <div class="ff"><label>Data *</label><input type="date" id="e-data"></div>
+      <div class="ff"><label>Horário</label><input type="time" id="e-hora"></div>
+      <button class="btn-save" onclick="saveEvento()">Salvar evento</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="m-nota" onclick="closeOut(event,'m-nota')">
+  <div class="modal"><div class="modal-handle"></div>
+    <div class="modal-head"><div class="modal-title">Nova Nota</div><button class="modal-close" onclick="closeModal('m-nota')">✕</button></div>
+    <div class="modal-body">
+      <div class="ff"><label>Nome (cliente ou tema) *</label><input type="text" id="n-nome" placeholder="Ex: Matheus Personal"></div>
+      <button class="btn-save" onclick="saveNota()">Criar nota</button>
     </div>
   </div>
 </div>
 
 <script>
 // ── DATA ──
-let data = JSON.parse(localStorage.getItem('mv-data') || '{"briefings":[],"propostas":[],"andamento":[],"eventos":[],"notas":[]}');
+const SERVICES = ['Identidade visual','Posicionamento','Instagram','Tom de voz','Conteúdo','Proposta de valor','Auditoria'];
+let DB = JSON.parse(localStorage.getItem('mv3') || '{"briefings":[],"propostas":[],"projetos":[],"eventos":[],"notas":[],"postit":""}');
+const save = () => localStorage.setItem('mv3', JSON.stringify(DB));
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,6);
 
-function save() { localStorage.setItem('mv-data', JSON.stringify(data)); }
+// ── TIME (Brasília UTC-3) ──
+function nowBRT() {
+  const now = new Date();
+  const brt = new Date(now.toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' }));
+  return brt;
+}
 
-// ── UTILS ──
-function addBusinessDays(date, days) {
-  let d = new Date(date); let added = 0;
-  while (added < days) {
-    d.setDate(d.getDate() + 1);
-    if (d.getDay() !== 0 && d.getDay() !== 6) added++;
+function todayBRT() {
+  const d = nowBRT(); d.setHours(0,0,0,0); return d;
+}
+
+function todayStr() {
+  const d = nowBRT();
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+
+function updateGreeting() {
+  const h = nowBRT().getHours();
+  const g = h < 12 ? 'Bom dia ☀️' : h < 18 ? 'Boa tarde 🌤' : 'Boa noite 🌙';
+  document.getElementById('greeting').textContent = g;
+}
+
+// ── BUSINESS DAYS ──
+function addBD(dateStr, days) {
+  const d = new Date(dateStr + 'T12:00:00'); let added = 0;
+  while (added < days) { d.setDate(d.getDate()+1); if (d.getDay()!==0 && d.getDay()!==6) added++; }
+  return d.toISOString().split('T')[0];
+}
+
+function bdUntil(targetStr) {
+  const today = todayBRT(); today.setHours(0,0,0,0);
+  const target = new Date(targetStr + 'T12:00:00');
+  if (target <= today) {
+    let count = 0; const d = new Date(target);
+    while (d < today) { d.setDate(d.getDate()+1); if (d.getDay()!==0 && d.getDay()!==6) count++; }
+    return -count;
   }
-  return d;
+  let count = 0; const d = new Date(today);
+  while (d < target) { d.setDate(d.getDate()+1); if (d.getDay()!==0 && d.getDay()!==6) count++; }
+  return count;
 }
 
-function daysUntil(dateStr) {
-  const today = new Date(); today.setHours(0,0,0,0);
-  const target = new Date(dateStr); target.setHours(0,0,0,0);
-  return Math.round((target - today) / 86400000);
+function fmtDate(str) {
+  const d = new Date(str+'T12:00:00');
+  return d.toLocaleDateString('pt-BR',{day:'2-digit',month:'short'});
 }
 
-function formatDate(str) {
-  const d = new Date(str + 'T12:00:00');
-  return d.toLocaleDateString('pt-BR', {day:'2-digit',month:'short'});
-}
+function prazoClass(dias) { return dias < 0 ? 'prazo-urgent' : dias <= 2 ? 'prazo-warn' : 'prazo-ok'; }
+function prazoTxt(dias) { return dias < 0 ? `Vencido há ${Math.abs(dias)}du` : dias === 0 ? 'Vence hoje' : `${dias}du restantes`; }
+function prazoColor(dias) { return dias < 0 ? 'var(--red)' : dias <= 2 ? 'var(--yellow)' : 'var(--green)'; }
 
-function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
+// ── NAV ──
+let currentScreen = 'home';
+let bppCurrent = 'briefings';
 
-// ── NAVIGATION ──
-function goTo(screen, btn) {
+function goScreen(id, btn) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('screen-' + screen).classList.add('active');
+  document.getElementById('sc-' + id).classList.add('active');
   btn.classList.add('active');
-  if (screen === 'inicio') renderInicio();
-  if (screen === 'agenda') renderCalendar();
-  if (screen === 'notas') renderNotas();
-  if (screen === 'propostas') renderPropostas();
-  if (screen === 'briefings') renderBriefings();
-  if (screen === 'andamento') renderAndamento();
+  currentScreen = id;
+  if (id === 'home') renderHome();
+  if (id === 'bpp') { renderBPP(); }
+  if (id === 'agenda') renderCal();
+  if (id === 'notas') renderNotas();
+  if (id === 'insights') renderInsights();
+}
+
+// ── BPP TAB ──
+function bppTab(tab, btn) {
+  bppCurrent = tab;
+  document.querySelectorAll('.sub-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  ['briefings','propostas','projetos'].forEach(t => {
+    document.getElementById('bpp-'+t).style.display = t === tab ? 'block' : 'none';
+  });
+  document.getElementById('bpp-title').textContent = tab.charAt(0).toUpperCase() + tab.slice(1);
+  // pipeline indicator
+  const idx = ['briefings','propostas','projetos'].indexOf(tab);
+  [0,1,2].forEach(i => {
+    const dot = document.getElementById('pip-'+i);
+    const lbl = document.getElementById('pip-lbl-'+i);
+    if (i <= idx) { dot.classList.add('active'); lbl.classList.add('active'); }
+    else { dot.classList.remove('active'); lbl.classList.remove('active'); }
+    if (i < 2) {
+      const line = document.getElementById('pip-line-'+i);
+      if (i < idx) line.classList.add('done'); else line.classList.remove('done');
+    }
+  });
+}
+
+function bppAdd() {
+  if (bppCurrent === 'briefings') openModal('m-briefing');
+  else if (bppCurrent === 'propostas') openModal('m-proposta');
+  else openModal('m-projeto');
+}
+
+// ── TAG SELECTORS ──
+function buildTagSel(containerId) {
+  const c = document.getElementById(containerId);
+  if (!c) return;
+  c.innerHTML = SERVICES.map(s => `<button class="ts-btn" onclick="this.classList.toggle('on')">${s}</button>`).join('');
+}
+
+function getSelTags(containerId) {
+  return [...document.querySelectorAll('#'+containerId+' .ts-btn.on')].map(b=>b.textContent);
+}
+
+function resetModal(id) {
+  document.querySelectorAll('#'+id+' input').forEach(i=>i.value='');
+  document.querySelectorAll('#'+id+' .ts-btn').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('#'+id+' select').forEach(s=>s.selectedIndex=0);
 }
 
 // ── MODALS ──
 function openModal(id) {
+  buildTagSel(id.replace('m-','') === 'briefing' ? 'b-tags' : id.replace('m-','') === 'proposta' ? 'p-tags' : 'pr-tags');
   document.getElementById(id).classList.add('show');
-  // Set today as default date
-  const today = new Date().toISOString().split('T')[0];
-  const dateInputs = document.querySelectorAll('#' + id + ' input[type="date"]');
-  dateInputs.forEach(i => { if (!i.value) i.value = today; });
+  const t = todayStr();
+  document.querySelectorAll('#'+id+' input[type="date"]').forEach(i=>{ if(!i.value) i.value=t; });
 }
 
-function closeModal(id) {
-  document.getElementById(id).classList.remove('show');
-}
-
-function closeModalOutside(e, id) {
-  if (e.target.classList.contains('modal-overlay')) closeModal(id);
-}
-
-// ── TAG TOGGLE ──
-function toggleTag(el) { el.classList.toggle('selected'); }
-
-function getSelectedTags(modalId) {
-  return [...document.querySelectorAll('#' + modalId + ' .tag-toggle.selected')].map(t => t.textContent);
-}
-
-function resetModal(modalId) {
-  document.querySelectorAll('#' + modalId + ' input').forEach(i => i.value = '');
-  document.querySelectorAll('#' + modalId + ' .tag-toggle').forEach(t => t.classList.remove('selected'));
-  document.querySelectorAll('#' + modalId + ' select').forEach(s => s.selectedIndex = 0);
-}
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+function closeOut(e,id) { if(e.target.classList.contains('modal-overlay')) closeModal(id); }
 
 // ── BRIEFINGS ──
 function saveBriefing() {
   const nome = document.getElementById('b-nome').value.trim();
-  const dataEnvio = document.getElementById('b-data').value;
-  if (!nome || !dataEnvio) return;
-  const prazo = addBusinessDays(dataEnvio + 'T12:00:00', 7).toISOString().split('T')[0];
-  const tags = getSelectedTags('modal-briefing');
-  data.briefings.push({ id: uid(), nome, dataEnvio, prazo, tags });
-  save(); closeModal('modal-briefing'); resetModal('modal-briefing'); renderBriefings(); renderInicio();
+  const data = document.getElementById('b-data').value;
+  if (!nome||!data) return;
+  const valor = parseFloat(document.getElementById('b-valor').value)||0;
+  const prazo = addBD(data, 7);
+  const tags = getSelTags('b-tags');
+  DB.briefings.push({id:uid(),nome,data,prazo,valor,tags,createdAt:Date.now()});
+  save(); closeModal('m-briefing'); resetModal('m-briefing'); renderBPP(); renderHome();
 }
 
-function renderBriefings() {
-  const el = document.getElementById('briefings-list');
-  if (!data.briefings.length) {
-    el.innerHTML = '<div class="empty-state"><div class="empty-icon">📨</div><div class="empty-text">Nenhum briefing cadastrado.<br>Toque em + para adicionar.</div></div>';
-    return;
-  }
-  el.innerHTML = data.briefings.map(b => {
-    const dias = daysUntil(b.prazo);
-    const cls = dias < 0 ? 'urgent' : dias <= 2 ? 'urgent' : 'ok';
-    const txt = dias < 0 ? `Vencido há ${Math.abs(dias)}d` : dias === 0 ? 'Vence hoje' : `${dias}d restantes`;
-    const pct = Math.max(0, Math.min(100, ((7 - Math.max(0,dias)) / 7) * 100));
-    const color = dias < 0 ? '#ff3b30' : dias <= 2 ? '#ff9500' : '#34c759';
-    const tagsHtml = b.tags.map(t => `<span class="tag">${t}</span>`).join('');
-    return `<div class="client-card">
-      <div class="client-card-header">
-        <div><div class="client-card-name">${b.nome}</div><div class="client-card-date">Enviado em ${formatDate(b.dataEnvio)}</div></div>
-        <button onclick="deleteBriefing('${b.id}')" style="background:none;border:none;color:var(--subtle);cursor:pointer;font-size:.8rem;padding:.2rem">✕</button>
-      </div>
-      ${b.tags.length ? `<div class="client-card-tags">${tagsHtml}</div>` : ''}
-      <div class="client-card-footer">
-        <span class="prazo-text ${cls}">${txt}</span>
-        <span style="font-family:'Titillium Web',sans-serif;font-size:.6rem;color:var(--muted)">Prazo: ${formatDate(b.prazo)}</span>
-      </div>
-      <div class="prazo-bar-wrap"><div class="prazo-bar-bg"><div class="prazo-bar-fill" style="width:${pct}%;background:${color}"></div></div></div>
-    </div>`;
-  }).join('');
-}
+function deleteBriefing(id) { DB.briefings = DB.briefings.filter(b=>b.id!==id); save(); renderBPP(); renderHome(); }
 
-function deleteBriefing(id) {
-  data.briefings = data.briefings.filter(b => b.id !== id);
-  save(); renderBriefings(); renderInicio();
+function moveToProposta(id) {
+  const b = DB.briefings.find(b=>b.id===id);
+  if (!b) return;
+  DB.propostas.push({id:uid(),nome:b.nome,status:'entregue',valor:b.valor,tags:b.tags,data:todayStr(),createdAt:Date.now()});
+  DB.briefings = DB.briefings.filter(x=>x.id!==id);
+  save(); renderBPP(); renderHome();
+  // switch to propostas tab
+  const btn = document.querySelector('.sub-btn:nth-child(2)');
+  if(btn) bppTab('propostas',btn);
 }
 
 // ── PROPOSTAS ──
 function saveProposta() {
   const nome = document.getElementById('p-nome').value.trim();
-  const status = document.getElementById('p-status').value;
   if (!nome) return;
-  const tags = getSelectedTags('modal-proposta');
-  data.propostas.push({ id: uid(), nome, status, tags, data: new Date().toISOString().split('T')[0] });
-  save(); closeModal('modal-proposta'); resetModal('modal-proposta'); renderPropostas();
+  const status = document.getElementById('p-status').value;
+  const valor = parseFloat(document.getElementById('p-valor').value)||0;
+  const tags = getSelTags('p-tags');
+  DB.propostas.push({id:uid(),nome,status,valor,tags,data:todayStr(),createdAt:Date.now()});
+  save(); closeModal('m-proposta'); resetModal('m-proposta'); renderBPP(); renderHome();
 }
 
-function renderPropostas() {
-  const groups = { aguardando: [], avaliacao: [], entregue: [] };
-  data.propostas.forEach(p => groups[p.status]?.push(p));
-  const hasAny = data.propostas.length > 0;
-  document.getElementById('propostas-empty').style.display = hasAny ? 'none' : 'block';
+function deleteProposta(id) { DB.propostas = DB.propostas.filter(p=>p.id!==id); save(); renderBPP(); renderHome(); }
 
-  ['aguardando','avaliacao','entregues'].forEach(k => {
-    const id = 'propostas-' + k;
-    const key = k === 'entregues' ? 'entregue' : k;
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.innerHTML = (groups[key] || []).map(p => {
-      const statusMap = { entregue: ['green','Entregue'], avaliacao: ['blue','Em avaliação'], aguardando: ['yellow','Aguardando'] };
-      const [sc, sl] = statusMap[p.status] || ['',''];
-      const tagsHtml = p.tags.map(t => `<span class="tag">${t}</span>`).join('');
-      return `<div class="client-card">
-        <div class="client-card-header">
-          <div><div class="client-card-name">${p.nome}</div><div class="client-card-date">${formatDate(p.data)}</div></div>
-          <div style="display:flex;gap:.4rem;align-items:center">
-            <span class="tag ${sc}">${sl}</span>
-            <button onclick="deleteProposta('${p.id}')" style="background:none;border:none;color:var(--subtle);cursor:pointer;font-size:.8rem">✕</button>
-          </div>
+function moveToProjeto(id) {
+  const p = DB.propostas.find(p=>p.id===id);
+  if (!p) return;
+  DB.projetos.push({id:uid(),nome:p.nome,data:todayStr(),prazo:addBD(todayStr(),15),valor:p.valor,tags:p.tags,etapa:'diagnostico',createdAt:Date.now()});
+  DB.propostas = DB.propostas.filter(x=>x.id!==id);
+  save(); renderBPP(); renderHome();
+  const btn = document.querySelector('.sub-btn:nth-child(3)');
+  if(btn) bppTab('projetos',btn);
+}
+
+// ── PROJETOS ──
+function saveProjeto() {
+  const nome = document.getElementById('pr-nome').value.trim();
+  const data = document.getElementById('pr-data').value;
+  if (!nome||!data) return;
+  const valor = parseFloat(document.getElementById('pr-valor').value)||0;
+  const etapa = document.getElementById('pr-etapa').value;
+  const prazo = addBD(data, 15);
+  const tags = getSelTags('pr-tags');
+  DB.projetos.push({id:uid(),nome,data,prazo,valor,etapa,tags,createdAt:Date.now()});
+  save(); closeModal('m-projeto'); resetModal('m-projeto'); renderBPP(); renderHome();
+}
+
+function deleteProjeto(id) { DB.projetos = DB.projetos.filter(p=>p.id!==id); save(); renderBPP(); renderHome(); }
+
+// ── RENDER BPP ──
+const etapaMap = {diagnostico:'Diagnóstico',identidade:'Identidade visual',estrategia:'Estratégia',conteudo:'Conteúdo',revisao:'Revisão',entrega:'Entrega final'};
+const statusMap = {entregue:['green','Entregue'],avaliacao:['blue','Em avaliação'],aguardando:['yellow','Aguardando']};
+
+function renderBPP() {
+  // Briefings
+  const bEl = document.getElementById('bpp-briefings');
+  if (!DB.briefings.length) {
+    bEl.innerHTML = '<div class="empty"><div class="empty-icon">📨</div><div class="empty-text">Nenhum briefing. Toque em + para adicionar.</div></div>';
+  } else {
+    bEl.innerHTML = DB.briefings.map(b => {
+      const dias = bdUntil(b.prazo);
+      const pct = Math.max(0,Math.min(100,((7-Math.max(0,dias))/7)*100));
+      const tagsH = b.tags.map(t=>`<span class="tag">${t}</span>`).join('');
+      return `<div class="gcard pipe-item">
+        <div class="pipe-header">
+          <div><div class="pipe-name">${b.nome}</div><div class="pipe-date">Enviado ${fmtDate(b.data)}${b.valor?` · R$${b.valor.toLocaleString('pt-BR')}`:''}  </div></div>
+          <button class="btn-del" onclick="deleteBriefing('${b.id}')">✕</button>
         </div>
-        ${p.tags.length ? `<div class="client-card-tags">${tagsHtml}</div>` : ''}
+        ${b.tags.length?`<div class="pipe-tags">${tagsH}</div>`:''}
+        <div class="pipe-footer">
+          <span class="prazo-txt ${prazoClass(dias)}">${prazoTxt(dias)}</span>
+          <span style="font-family:'Titillium Web',sans-serif;font-size:.58rem;color:var(--muted)">Prazo: ${fmtDate(b.prazo)}</span>
+        </div>
+        <div class="prazo-bar"><div class="prazo-fill" style="width:${pct}%;background:${prazoColor(dias)}"></div></div>
+        <div class="pipe-actions"><button class="btn-move" onclick="moveToProposta('${b.id}')">→ Mover para Proposta</button></div>
       </div>`;
-    }).join('') || '';
-  });
-}
-
-function deleteProposta(id) {
-  data.propostas = data.propostas.filter(p => p.id !== id);
-  save(); renderPropostas();
-}
-
-// ── ANDAMENTO ──
-function saveAndamento() {
-  const nome = document.getElementById('a-nome').value.trim();
-  const dataInicio = document.getElementById('a-data').value;
-  const etapa = document.getElementById('a-etapa').value;
-  if (!nome || !dataInicio) return;
-  const prazo = addBusinessDays(dataInicio + 'T12:00:00', 15).toISOString().split('T')[0];
-  const tags = getSelectedTags('modal-andamento');
-  data.andamento.push({ id: uid(), nome, dataInicio, prazo, etapa, tags });
-  save(); closeModal('modal-andamento'); resetModal('modal-andamento'); renderAndamento(); renderInicio();
-}
-
-function renderAndamento() {
-  const el = document.getElementById('andamento-list');
-  if (!data.andamento.length) {
-    el.innerHTML = '<div class="empty-state"><div class="empty-icon">⚡</div><div class="empty-text">Nenhum projeto em andamento.</div></div>';
-    return;
+    }).join('');
   }
-  const etapaMap = { diagnostico:'Diagnóstico', identidade:'Identidade visual', estrategia:'Estratégia', conteudo:'Conteúdo', revisao:'Revisão', entrega:'Entrega final' };
-  el.innerHTML = data.andamento.map(a => {
-    const dias = daysUntil(a.prazo);
-    const cls = dias < 0 ? 'urgent' : dias <= 3 ? 'urgent' : 'ok';
-    const txt = dias < 0 ? `Vencido há ${Math.abs(dias)}d` : dias === 0 ? 'Entrega hoje' : `${dias}d para entrega`;
-    const tagsHtml = a.tags.map(t => `<span class="tag">${t}</span>`).join('');
-    return `<div class="client-card">
-      <div class="client-card-header">
-        <div><div class="client-card-name">${a.nome}</div><div class="client-card-date">Início: ${formatDate(a.dataInicio)}</div></div>
-        <div style="display:flex;gap:.4rem;align-items:center">
-          <span class="tag blue">${etapaMap[a.etapa]||a.etapa}</span>
-          <button onclick="deleteAndamento('${a.id}')" style="background:none;border:none;color:var(--subtle);cursor:pointer;font-size:.8rem">✕</button>
-        </div>
-      </div>
-      ${a.tags.length ? `<div class="client-card-tags">${tagsHtml}</div>` : ''}
-      <div class="client-card-footer">
-        <span class="prazo-text ${cls}">${txt}</span>
-        <span style="font-family:'Titillium Web',sans-serif;font-size:.6rem;color:var(--muted)">Entrega: ${formatDate(a.prazo)}</span>
-      </div>
-    </div>`;
-  }).join('');
-}
 
-function deleteAndamento(id) {
-  data.andamento = data.andamento.filter(a => a.id !== id);
-  save(); renderAndamento(); renderInicio();
+  // Propostas
+  const pEl = document.getElementById('bpp-propostas');
+  if (!DB.propostas.length) {
+    pEl.innerHTML = '<div class="empty"><div class="empty-icon">📤</div><div class="empty-text">Nenhuma proposta.</div></div>';
+  } else {
+    pEl.innerHTML = DB.propostas.map(p => {
+      const [sc,sl] = statusMap[p.status]||['',''];
+      const tagsH = p.tags.map(t=>`<span class="tag">${t}</span>`).join('');
+      return `<div class="gcard pipe-item">
+        <div class="pipe-header">
+          <div><div class="pipe-name">${p.nome}</div><div class="pipe-date">${fmtDate(p.data)}${p.valor?` · R$${p.valor.toLocaleString('pt-BR')}`:''}  </div></div>
+          <div style="display:flex;align-items:center;gap:.4rem"><span class="tag ${sc}">${sl}</span><button class="btn-del" onclick="deleteProposta('${p.id}')">✕</button></div>
+        </div>
+        ${p.tags.length?`<div class="pipe-tags">${tagsH}</div>`:''}
+        <div class="pipe-actions"><button class="btn-move" onclick="moveToProjeto('${p.id}')">→ Mover para Projeto</button></div>
+      </div>`;
+    }).join('');
+  }
+
+  // Projetos
+  const prEl = document.getElementById('bpp-projetos');
+  if (!DB.projetos.length) {
+    prEl.innerHTML = '<div class="empty"><div class="empty-icon">⚡</div><div class="empty-text">Nenhum projeto em andamento.</div></div>';
+  } else {
+    prEl.innerHTML = DB.projetos.map(p => {
+      const dias = bdUntil(p.prazo);
+      const tagsH = p.tags.map(t=>`<span class="tag">${t}</span>`).join('');
+      return `<div class="gcard pipe-item">
+        <div class="pipe-header">
+          <div><div class="pipe-name">${p.nome}</div><div class="pipe-date">Início ${fmtDate(p.data)}${p.valor?` · R$${p.valor.toLocaleString('pt-BR')}`:''}  </div></div>
+          <div style="display:flex;align-items:center;gap:.4rem"><span class="tag blue">${etapaMap[p.etapa]||p.etapa}</span><button class="btn-del" onclick="deleteProjeto('${p.id}')">✕</button></div>
+        </div>
+        ${p.tags.length?`<div class="pipe-tags">${tagsH}</div>`:''}
+        <div class="pipe-footer">
+          <span class="prazo-txt ${prazoClass(dias)}">${prazoTxt(dias)}</span>
+          <span style="font-family:'Titillium Web',sans-serif;font-size:.58rem;color:var(--muted)">Entrega: ${fmtDate(p.prazo)}</span>
+        </div>
+      </div>`;
+    }).join('');
+  }
 }
 
 // ── AGENDA ──
-let calDate = new Date();
+let calDate = nowBRT();
+let selectedDay = todayStr();
 
-function renderCalendar() {
+function renderCal() {
   const months = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-  document.getElementById('cal-month-label').textContent = months[calDate.getMonth()] + ' ' + calDate.getFullYear();
+  document.getElementById('cal-label').textContent = months[calDate.getMonth()] + ' ' + calDate.getFullYear();
   const grid = document.getElementById('cal-grid');
-  const days = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
-  const today = new Date(); today.setHours(0,0,0,0);
+  const tStr = todayStr();
   const first = new Date(calDate.getFullYear(), calDate.getMonth(), 1);
   const last = new Date(calDate.getFullYear(), calDate.getMonth()+1, 0);
-
-  let html = days.map(d => `<div class="cal-day-label">${d}</div>`).join('');
-  for (let i = 0; i < first.getDay(); i++) html += '<div></div>';
-  for (let d = 1; d <= last.getDate(); d++) {
-    const cur = new Date(calDate.getFullYear(), calDate.getMonth(), d);
-    cur.setHours(0,0,0,0);
-    const iso = cur.toISOString().split('T')[0];
-    const isToday = cur.getTime() === today.getTime();
-    const hasEv = data.eventos.some(e => e.data === iso);
-    html += `<div class="cal-day${isToday?' today':''}${hasEv?' has-event':''}" onclick="selectDay('${iso}')">${d}</div>`;
+  let h = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'].map(d=>`<div class="cal-lbl">${d}</div>`).join('');
+  for (let i=0;i<first.getDay();i++) h+='<div></div>';
+  for (let d=1;d<=last.getDate();d++) {
+    const iso = calDate.getFullYear()+'-'+String(calDate.getMonth()+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+    const isToday = iso===tStr;
+    const isSel = iso===selectedDay;
+    const hasEv = DB.eventos.some(e=>e.data===iso);
+    h+=`<div class="cal-day${isToday?' today':''}${isSel&&!isToday?' selected':''}${hasEv?' has-event':''}" onclick="selectDay('${iso}')">${d}</div>`;
   }
-  grid.innerHTML = html;
-  renderDayEvents(today.toISOString().split('T')[0]);
+  grid.innerHTML = h;
+  renderDayEvs(selectedDay);
 }
 
-function changeMonth(dir) { calDate.setMonth(calDate.getMonth() + dir); renderCalendar(); }
+function calMove(d) { calDate.setMonth(calDate.getMonth()+d); renderCal(); }
 
 function selectDay(iso) {
-  document.querySelectorAll('.cal-day').forEach(d => d.style.outline='');
-  renderDayEvents(iso);
+  selectedDay = iso;
+  renderCal();
 }
 
-function renderDayEvents(iso) {
-  const evs = data.eventos.filter(e => e.data === iso);
-  const label = document.getElementById('cal-events-label');
-  const list = document.getElementById('cal-events-list');
-  const d = new Date(iso + 'T12:00:00');
-  label.textContent = d.toLocaleDateString('pt-BR', {weekday:'long', day:'2-digit', month:'long'});
-  if (!evs.length) {
-    list.innerHTML = '<div style="padding:.5rem 0;font-size:.85rem;color:var(--muted)">Nenhum evento neste dia.</div>';
-    return;
-  }
-  list.innerHTML = evs.map(e => `<div class="event-item">
+function renderDayEvs(iso) {
+  const d = new Date(iso+'T12:00:00');
+  document.getElementById('cal-day-label').textContent = d.toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long'});
+  const evs = DB.eventos.filter(e=>e.data===iso);
+  const el = document.getElementById('cal-events');
+  if (!evs.length) { el.innerHTML='<div style="padding:.4rem 0;font-size:.82rem;color:var(--muted)">Nenhum evento neste dia.</div>'; return; }
+  el.innerHTML = evs.map(e=>`<div class="gcard event-item">
     <div class="event-dot"></div>
     <div class="event-name">${e.titulo}</div>
     <div class="event-time">${e.hora||''}</div>
-    <button onclick="deleteEvento('${e.id}')" style="background:none;border:none;color:var(--subtle);cursor:pointer;font-size:.8rem;margin-left:.5rem">✕</button>
+    <button class="btn-del" onclick="deleteEvento('${e.id}')" style="margin-left:.4rem">✕</button>
   </div>`).join('');
 }
 
 function saveEvento() {
   const titulo = document.getElementById('e-titulo').value.trim();
-  const eData = document.getElementById('e-data').value;
+  const data = document.getElementById('e-data').value;
+  if (!titulo||!data) return;
   const hora = document.getElementById('e-hora').value;
-  if (!titulo || !eData) return;
-  data.eventos.push({ id: uid(), titulo, data: eData, hora });
-  save(); closeModal('modal-evento'); resetModal('modal-evento'); renderCalendar();
+  DB.eventos.push({id:uid(),titulo,data,hora,createdAt:Date.now()});
+  save(); closeModal('m-evento'); resetModal('m-evento'); renderCal();
 }
 
-function deleteEvento(id) {
-  data.eventos = data.eventos.filter(e => e.id !== id);
-  save(); renderCalendar();
-}
+function deleteEvento(id) { DB.eventos=DB.eventos.filter(e=>e.id!==id); save(); renderCal(); }
 
 // ── NOTAS ──
 let currentNota = null;
 
 function renderNotas() {
-  const list = document.getElementById('notas-list');
-  const content = document.getElementById('notas-content');
-  const editor = document.getElementById('nota-editor');
-  content.style.display = 'flex'; content.style.flexDirection = 'column'; content.style.flex = '1';
-  editor.classList.remove('show');
-  if (!data.notas.length) {
-    list.innerHTML = '<div class="empty-state"><div class="empty-icon">📝</div><div class="empty-text">Nenhuma nota ainda.<br>Toque em + para criar.</div></div>';
-    return;
-  }
-  list.innerHTML = data.notas.map(n => `<div class="nota-card" onclick="openNota('${n.id}')">
-    <div class="nota-card-name">${n.nome}</div>
-    <div class="nota-card-preview">${n.conteudo || 'Sem conteúdo ainda...'}</div>
-    <div class="nota-card-date">${formatDate(n.data)}</div>
+  document.getElementById('notas-list-view').style.display='flex';
+  document.getElementById('notas-list-view').style.flexDirection='column';
+  document.getElementById('notas-list-view').style.flex='1';
+  document.getElementById('nota-editor').classList.remove('show');
+  const el = document.getElementById('notas-list');
+  if (!DB.notas.length) { el.innerHTML='<div class="empty"><div class="empty-icon">📝</div><div class="empty-text">Nenhuma nota. Toque em + para criar.</div></div>'; return; }
+  el.innerHTML = DB.notas.map(n=>`<div class="gcard nota-list-item" onclick="openNota('${n.id}')">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div class="nota-item-name">${n.nome}</div>
+      ${n.revisado?'<span class="tag green">Revisado</span>':''}
+    </div>
+    <div class="nota-item-prev">${n.conteudo||'Sem conteúdo ainda...'}</div>
+    <div class="nota-item-meta">${fmtDate(n.data)}</div>
   </div>`).join('');
 }
 
 function saveNota() {
   const nome = document.getElementById('n-nome').value.trim();
   if (!nome) return;
-  data.notas.push({ id: uid(), nome, conteudo: '', data: new Date().toISOString().split('T')[0] });
-  save(); closeModal('modal-nota'); resetModal('modal-nota'); renderNotas();
+  DB.notas.push({id:uid(),nome,conteudo:'',data:todayStr(),revisado:false,createdAt:Date.now()});
+  save(); closeModal('m-nota'); resetModal('m-nota'); renderNotas();
 }
 
 function openNota(id) {
-  currentNota = data.notas.find(n => n.id === id);
+  currentNota = DB.notas.find(n=>n.id===id);
   if (!currentNota) return;
-  document.getElementById('nota-editor-title').textContent = currentNota.nome;
-  document.getElementById('nota-editor-body').value = currentNota.conteudo || '';
-  document.getElementById('notas-content').style.display = 'none';
+  document.getElementById('ned-title').textContent = currentNota.nome;
+  document.getElementById('ned-body').value = currentNota.conteudo||'';
+  document.getElementById('nota-read-sw').checked = currentNota.revisado||false;
+  document.getElementById('notas-list-view').style.display='none';
   document.getElementById('nota-editor').classList.add('show');
 }
 
 function closeNota() { renderNotas(); }
 
-function saveNotaContent() {
+function saveNotaBody() {
   if (!currentNota) return;
-  currentNota.conteudo = document.getElementById('nota-editor-body').value;
-  const n = data.notas.find(n => n.id === currentNota.id);
-  if (n) n.conteudo = currentNota.conteudo;
-  save();
+  const n = DB.notas.find(n=>n.id===currentNota.id);
+  if (n) { n.conteudo = document.getElementById('ned-body').value; save(); }
+}
+
+function toggleNotaRead() {
+  if (!currentNota) return;
+  const n = DB.notas.find(n=>n.id===currentNota.id);
+  if (n) { n.revisado = document.getElementById('nota-read-sw').checked; save(); }
 }
 
 function deleteNota() {
   if (!currentNota) return;
   if (!confirm('Deletar esta nota?')) return;
-  data.notas = data.notas.filter(n => n.id !== currentNota.id);
-  save(); currentNota = null; renderNotas();
+  DB.notas = DB.notas.filter(n=>n.id!==currentNota.id);
+  save(); currentNota=null; renderNotas();
 }
 
-// ── INÍCIO ──
-function renderInicio() {
-  const today = new Date(); today.setHours(0,0,0,0);
-  const h = today.getHours();
-  const greet = h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite';
-  document.getElementById('greeting-time').textContent = greet;
-  document.getElementById('sum-briefings').textContent = data.briefings.length;
-  document.getElementById('sum-propostas').textContent = data.propostas.length;
-  document.getElementById('sum-andamento').textContent = data.andamento.length;
-  const urgentes = data.briefings.filter(b => daysUntil(b.prazo) <= 2).length +
-                   data.andamento.filter(a => daysUntil(a.prazo) <= 3).length;
-  document.getElementById('sum-urgentes').textContent = urgentes;
+// ── POSTIT ──
+function savePostit() { DB.postit = document.getElementById('postit-input').value; save(); }
 
-  // Prazos próximos
-  const prazos = [
-    ...data.briefings.map(b => ({ nome: b.nome, prazo: b.prazo, tipo: 'Briefing' })),
-    ...data.andamento.map(a => ({ nome: a.nome, prazo: a.prazo, tipo: 'Projeto' }))
-  ].sort((a,b) => new Date(a.prazo) - new Date(b.prazo)).slice(0,3);
+// ── HOME ──
+function renderHome() {
+  updateGreeting();
+  document.getElementById('postit-input').value = DB.postit||'';
+  document.getElementById('s-briefings').textContent = DB.briefings.length;
+  document.getElementById('s-propostas').textContent = DB.propostas.length;
+  document.getElementById('s-projetos').textContent = DB.projetos.length;
+  const urg = DB.briefings.filter(b=>bdUntil(b.prazo)<=2).length + DB.projetos.filter(p=>bdUntil(p.prazo)<=3).length;
+  document.getElementById('s-urgentes').textContent = urg;
 
-  const prazosEl = document.getElementById('inicio-prazos');
-  if (!prazos.length) {
-    prazosEl.innerHTML = '<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-text">Nenhum prazo no momento.</div></div>';
-  } else {
-    prazosEl.innerHTML = prazos.map(p => {
-      const dias = daysUntil(p.prazo);
-      const cls = dias < 0 ? 'urgent' : dias <= 2 ? 'urgent' : 'ok';
-      const txt = dias < 0 ? `Vencido há ${Math.abs(dias)}d` : dias === 0 ? 'Vence hoje' : `${dias}d restantes`;
-      return `<div class="event-item">
-        <div class="event-dot" style="${dias<=2?'background:#ff3b30':''}"></div>
-        <div class="event-name">${p.nome} <span style="font-size:.75rem;color:var(--muted)">(${p.tipo})</span></div>
-        <div class="prazo-text ${cls}" style="font-size:.65rem">${txt}</div>
-      </div>`;
-    }).join('');
+  // Bar chart (last 4 months)
+  const months=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+  const now = nowBRT();
+  const bars = [];
+  for (let i=3;i>=0;i--) {
+    const m = new Date(now.getFullYear(), now.getMonth()-i, 1);
+    const key = m.getFullYear()+'-'+String(m.getMonth()+1).padStart(2,'0');
+    const count = DB.briefings.filter(b=>b.data&&b.data.startsWith(key)).length;
+    bars.push({label:months[m.getMonth()],count});
   }
+  const maxB = Math.max(...bars.map(b=>b.count),1);
+  document.getElementById('bar-chart').innerHTML = bars.map(b=>`<div class="bar-item">
+    <div class="bar-fill" style="height:${Math.max(4,(b.count/maxB)*44)}px"></div>
+    <div class="bar-lbl">${b.label}</div>
+  </div>`).join('');
 
-  // Próximos eventos
-  const todayStr = today.toISOString().split('T')[0];
-  const proxEvs = data.eventos.filter(e => e.data >= todayStr).sort((a,b) => a.data.localeCompare(b.data)).slice(0,3);
-  const evsEl = document.getElementById('inicio-eventos');
-  if (!proxEvs.length) {
-    evsEl.innerHTML = '<div class="empty-state"><div class="empty-icon">📅</div><div class="empty-text">Nenhum evento agendado.</div></div>';
-  } else {
-    evsEl.innerHTML = proxEvs.map(e => `<div class="event-item">
-      <div class="event-dot"></div>
-      <div class="event-name">${e.titulo}</div>
-      <div class="event-time">${formatDate(e.data)}${e.hora?' · '+e.hora:''}</div>
-    </div>`).join('');
-  }
+  // Donut (services)
+  const tagCount = {};
+  [...DB.briefings,...DB.propostas,...DB.projetos].forEach(item=>(item.tags||[]).forEach(t=>{ tagCount[t]=(tagCount[t]||0)+1; }));
+  const colors=['#ED4B00','#0a84ff','#34c759','#ff9f0a','#bf5af2','#ff3b30','#5ac8fa'];
+  const entries = Object.entries(tagCount).slice(0,5);
+  const total = entries.reduce((s,[,v])=>s+v,0)||1;
+  let offset = 0; let donutSegs = '';
+  const circ = 2*Math.PI*20;
+  entries.forEach(([k,v],i)=>{
+    const pct = v/total; const len = pct*circ;
+    donutSegs+=`<circle cx="26" cy="26" r="20" fill="none" stroke="${colors[i%colors.length]}" stroke-width="8" stroke-dasharray="${len} ${circ-len}" stroke-dashoffset="${-offset}" transform="rotate(-90 26 26)" opacity=".85"/>`;
+    offset+=len;
+  });
+  document.getElementById('donut-svg').innerHTML = `<circle cx="26" cy="26" r="20" fill="none" stroke="var(--border)" stroke-width="8"/>${donutSegs}`;
+  document.getElementById('donut-legend').innerHTML = entries.slice(0,3).map(([k,v],i)=>`<div class="donut-leg-item"><div class="donut-dot" style="background:${colors[i%colors.length]}"></div><div class="donut-leg-label">${k}</div></div>`).join('');
+
+  // Prazos
+  const all=[...DB.briefings.map(b=>({nome:b.nome,prazo:b.prazo,tipo:'Briefing'})),...DB.projetos.map(p=>({nome:p.nome,prazo:p.prazo,tipo:'Projeto'}))].sort((a,b)=>a.prazo.localeCompare(b.prazo)).slice(0,4);
+  const pEl=document.getElementById('home-prazos');
+  pEl.innerHTML = all.length ? all.map(p=>{const d=bdUntil(p.prazo);return`<div class="gcard event-item"><div class="event-dot" style="${d<=2?'background:var(--red)':''}"></div><div class="event-name">${p.nome} <span style="font-size:.72rem;color:var(--muted)">(${p.tipo})</span></div><span class="prazo-txt ${prazoClass(d)}" style="font-size:.6rem">${prazoTxt(d)}</span></div>`;}).join('') : '<div class="empty"><div class="empty-icon">📋</div><div class="empty-text">Nenhum prazo.</div></div>';
+
+  // Eventos
+  const tStr=todayStr();
+  const evs=DB.eventos.filter(e=>e.data>=tStr).sort((a,b)=>a.data.localeCompare(b.data)).slice(0,3);
+  const eEl=document.getElementById('home-eventos');
+  eEl.innerHTML = evs.length ? evs.map(e=>`<div class="gcard event-item"><div class="event-dot"></div><div class="event-name">${e.titulo}</div><div class="event-time">${fmtDate(e.data)}${e.hora?' · '+e.hora:''}</div></div>`).join('') : '<div class="empty"><div class="empty-icon">📅</div><div class="empty-text">Nenhum evento.</div></div>';
 }
 
-// ── GREETING TIME ──
-function updateGreeting() {
-  const h = new Date().getHours();
-  const g = h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite';
-  const el = document.getElementById('greeting-time');
-  if (el) el.textContent = g;
+// ── INSIGHTS ──
+const PYRAMID = [
+  {label:'Consciência',color:'#ED4B00',w:'100%'},
+  {label:'Interesse',color:'#e85d28',w:'86%'},
+  {label:'Desejo',color:'#c44a1e',w:'72%'},
+  {label:'Ação',color:'#a33a18',w:'58%'},
+  {label:'Retenção',color:'#7a2b12',w:'44%'},
+];
+
+const INSIGHTS = [
+  {author:'Philip Kotler',book:'Administração de Marketing',text:'Marketing não é a arte de encontrar formas inteligentes de descartar o que você faz. É a arte de criar valor genuíno para os clientes.'},
+  {author:'Philip Kotler',book:'Marketing 4.0',text:'Na era digital, o caminho para o coração dos consumidores passa pela criação de conteúdo que educa, inspira e entretém.'},
+  {author:'Philip Kotler',book:'Marketing de A a Z',text:'A melhor propaganda é feita por clientes satisfeitos. A pior, por clientes insatisfeitos.'},
+  {author:'Al Ries & Jack Trout',book:'Posicionamento',text:'Posicionamento não é o que você faz com um produto. É o que você faz com a mente do cliente potencial.'},
+  {author:'Al Ries & Jack Trout',book:'As 22 Consagradas Leis do Marketing',text:'É melhor ser o primeiro do que ser o melhor. É muito mais fácil entrar na mente primeiro do que convencer alguém de que você tem um produto melhor do que o que chegou lá antes.'},
+  {author:'Al Ries & Jack Trout',book:'Posicionamento',text:'A batalha do marketing é uma batalha de percepções, não de produtos.'},
+  {author:'Marty Neumeier',book:'The Brand Gap',text:'Uma marca não é um logo. Não é uma identidade corporativa. Não é um produto. Uma marca é o sentimento visceral de uma pessoa sobre um produto, serviço ou empresa.'},
+  {author:'Marty Neumeier',book:'Zag',text:'Quando todos seguem em zigue, você deve seguir em zague. A diferenciação radical é o único antídoto para a irrelevância.'},
+  {author:'Marty Neumeier',book:'The Brand Gap',text:'Confiança é criada não por meio de discurso, mas por comportamento consistente ao longo do tempo.'},
+  {author:'Seth Godin',book:'This Is Marketing',text:'O marketing não é mais sobre o que você faz, mas sobre as histórias que você conta.'},
+  {author:'Seth Godin',book:'Purple Cow',text:'Ser seguro é arriscado. O extraordinário, o notável, o surpreendente — esses são os únicos que as pessoas comentam.'},
+  {author:'David Aaker',book:'Construindo Marcas Fortes',text:'Uma marca forte é um ativo estratégico. Ela representa uma promessa ao cliente e um conjunto de valores que cria diferenciação sustentável.'},
+];
+
+let lastInsight = -1;
+
+function showRandomInsight() {
+  let idx;
+  do { idx = Math.floor(Math.random()*INSIGHTS.length); } while (idx===lastInsight&&INSIGHTS.length>1);
+  lastInsight = idx;
+  const ins = INSIGHTS[idx];
+  const el = document.getElementById('insights-list');
+  const card = document.createElement('div');
+  card.className = 'gcard insight-card';
+  card.style.cssText = 'border-left:3px solid var(--orange);animation:fadeInUp .4s ease forwards';
+  card.innerHTML = `<div class="insight-author">${ins.author}</div><div class="insight-text">"${ins.text}"</div><div class="insight-source">${ins.book}</div>`;
+  el.insertBefore(card, el.firstChild);
+}
+
+function renderInsights() {
+  // Pyramid
+  document.getElementById('pyramid').innerHTML = PYRAMID.map(p=>`<div class="pyr-row" style="width:${p.w};background:${p.color}">${p.label}</div>`).join('');
+  // Initial insights
+  if (!document.getElementById('insights-list').children.length) {
+    document.getElementById('insights-list').innerHTML = INSIGHTS.slice(0,4).map(ins=>`<div class="gcard insight-card" style="border-left:3px solid var(--orange)"><div class="insight-author">${ins.author}</div><div class="insight-text">"${ins.text}"</div><div class="insight-source">${ins.book}</div></div>`).join('');
+  }
 }
 
 // ── INIT ──
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', ()=>{
   updateGreeting();
-  renderInicio();
-  renderBriefings();
-  renderPropostas();
-  renderAndamento();
-  renderCalendar();
+  renderHome();
+  renderBPP();
+  renderCal();
   renderNotas();
+  renderInsights();
+  setInterval(updateGreeting, 60000);
+  // build tag selectors on page load
+  ['b-tags','p-tags','pr-tags'].forEach(buildTagSel);
 });
 </script>
 </body>
