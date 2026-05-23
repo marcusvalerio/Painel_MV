@@ -8,1235 +8,855 @@
 <meta name="theme-color" content="#06060a" media="(prefers-color-scheme: dark)">
 <meta name="theme-color" content="#f2f2f7" media="(prefers-color-scheme: light)">
 <title>MV · Painel</title>
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23020035'/%3E%3Ctext x='50' y='68' text-anchor='middle' font-family='Arial Black' font-weight='900' font-size='42' fill='%23ED4B00'%3EMV%3C/text%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;600;700&family=DM+Sans:wght@300;400;500&family=Titillium+Web:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
-/* ── TOKENS ── */
-:root {
-  --orange: #ED4B00;
-  --orange2: #ff6a20;
-  --blue: #0a84ff;
-  --green: #34c759;
-  --red: #ff3b30;
-  --yellow: #ff9f0a;
-  --purple: #bf5af2;
-  --ease: cubic-bezier(.16,1,.3,1);
-  --radius: 16px;
-  --radius-sm: 10px;
+:root{
+  --orange:#ED4B00;--orange2:#ff6a20;
+  --blue:#0a84ff;--green:#34c759;--red:#ff3b30;
+  --yellow:#ff9f0a;--purple:#bf5af2;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --r:16px;--rs:10px;
 }
 
-/* LIGHT MODE */
-:root {
-  --bg: #f2f2f7;
-  --bg2: #ffffff;
-  --bg3: #e5e5ea;
-  --text: #1c1c1e;
-  --text2: #3a3a3c;
-  --muted: #8e8e93;
-  --subtle: #c7c7cc;
-  --border: rgba(60,60,67,.12);
-  --border2: rgba(60,60,67,.06);
-  --glass: rgba(255,255,255,.72);
-  --glass-hover: rgba(255,255,255,.85);
-  --glass-border: rgba(255,255,255,.8);
-  --glass-blur: blur(28px) saturate(200%);
-  --card-shadow: 0 2px 24px rgba(0,0,0,.07), 0 1px 0 rgba(255,255,255,.9) inset;
-  --nav-bg: rgba(242,242,247,.82);
-  --tag-bg: rgba(118,118,128,.12);
-  --input-bg: rgba(118,118,128,.08);
+/* LIGHT */
+:root{
+  --bg:#f2f2f7;--bg2:#fff;--bg3:#e5e5ea;
+  --text:#1c1c1e;--text2:#3a3a3c;--muted:#8e8e93;--subtle:#c7c7cc;
+  --border:rgba(60,60,67,.12);
+  --glass:rgba(255,255,255,.75);--gb:rgba(255,255,255,.85);
+  --gbl:rgba(255,255,255,.9);
+  --gblur:blur(28px) saturate(200%);
+  --shadow:0 2px 20px rgba(0,0,0,.07),0 1px 0 rgba(255,255,255,.9) inset;
+  --nav:rgba(242,242,247,.85);
+  --tag:rgba(118,118,128,.1);
+  --inp:rgba(118,118,128,.08);
 }
 
-/* DARK MODE */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #06060a;
-    --bg2: #1c1c1e;
-    --bg3: #2c2c2e;
-    --text: #f2f2f7;
-    --text2: #ebebf5;
-    --muted: #8e8e93;
-    --subtle: #3a3a3c;
-    --border: rgba(255,255,255,.09);
-    --border2: rgba(255,255,255,.04);
-    --glass: rgba(255,255,255,.055);
-    --glass-hover: rgba(255,255,255,.09);
-    --glass-border: rgba(255,255,255,.13);
-    --glass-blur: blur(32px) saturate(220%);
-    --card-shadow: 0 8px 48px rgba(0,0,0,.7), 0 1px 0 rgba(255,255,255,.08) inset;
-    --nav-bg: rgba(6,6,10,.75);
-    --tag-bg: rgba(255,255,255,.09);
-    --input-bg: rgba(255,255,255,.07);
+/* DARK */
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#06060a;--bg2:#1c1c1e;--bg3:#2c2c2e;
+    --text:#f2f2f7;--text2:#ebebf5;--muted:#8e8e93;--subtle:#3a3a3c;
+    --border:rgba(255,255,255,.09);
+    --glass:rgba(255,255,255,.055);--gb:rgba(255,255,255,.09);
+    --gbl:rgba(255,255,255,.12);
+    --gblur:blur(32px) saturate(220%);
+    --shadow:0 8px 48px rgba(0,0,0,.7),0 1px 0 rgba(255,255,255,.08) inset;
+    --nav:rgba(6,6,10,.78);
+    --tag:rgba(255,255,255,.09);
+    --inp:rgba(255,255,255,.07);
+  }
+  .app::before{
+    content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.02;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size:180px;mix-blend-mode:overlay;
+  }
+  .app::after{
+    content:'';position:fixed;pointer-events:none;z-index:0;
+    width:500px;height:500px;border-radius:50%;
+    background:radial-gradient(circle,rgba(237,75,0,.12) 0%,transparent 70%);
+    top:-200px;right:-150px;filter:blur(60px);
   }
 }
 
-html, body {
-  height: 100%; overflow: hidden;
-  background: var(--bg); color: var(--text);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 15px; line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;}
 
-/* ── APP SHELL ── */
-.app { display: flex; flex-direction: column; height: 100svh; position: relative; overflow: hidden; }
+.app{display:flex;flex-direction:column;height:100svh;overflow:hidden;position:relative;}
 
-/* NOISE dark only */
-@media (prefers-color-scheme: dark) {
-  .app::before {
-    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: .022;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-size: 180px; mix-blend-mode: overlay;
-  }
-  /* ambient orbs */
-  .app::after {
-    content: ''; position: fixed; pointer-events: none; z-index: 0;
-    width: 500px; height: 500px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(237,75,0,.12) 0%, transparent 70%);
-    top: -200px; right: -150px; filter: blur(60px);
-  }
-}
+.screen{display:none;flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:96px;position:relative;z-index:1;-webkit-overflow-scrolling:touch;}
+.screen.active{display:flex;flex-direction:column;}
 
-/* ── SCREENS ── */
-.screen { display: none; flex: 1; overflow-y: auto; overflow-x: hidden; padding-bottom: 96px; position: relative; z-index: 1; -webkit-overflow-scrolling: touch; }
-.screen.active { display: flex; flex-direction: column; }
+/* TOPBAR */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  padding:max(env(safe-area-inset-top,48px),48px) 1.2rem .8rem;
+  background:var(--nav);
+  backdrop-filter:var(--gblur);-webkit-backdrop-filter:var(--gblur);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:flex-end;justify-content:space-between;gap:.75rem;
+}
+.topbar-title{font-family:'Oswald',sans-serif;font-weight:600;font-size:1.2rem;letter-spacing:.03em;text-transform:uppercase;color:var(--text);}
+.topbar-title span{color:var(--orange);}
+.topbar-r{display:flex;gap:.5rem;align-items:center;}
+.tb-btn{width:30px;height:30px;border-radius:50%;background:var(--orange);color:#fff;border:none;display:flex;align-items:center;justify-content:center;font-size:1rem;cursor:pointer;box-shadow:0 4px 14px rgba(237,75,0,.4);transition:transform .2s var(--ease);}
+.tb-btn:active{transform:scale(.92);}
+.tb-btn-ghost{width:30px;height:30px;border-radius:50%;background:var(--tag);color:var(--muted);border:none;display:flex;align-items:center;justify-content:center;font-size:.85rem;cursor:pointer;transition:all .2s;}
+.tb-btn-ghost:hover{color:var(--text);}
 
-/* ── TOPBAR ── */
-.topbar {
-  position: sticky; top: 0; z-index: 50;
-  padding: max(env(safe-area-inset-top,44px), 44px) 1.25rem .85rem;
-  background: var(--nav-bg);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border-bottom: 1px solid var(--border);
-  display: flex; align-items: flex-end; justify-content: space-between;
-  gap: .75rem;
-}
+/* GLASS CARD */
+.gc{background:var(--glass);backdrop-filter:var(--gblur);-webkit-backdrop-filter:var(--gblur);border:1px solid var(--gbl);border-radius:var(--r);box-shadow:var(--shadow);position:relative;overflow:hidden;}
+.gc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.45),rgba(255,255,255,.7),rgba(255,255,255,.45),transparent);}
+@media(prefers-color-scheme:dark){.gc::before{background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),rgba(255,255,255,.2),rgba(255,255,255,.12),transparent);}}
+.gc::after{content:'';position:absolute;top:0;left:0;width:1px;height:55%;background:linear-gradient(180deg,rgba(255,255,255,.3),transparent);pointer-events:none;}
 
-.topbar-left { display: flex; align-items: center; gap: .75rem; }
+/* TAGS */
+.tag{display:inline-flex;align-items:center;padding:.18rem .6rem;border-radius:100px;font-family:'Titillium Web',sans-serif;font-size:.57rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:var(--tag);color:var(--muted);}
+.tag.o{background:rgba(237,75,0,.13);color:var(--orange);}
+.tag.g{background:rgba(52,199,89,.13);color:var(--green);}
+.tag.b{background:rgba(10,132,255,.13);color:var(--blue);}
+.tag.y{background:rgba(255,159,10,.13);color:var(--yellow);}
+.tag.r{background:rgba(255,59,48,.13);color:var(--red);}
+.tag.p{background:rgba(191,90,242,.13);color:var(--purple);}
 
-/* LOGO */
-.logo-mark {
-  width: 34px; height: 34px; border-radius: 9px; flex-shrink: 0;
-  background: linear-gradient(135deg, #020035 0%, var(--orange) 100%);
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 2px 12px rgba(237,75,0,.4);
-  position: relative; overflow: hidden;
-}
-.logo-mark::before {
-  content: ''; position: absolute; inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,.2) 0%, transparent 60%);
-}
-.logo-mark-text {
-  font-family: 'Oswald', sans-serif; font-weight: 700; font-size: .72rem;
-  letter-spacing: .05em; color: white; position: relative; z-index: 1;
-}
+/* BOTTOM NAV */
+.bnav{position:fixed;bottom:0;left:0;right:0;z-index:100;padding:.5rem 1rem calc(.5rem + env(safe-area-inset-bottom,12px));background:var(--nav);backdrop-filter:var(--gblur);-webkit-backdrop-filter:var(--gblur);border-top:1px solid var(--gbl);}
+.npill{background:var(--glass);backdrop-filter:var(--gblur);border:1px solid var(--gbl);border-radius:100px;padding:.28rem .3rem;display:flex;align-items:center;justify-content:space-around;box-shadow:var(--shadow);position:relative;overflow:hidden;}
+.npill::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);}
+.nbtn{display:flex;flex-direction:column;align-items:center;gap:.16rem;padding:.42rem .65rem;border-radius:100px;border:none;background:transparent;cursor:pointer;transition:all .2s var(--ease);min-width:50px;}
+.nbtn.active{background:var(--gb);backdrop-filter:blur(16px);box-shadow:0 2px 10px rgba(0,0,0,.12),inset 0 1px 0 rgba(255,255,255,.3);border:1px solid var(--gbl);}
+@media(prefers-color-scheme:dark){.nbtn.active{box-shadow:0 2px 12px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.1);}}
+.nicon svg{width:18px;height:18px;stroke:var(--muted);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;transition:stroke .2s;}
+.nbtn.active .nicon svg{stroke:var(--orange);}
+.nlbl{font-family:'Titillium Web',sans-serif;font-size:.5rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);transition:color .2s;}
+.nbtn.active .nlbl{color:var(--orange);}
 
-.topbar-title {
-  font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 1.2rem;
-  letter-spacing: .03em; text-transform: uppercase; color: var(--text);
-}
-.topbar-title span { color: var(--orange); }
+/* CONTENT */
+.c{padding:1.1rem;flex:1;}
 
-.topbar-action {
-  width: 32px; height: 32px; border-radius: 50%;
-  background: var(--orange); color: white; border: none;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.1rem; cursor: pointer; flex-shrink: 0;
-  box-shadow: 0 4px 16px rgba(237,75,0,.4);
-  transition: transform .2s var(--ease), box-shadow .2s;
-}
-.topbar-action:active { transform: scale(.92); }
+/* SECTION LABEL */
+.sl{font-family:'Titillium Web',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin:1.1rem 0 .55rem;}
 
-/* ── GLASS CARD ── */
-.gcard {
-  background: var(--glass);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius);
-  box-shadow: var(--card-shadow);
-  position: relative; overflow: hidden;
-}
-.gcard::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,.35), rgba(255,255,255,.6), rgba(255,255,255,.35), transparent);
-}
-@media (prefers-color-scheme: dark) {
-  .gcard::before { background: linear-gradient(90deg, transparent, rgba(255,255,255,.12), rgba(255,255,255,.22), rgba(255,255,255,.12), transparent); }
-}
-/* left shine */
-.gcard::after {
-  content: ''; position: absolute; top: 0; left: 0; width: 1px; height: 60%;
-  background: linear-gradient(180deg, rgba(255,255,255,.35), transparent);
-  pointer-events: none;
-}
+/* EMPTY */
+.empty{text-align:center;padding:2.5rem 1.5rem;}
+.ei{font-size:2rem;margin-bottom:.4rem;opacity:.35;}
+.et{font-size:.8rem;color:var(--muted);line-height:1.6;}
 
-/* ── TAGS ── */
-.tag {
-  display: inline-flex; align-items: center; padding: .18rem .6rem;
-  border-radius: 100px; font-family: 'Titillium Web', sans-serif;
-  font-size: .58rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
-  background: var(--tag-bg); color: var(--muted);
-}
-.tag.orange { background: rgba(237,75,0,.13); color: var(--orange); }
-.tag.green  { background: rgba(52,199,89,.13); color: var(--green); }
-.tag.blue   { background: rgba(10,132,255,.13); color: var(--blue); }
-.tag.yellow { background: rgba(255,159,10,.13); color: var(--yellow); }
-.tag.red    { background: rgba(255,59,48,.13); color: var(--red); }
-.tag.purple { background: rgba(191,90,242,.13); color: var(--purple); }
-
-/* ── BOTTOM NAV ── */
-.bottom-nav {
-  position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
-  padding: .55rem 1rem calc(.55rem + env(safe-area-inset-bottom, 12px));
-  background: var(--nav-bg);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border-top: 1px solid var(--glass-border);
-}
-@media (prefers-color-scheme: dark) {
-  .bottom-nav { box-shadow: 0 -1px 0 rgba(255,255,255,.07), inset 0 1px 0 rgba(255,255,255,.04); }
-}
-
-.nav-pill-wrap {
-  background: var(--glass);
-  backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  border-radius: 100px; padding: .3rem .35rem;
-  display: flex; align-items: center; justify-content: space-around;
-  box-shadow: var(--card-shadow);
-  position: relative; overflow: hidden;
-}
-.nav-pill-wrap::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,.5), transparent);
-}
-
-.nav-btn {
-  display: flex; flex-direction: column; align-items: center; gap: .18rem;
-  padding: .45rem .7rem; border-radius: 100px; border: none;
-  background: transparent; cursor: pointer; transition: all .2s var(--ease);
-  min-width: 52px; position: relative;
-}
-.nav-btn.active {
-  background: var(--glass-hover);
-  backdrop-filter: blur(16px);
-  box-shadow: 0 2px 10px rgba(0,0,0,.12), inset 0 1px 0 rgba(255,255,255,.3);
-  border: 1px solid var(--glass-border);
-}
-@media (prefers-color-scheme: dark) {
-  .nav-btn.active { box-shadow: 0 2px 12px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.1); }
-}
-
-.nav-icon-wrap { width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; }
-
-.nav-icon-wrap svg { width: 20px; height: 20px; stroke: var(--muted); fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; transition: stroke .2s; }
-.nav-btn.active .nav-icon-wrap svg { stroke: var(--orange); }
-
-.nav-label {
-  font-family: 'Titillium Web', sans-serif; font-size: .52rem; font-weight: 700;
-  letter-spacing: .07em; text-transform: uppercase; color: var(--muted); transition: color .2s;
-}
-.nav-btn.active .nav-label { color: var(--orange); }
-
-/* ── CONTENT ── */
-.content { padding: 1.1rem 1.1rem; flex: 1; }
-
-/* ── SECTION LABEL ── */
-.sec-label {
-  font-family: 'Titillium Web', sans-serif; font-size: .6rem; font-weight: 700;
-  letter-spacing: .18em; text-transform: uppercase; color: var(--muted);
-  margin: 1.1rem 0 .6rem; padding-left: .1rem;
-}
-
-/* ── EMPTY STATE ── */
-.empty { text-align: center; padding: 2.5rem 1.5rem; }
-.empty-icon { font-size: 2rem; margin-bottom: .5rem; opacity: .35; }
-.empty-text { font-size: .82rem; color: var(--muted); line-height: 1.6; }
-
-/* ── HOME ── */
-.home-header { margin-bottom: 1.25rem; }
-.home-time {
-  font-family: 'Titillium Web', sans-serif; font-size: .62rem; font-weight: 700;
-  letter-spacing: .2em; text-transform: uppercase; color: var(--orange); margin-bottom: .25rem;
-}
-.home-name {
-  font-family: 'Oswald', sans-serif; font-weight: 200; font-size: 1.9rem;
-  text-transform: uppercase; letter-spacing: .02em; color: var(--text);
-}
-.home-name b { font-weight: 700; }
+/* HOME */
+.h-greet-sub{font-family:'Titillium Web',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--orange);margin-bottom:.2rem;}
+.h-greet-name{font-family:'Oswald',sans-serif;font-weight:200;font-size:1.8rem;text-transform:uppercase;letter-spacing:.02em;}
+.h-greet-name b{font-weight:700;}
 
 /* POSTIT */
-.postit {
-  margin-bottom: 1.1rem; padding: .9rem 1rem;
-  border-radius: var(--radius-sm); border-left: 3px solid var(--orange);
-}
-.postit-label {
-  font-family: 'Titillium Web', sans-serif; font-size: .58rem; font-weight: 700;
-  letter-spacing: .15em; text-transform: uppercase; color: var(--orange); margin-bottom: .35rem;
-}
-.postit-input {
-  width: 100%; background: none; border: none; outline: none;
-  font-family: 'DM Sans', sans-serif; font-size: .85rem; color: var(--text);
-  resize: none; min-height: 40px; line-height: 1.5;
-}
-.postit-input::placeholder { color: var(--muted); }
+.postit{margin-bottom:1rem;padding:.85rem 1rem;border-left:3px solid var(--orange);}
+.postit-lbl{font-family:'Titillium Web',sans-serif;font-size:.57rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--orange);margin-bottom:.3rem;}
+.postit-inp{width:100%;background:none;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:.84rem;color:var(--text);resize:none;min-height:38px;line-height:1.5;}
+.postit-inp::placeholder{color:var(--muted);}
 
-/* SUMMARY GRID */
-.sum-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: .65rem; margin-bottom: 1.1rem; }
-.sum-card { padding: 1rem; border-radius: var(--radius-sm); }
-.sum-num {
-  font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 2rem; line-height: 1;
-  color: var(--orange); margin-bottom: .2rem;
-}
-.sum-lbl {
-  font-family: 'Titillium Web', sans-serif; font-size: .58rem; font-weight: 700;
-  letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
-}
+/* SUMMARY */
+.sg{display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem;margin-bottom:1rem;}
+.sc-num{font-family:'Oswald',sans-serif;font-weight:700;font-size:1.9rem;line-height:1;color:var(--orange);margin-bottom:.15rem;}
+.sc-lbl{font-family:'Titillium Web',sans-serif;font-size:.56rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+.sc-val{font-family:'Titillium Web',sans-serif;font-size:.62rem;font-weight:600;color:var(--green);margin-top:.1rem;}
 
-/* CHARTS */
-.chart-row { display: grid; grid-template-columns: 1fr 1fr; gap: .65rem; margin-bottom: 1.1rem; }
-.chart-card { padding: 1rem; border-radius: var(--radius-sm); }
-.chart-title {
-  font-family: 'Titillium Web', sans-serif; font-size: .6rem; font-weight: 700;
-  letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: .75rem;
-}
-.bar-chart { display: flex; align-items: flex-end; gap: .3rem; height: 50px; }
-.bar-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: .2rem; }
-.bar-fill { width: 100%; border-radius: 3px 3px 0 0; background: var(--orange); opacity: .7; min-height: 3px; transition: height .5s var(--ease); }
-.bar-lbl { font-family: 'Titillium Web', sans-serif; font-size: .48rem; color: var(--muted); }
+/* DASHBOARD */
+.dash-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1rem;}
+.dash-card{padding:.9rem;}
+.dash-title{font-family:'Titillium Web',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem;}
+.bar-chart{display:flex;align-items:flex-end;gap:.25rem;height:44px;}
+.bi{flex:1;display:flex;flex-direction:column;align-items:center;gap:.15rem;}
+.bf{width:100%;border-radius:3px 3px 0 0;background:var(--orange);min-height:3px;transition:height .5s var(--ease);}
+.bl{font-family:'Titillium Web',sans-serif;font-size:.46rem;font-weight:700;color:var(--muted);}
+.bn{font-family:'Titillium Web',sans-serif;font-size:.48rem;font-weight:700;color:var(--orange);}
+.donut-wrap{display:flex;align-items:center;gap:.65rem;}
+.dleg-item{display:flex;align-items:center;gap:.35rem;margin-bottom:.25rem;}
+.ddot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.dleg-lbl{font-size:.62rem;color:var(--muted);}
 
-.donut-wrap { display: flex; align-items: center; gap: .75rem; }
-.donut-legend { flex: 1; }
-.donut-leg-item { display: flex; align-items: center; gap: .4rem; margin-bottom: .3rem; }
-.donut-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-.donut-leg-label { font-size: .65rem; color: var(--muted); }
+/* PIPELINE ITEMS */
+.pi{padding:.85rem 1rem;border-radius:var(--rs);margin-bottom:.5rem;cursor:pointer;transition:transform .15s;}
+.pi:active{transform:scale(.98);}
+.pi-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.45rem;gap:.4rem;}
+.pi-name{font-family:'Titillium Web',sans-serif;font-size:.88rem;font-weight:700;color:var(--text);}
+.pi-date{font-size:.7rem;color:var(--muted);margin-top:.08rem;}
+.pi-tags{display:flex;flex-wrap:wrap;gap:.28rem;margin-bottom:.45rem;}
+.pi-foot{display:flex;align-items:center;justify-content:space-between;}
+.pi-actions{display:flex;gap:.35rem;margin-top:.55rem;flex-wrap:wrap;}
+.pbar{height:3px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:.45rem;}
+.pbar-f{height:100%;border-radius:2px;transition:width .5s var(--ease);}
+.pt{font-family:'Titillium Web',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;}
+.pt-ok{color:var(--green);}.pt-w{color:var(--yellow);}.pt-u{color:var(--red);}
 
-/* PIPELINE ITEM */
-.pipe-item { padding: .85rem 1rem; border-radius: var(--radius-sm); margin-bottom: .5rem; cursor: pointer; transition: transform .15s; }
-.pipe-item:active { transform: scale(.98); }
-.pipe-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: .5rem; }
-.pipe-name { font-family: 'Titillium Web', sans-serif; font-size: .88rem; font-weight: 700; color: var(--text); }
-.pipe-date { font-size: .72rem; color: var(--muted); margin-top: .1rem; }
-.pipe-tags { display: flex; flex-wrap: wrap; gap: .3rem; margin-bottom: .5rem; }
-.pipe-footer { display: flex; align-items: center; justify-content: space-between; }
-.pipe-actions { display: flex; gap: .4rem; margin-top: .6rem; }
+/* BPP */
+.sub-nav{display:flex;gap:.35rem;padding:.65rem 1.1rem 0;}
+.sb{padding:.38rem .85rem;border-radius:100px;border:1px solid var(--border);background:var(--glass);font-family:'Titillium Web',sans-serif;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:all .2s var(--ease);backdrop-filter:blur(12px);}
+.sb.active{background:var(--orange);border-color:var(--orange);color:#fff;box-shadow:0 4px 14px rgba(237,75,0,.3);}
 
-/* PRAZO */
-.prazo-bar { height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; margin-top: .5rem; }
-.prazo-fill { height: 100%; border-radius: 2px; transition: width .5s var(--ease); }
-.prazo-txt {
-  font-family: 'Titillium Web', sans-serif; font-size: .6rem; font-weight: 700;
-  letter-spacing: .07em; text-transform: uppercase;
-}
-.prazo-ok { color: var(--green); }
-.prazo-warn { color: var(--yellow); }
-.prazo-urgent { color: var(--red); }
+/* PIPELINE VIS */
+.pip-vis{display:flex;align-items:center;padding:.85rem 1.1rem .4rem;}
+.pip-s{display:flex;flex-direction:column;align-items:center;gap:.25rem;flex-shrink:0;}
+.pip-d{width:26px;height:26px;border-radius:50%;background:var(--glass);border:1.5px solid var(--border);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;font-size:.65rem;transition:all .3s var(--ease);}
+.pip-d.on{background:var(--orange);border-color:var(--orange);box-shadow:0 0 0 4px rgba(237,75,0,.15);}
+.pip-d svg{width:12px;height:12px;stroke:var(--muted);fill:none;stroke-width:2;}
+.pip-d.on svg{stroke:#fff;}
+.pip-l-lbl{font-family:'Titillium Web',sans-serif;font-size:.52rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);}
+.pip-l-lbl.on{color:var(--orange);}
+.pip-ln{flex:1;height:1.5px;background:var(--border);margin:0 .18rem .9rem;position:relative;overflow:hidden;}
+.pip-ln.done::after{content:'';position:absolute;inset:0;background:var(--orange);}
 
-/* BPP SUB-NAV */
-.sub-nav { display: flex; gap: .4rem; padding: .75rem 1.1rem 0; }
-.sub-btn {
-  padding: .4rem .9rem; border-radius: 100px; border: 1px solid var(--border);
-  background: var(--glass); font-family: 'Titillium Web', sans-serif;
-  font-size: .65rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
-  color: var(--muted); cursor: pointer; transition: all .2s var(--ease);
-  backdrop-filter: blur(12px);
-}
-.sub-btn.active {
-  background: var(--orange); border-color: var(--orange); color: white;
-  box-shadow: 0 4px 14px rgba(237,75,0,.3);
-}
-
-/* PIPELINE PROGRESS */
-.pipeline-vis {
-  display: flex; align-items: center; padding: 1rem 1.1rem .5rem; gap: 0;
-}
-.pip-step {
-  display: flex; flex-direction: column; align-items: center; gap: .3rem; flex-shrink: 0;
-}
-.pip-dot {
-  width: 28px; height: 28px; border-radius: 50%;
-  background: var(--glass); border: 1.5px solid var(--border);
-  backdrop-filter: blur(8px);
-  display: flex; align-items: center; justify-content: center;
-  font-size: .7rem; transition: all .3s var(--ease);
-}
-.pip-dot.active { background: var(--orange); border-color: var(--orange); box-shadow: 0 0 0 4px rgba(237,75,0,.15); }
-.pip-dot svg { width: 14px; height: 14px; stroke: var(--muted); fill: none; stroke-width: 2; }
-.pip-dot.active svg { stroke: white; }
-.pip-lbl { font-family: 'Titillium Web', sans-serif; font-size: .55rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
-.pip-lbl.active { color: var(--orange); }
-.pip-line { flex: 1; height: 1.5px; background: var(--border); margin: 0 .2rem; margin-bottom: 1.2rem; position: relative; overflow: hidden; }
-.pip-line.done::after { content: ''; position: absolute; inset: 0; background: var(--orange); }
-
-/* MOVE BTN */
-.btn-move {
-  display: inline-flex; align-items: center; gap: .35rem;
-  padding: .35rem .8rem; border-radius: 100px;
-  background: rgba(237,75,0,.1); border: 1px solid rgba(237,75,0,.3);
-  color: var(--orange); font-family: 'Titillium Web', sans-serif;
-  font-size: .6rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
-  cursor: pointer; transition: all .2s;
-}
-.btn-move:hover { background: var(--orange); color: white; }
-
-.btn-del {
-  width: 26px; height: 26px; border-radius: 50%; border: none;
-  background: var(--tag-bg); color: var(--muted); cursor: pointer;
-  display: flex; align-items: center; justify-content: center; font-size: .7rem;
-  transition: all .2s; flex-shrink: 0;
-}
-.btn-del:hover { background: rgba(255,59,48,.15); color: var(--red); }
+/* MOVE/EDIT BTNS */
+.btn-mv{display:inline-flex;align-items:center;gap:.3rem;padding:.3rem .75rem;border-radius:100px;background:rgba(237,75,0,.1);border:1px solid rgba(237,75,0,.3);color:var(--orange);font-family:'Titillium Web',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .2s;}
+.btn-mv:hover{background:var(--orange);color:#fff;}
+.btn-edit{display:inline-flex;align-items:center;gap:.3rem;padding:.3rem .75rem;border-radius:100px;background:var(--tag);border:1px solid var(--border);color:var(--muted);font-family:'Titillium Web',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .2s;}
+.btn-edit:hover{color:var(--text);background:var(--gb);}
+.btn-del{width:24px;height:24px;border-radius:50%;border:none;background:var(--tag);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.68rem;transition:all .2s;flex-shrink:0;}
+.btn-del:hover{background:rgba(255,59,48,.15);color:var(--red);}
 
 /* CALENDAR */
-.cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: .75rem; }
-.cal-month { font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 1.05rem; text-transform: uppercase; letter-spacing: .05em; }
-.cal-nav-wrap { display: flex; gap: .35rem; }
-.cal-nav-btn {
-  width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border);
-  background: var(--glass); backdrop-filter: blur(12px); color: var(--muted); cursor: pointer;
-  display: flex; align-items: center; justify-content: center; font-size: .8rem; transition: all .2s;
-}
-.cal-nav-btn:hover { border-color: var(--orange); color: var(--orange); }
-.cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: .15rem; margin-bottom: .75rem; }
-.cal-lbl { text-align: center; font-family: 'Titillium Web', sans-serif; font-size: .55rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--subtle); padding: .25rem 0; }
-.cal-day {
-  aspect-ratio: 1; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-  font-size: .8rem; color: var(--muted); cursor: pointer; transition: all .18s; position: relative;
-}
-.cal-day:hover { background: var(--tag-bg); color: var(--text); }
-.cal-day.today { background: var(--orange); color: white; font-weight: 700; box-shadow: 0 0 0 3px rgba(237,75,0,.2); }
-.cal-day.selected { background: var(--glass); border: 1.5px solid var(--orange); color: var(--orange); backdrop-filter: blur(8px); }
-.cal-day.today.selected { background: var(--orange); color: white; }
-.cal-day.has-event::after { content: ''; position: absolute; bottom: 1px; left: 50%; transform: translateX(-50%); width: 4px; height: 4px; border-radius: 50%; background: var(--orange); }
-.cal-day.today.has-event::after { background: rgba(255,255,255,.8); }
-.cal-day.dim { opacity: .28; }
-.event-item { display: flex; align-items: center; gap: .65rem; padding: .75rem .9rem; border-radius: var(--radius-sm); margin-bottom: .45rem; }
-.event-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--orange); flex-shrink: 0; }
-.event-name { flex: 1; font-size: .85rem; font-weight: 500; color: var(--text); }
-.event-time { font-family: 'Titillium Web', sans-serif; font-size: .6rem; font-weight: 700; color: var(--muted); }
+.cal-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:.65rem;}
+.cal-m{font-family:'Oswald',sans-serif;font-weight:400;font-size:1rem;text-transform:uppercase;letter-spacing:.05em;}
+.cal-nav{display:flex;gap:.3rem;}
+.cal-nb{width:26px;height:26px;border-radius:50%;border:1px solid var(--border);background:var(--glass);backdrop-filter:blur(12px);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.78rem;transition:all .2s;}
+.cal-nb:hover{border-color:var(--orange);color:var(--orange);}
+.cg{display:grid;grid-template-columns:repeat(7,1fr);gap:.12rem;margin-bottom:.65rem;}
+.cdl{text-align:center;font-family:'Titillium Web',sans-serif;font-size:.52rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--subtle);padding:.22rem 0;}
+.cd{aspect-ratio:1;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.78rem;color:var(--muted);cursor:pointer;transition:all .18s;position:relative;}
+.cd:hover{background:var(--tag);color:var(--text);}
+.cd.today{background:var(--orange);color:#fff;font-weight:700;box-shadow:0 0 0 3px rgba(237,75,0,.2);}
+.cd.sel:not(.today){background:var(--glass);border:1.5px solid var(--orange);color:var(--orange);backdrop-filter:blur(8px);}
+.cd.hev::after{content:'';position:absolute;bottom:1px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--orange);}
+.cd.today.hev::after{background:rgba(255,255,255,.8);}
+.cd.dim{opacity:.27;}
+.ev-item{display:flex;align-items:center;gap:.6rem;padding:.72rem .9rem;border-radius:var(--rs);margin-bottom:.4rem;}
+.ev-dot{width:7px;height:7px;border-radius:50%;background:var(--orange);flex-shrink:0;}
+.ev-name{flex:1;font-size:.84rem;font-weight:500;color:var(--text);}
+.ev-time{font-family:'Titillium Web',sans-serif;font-size:.58rem;font-weight:700;color:var(--muted);}
 
 /* NOTES */
-.nota-list-item { padding: .9rem 1rem; border-radius: var(--radius-sm); margin-bottom: .5rem; cursor: pointer; transition: transform .15s; }
-.nota-list-item:active { transform: scale(.98); }
-.nota-item-name { font-family: 'Titillium Web', sans-serif; font-size: .88rem; font-weight: 700; color: var(--text); margin-bottom: .25rem; }
-.nota-item-prev { font-size: .78rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.nota-item-meta { font-family: 'Titillium Web', sans-serif; font-size: .56rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--subtle); margin-top: .4rem; }
-
-/* NOTE EDITOR */
-.nota-editor { display: none; flex-direction: column; height: 100%; }
-.nota-editor.show { display: flex; flex: 1; }
-.nota-ed-header { padding: .75rem 1.1rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: .75rem; }
-.nota-ed-title { font-family: 'Titillium Web', sans-serif; font-size: .9rem; font-weight: 700; color: var(--text); flex: 1; }
-.nota-ed-body { flex: 1; padding: 1.1rem; font-size: .92rem; color: var(--text); line-height: 1.7; border: none; background: transparent; resize: none; outline: none; font-family: 'DM Sans', sans-serif; font-weight: 300; }
-.nota-ed-body::placeholder { color: var(--muted); }
-.nota-read-toggle { display: flex; align-items: center; gap: .5rem; padding: .6rem 1.1rem; border-top: 1px solid var(--border); }
-.nota-read-toggle label { font-family: 'Titillium Web', sans-serif; font-size: .62rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
-.toggle-sw { position: relative; width: 36px; height: 20px; }
-.toggle-sw input { opacity: 0; width: 0; height: 0; }
-.toggle-track { position: absolute; inset: 0; border-radius: 20px; background: var(--border); cursor: pointer; transition: background .2s; }
-.toggle-sw input:checked + .toggle-track { background: var(--orange); }
-.toggle-track::after { content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: white; transition: transform .2s; box-shadow: 0 1px 4px rgba(0,0,0,.25); }
-.toggle-sw input:checked + .toggle-track::after { transform: translateX(16px); }
-.btn-back { background: none; border: none; cursor: pointer; color: var(--orange); font-family: 'Titillium Web', sans-serif; font-size: .8rem; font-weight: 700; letter-spacing: .08em; }
+.nota-li{padding:.85rem 1rem;border-radius:var(--rs);margin-bottom:.45rem;cursor:pointer;transition:transform .15s;}
+.nota-li:active{transform:scale(.98);}
+.nota-li-name{font-family:'Titillium Web',sans-serif;font-size:.87rem;font-weight:700;color:var(--text);margin-bottom:.22rem;}
+.nota-li-prev{font-size:.77rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.nota-li-meta{font-family:'Titillium Web',sans-serif;font-size:.54rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--subtle);margin-top:.35rem;}
+.ned{display:none;flex-direction:column;height:100%;}
+.ned.show{display:flex;flex:1;}
+.ned-h{padding:.72rem 1.1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.65rem;}
+.ned-t{font-family:'Titillium Web',sans-serif;font-size:.88rem;font-weight:700;color:var(--text);flex:1;}
+.ned-body{flex:1;padding:1.1rem;font-size:.9rem;color:var(--text);line-height:1.7;border:none;background:transparent;resize:none;outline:none;font-family:'DM Sans',sans-serif;font-weight:300;}
+.ned-body::placeholder{color:var(--muted);}
+.ned-foot{padding:.6rem 1.1rem;border-top:1px solid var(--border);display:flex;align-items:center;gap:.5rem;}
+.ned-foot label{font-family:'Titillium Web',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+.tsw{position:relative;width:34px;height:18px;}
+.tsw input{opacity:0;width:0;height:0;}
+.ttrack{position:absolute;inset:0;border-radius:18px;background:var(--border);cursor:pointer;transition:background .2s;}
+.tsw input:checked+.ttrack{background:var(--orange);}
+.ttrack::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 4px rgba(0,0,0,.25);}
+.tsw input:checked+.ttrack::after{transform:translateX(16px);}
+.btn-back{background:none;border:none;cursor:pointer;color:var(--orange);font-family:'Titillium Web',sans-serif;font-size:.78rem;font-weight:700;letter-spacing:.08em;}
 
 /* INSIGHTS */
-.pyramid-wrap { margin-bottom: 1.1rem; }
-.pyramid { display: flex; flex-direction: column; align-items: center; gap: .2rem; }
-.pyr-row {
-  border-radius: 6px; display: flex; align-items: center; justify-content: center;
-  font-family: 'Titillium Web', sans-serif; font-size: .62rem; font-weight: 700;
-  letter-spacing: .08em; text-transform: uppercase; color: white; text-align: center;
-  padding: .4rem .5rem; transition: transform .2s;
-}
-.pyr-row:hover { transform: scaleX(1.02); }
+.btn-ins-day{width:100%;padding:.8rem;border-radius:var(--rs);background:linear-gradient(135deg,rgba(237,75,0,.14),rgba(10,132,255,.09));border:1px solid rgba(237,75,0,.22);color:var(--orange);font-family:'Titillium Web',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .2s;margin-bottom:1rem;backdrop-filter:blur(12px);}
+.btn-ins-day:hover{background:linear-gradient(135deg,rgba(237,75,0,.24),rgba(10,132,255,.16));}
 
-.insight-card { padding: 1.1rem; border-radius: var(--radius-sm); margin-bottom: .65rem; }
-.insight-author {
-  font-family: 'Titillium Web', sans-serif; font-size: .58rem; font-weight: 700;
-  letter-spacing: .12em; text-transform: uppercase; color: var(--orange); margin-bottom: .5rem;
-}
-.insight-text { font-size: .88rem; font-weight: 300; color: var(--text2); line-height: 1.7; font-style: italic; }
-.insight-source { font-size: .72rem; color: var(--muted); margin-top: .5rem; }
+/* PYRAMID & FUNNEL */
+.pyr{display:flex;flex-direction:column;align-items:center;gap:.18rem;}
+.pyr-row{border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Titillium Web',sans-serif;font-size:.62rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#fff;text-align:center;padding:.42rem .5rem;cursor:pointer;transition:all .2s;position:relative;}
+.pyr-row:hover{filter:brightness(1.15);transform:scaleX(1.02);}
+.pyr-row.sel{outline:2px solid #fff;outline-offset:2px;filter:brightness(1.2);}
 
-.btn-insight-day {
-  width: 100%; padding: .85rem; border-radius: var(--radius-sm);
-  background: linear-gradient(135deg, rgba(237,75,0,.15), rgba(10,132,255,.1));
-  border: 1px solid rgba(237,75,0,.25); color: var(--orange);
-  font-family: 'Titillium Web', sans-serif; font-size: .72rem; font-weight: 700;
-  letter-spacing: .12em; text-transform: uppercase; cursor: pointer; transition: all .2s;
-  margin-bottom: 1.1rem; backdrop-filter: blur(12px);
-}
-.btn-insight-day:hover { background: linear-gradient(135deg, rgba(237,75,0,.25), rgba(10,132,255,.15)); }
+.funnel{display:flex;flex-direction:column;align-items:center;gap:.18rem;}
+.fun-row{border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Titillium Web',sans-serif;font-size:.62rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#fff;text-align:center;padding:.42rem .5rem;cursor:pointer;transition:all .2s;}
+.fun-row:hover{filter:brightness(1.15);transform:scaleX(1.02);}
+.fun-row.sel{outline:2px solid #fff;outline-offset:2px;filter:brightness(1.2);}
+
+.ins-detail{padding:1rem;border-radius:var(--rs);margin-bottom:.75rem;border-left:3px solid var(--orange);animation:fadein .3s ease forwards;}
+.ins-detail-title{font-family:'Titillium Web',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--orange);margin-bottom:.5rem;}
+.ins-detail-body{font-size:.84rem;font-weight:300;color:var(--text2);line-height:1.7;}
+.ins-detail-apply{font-size:.78rem;color:var(--muted);line-height:1.6;margin-top:.5rem;}
+.ins-detail-apply b{color:var(--text);font-weight:500;}
+
+.icard{padding:1rem;border-radius:var(--rs);margin-bottom:.55rem;border-left:3px solid var(--orange);}
+.icard-author{font-family:'Titillium Web',sans-serif;font-size:.57rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--orange);margin-bottom:.4rem;}
+.icard-text{font-size:.86rem;font-weight:300;color:var(--text2);line-height:1.7;}
+.icard-context{font-size:.78rem;color:var(--muted);margin-top:.45rem;line-height:1.6;}
+.icard-apply{font-size:.78rem;color:var(--text2);margin-top:.45rem;line-height:1.6;padding-top:.45rem;border-top:1px solid var(--border);}
+.icard-apply b{color:var(--orange);font-weight:600;}
+.icard-book{font-family:'Titillium Web',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--subtle);margin-top:.35rem;}
 
 /* MODAL */
-.modal-overlay { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,.45); backdrop-filter: blur(6px); align-items: flex-end; justify-content: center; }
-.modal-overlay.show { display: flex; }
-.modal { background: var(--bg2); border-radius: 20px 20px 0 0; border: 1px solid var(--border); border-bottom: none; width: 100%; max-width: 600px; max-height: 92svh; overflow-y: auto; animation: slideUp .32s var(--ease) forwards; }
-@media (prefers-color-scheme: dark) { .modal { background: #1a1a22; } }
-@keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
-.modal-handle { width: 36px; height: 4px; border-radius: 2px; background: var(--subtle); margin: .7rem auto .4rem; }
-.modal-head { padding: .4rem 1.25rem .9rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
-.modal-title { font-family: 'Titillium Web', sans-serif; font-size: .95rem; font-weight: 700; color: var(--text); }
-.modal-close { width: 26px; height: 26px; border-radius: 50%; background: var(--tag-bg); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: .75rem; color: var(--muted); }
-.modal-body { padding: 1.1rem; }
-.ff { margin-bottom: 1rem; }
-.ff label { display: block; font-family: 'Titillium Web', sans-serif; font-size: .6rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; color: var(--muted); margin-bottom: .38rem; }
-.ff input, .ff select { width: 100%; background: var(--input-bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: .72rem .9rem; font-family: 'DM Sans', sans-serif; font-size: .9rem; color: var(--text); outline: none; appearance: none; -webkit-appearance: none; transition: border-color .2s, box-shadow .2s; }
-.ff input:focus, .ff select:focus { border-color: rgba(237,75,0,.5); box-shadow: 0 0 0 3px rgba(237,75,0,.1); }
-.ff input::placeholder { color: var(--muted); }
-.ff select option { background: var(--bg2); }
-.tag-sel { display: flex; flex-wrap: wrap; gap: .38rem; }
-.ts-btn { padding: .3rem .75rem; border: 1px solid var(--border); border-radius: 100px; font-family: 'Titillium Web', sans-serif; font-size: .6rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); background: var(--input-bg); cursor: pointer; transition: all .18s; }
-.ts-btn.on { background: var(--orange); border-color: var(--orange); color: white; }
-.btn-save { width: 100%; padding: .85rem; background: var(--orange); color: white; border: none; border-radius: var(--radius-sm); cursor: pointer; font-family: 'Titillium Web', sans-serif; font-size: .78rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; box-shadow: 0 4px 20px rgba(237,75,0,.3); transition: all .2s var(--ease); margin-top: .35rem; }
-.btn-save:active { transform: scale(.97); }
+.mo{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.45);backdrop-filter:blur(6px);align-items:flex-end;justify-content:center;}
+.mo.show{display:flex;}
+.modal{background:var(--bg2);border-radius:20px 20px 0 0;border:1px solid var(--border);border-bottom:none;width:100%;max-width:600px;max-height:93svh;overflow-y:auto;animation:slideUp .32s var(--ease) forwards;}
+@media(prefers-color-scheme:dark){.modal{background:#18181f;}}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+@keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.mh{width:36px;height:4px;border-radius:2px;background:var(--subtle);margin:.65rem auto .38rem;}
+.mhead{padding:.35rem 1.2rem .85rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.mtitle{font-family:'Titillium Web',sans-serif;font-size:.93rem;font-weight:700;color:var(--text);}
+.mclose{width:24px;height:24px;border-radius:50%;background:var(--tag);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.72rem;color:var(--muted);}
+.mbody{padding:1.1rem;}
+.ff{margin-bottom:.95rem;}
+.ff label{display:block;font-family:'Titillium Web',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:.36rem;}
+.ff input,.ff select,.ff textarea{width:100%;background:var(--inp);border:1px solid var(--border);border-radius:var(--rs);padding:.7rem .88rem;font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--text);outline:none;appearance:none;-webkit-appearance:none;transition:border-color .2s,box-shadow .2s;}
+.ff input:focus,.ff select:focus,.ff textarea:focus{border-color:rgba(237,75,0,.5);box-shadow:0 0 0 3px rgba(237,75,0,.1);}
+.ff input::placeholder,.ff textarea::placeholder{color:var(--muted);}
+.ff select option{background:var(--bg2);}
+.ff textarea{resize:vertical;min-height:70px;}
+.tsel{display:flex;flex-wrap:wrap;gap:.35rem;}
+.tsb{padding:.28rem .72rem;border:1px solid var(--border);border-radius:100px;font-family:'Titillium Web',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);background:var(--inp);cursor:pointer;transition:all .18s;}
+.tsb.on{background:var(--orange);border-color:var(--orange);color:#fff;}
+.btn-save{width:100%;padding:.82rem;background:var(--orange);color:#fff;border:none;border-radius:var(--rs);cursor:pointer;font-family:'Titillium Web',sans-serif;font-size:.76rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;box-shadow:0 4px 20px rgba(237,75,0,.3);transition:all .2s var(--ease);margin-top:.3rem;}
+.btn-save:active{transform:scale(.97);}
 </style>
 </head>
 <body>
 <div class="app">
 
-<!-- ══ SCREEN: HOME ══ -->
+<!-- HOME -->
 <div class="screen active" id="sc-home">
-  <div class="topbar">
-    <div class="topbar-left">
-      <div class="logo-mark"><div class="logo-mark-text">MV</div></div>
-      <div class="topbar-title">MV <span>·</span> Painel</div>
+  <div class="topbar"><div class="topbar-title">MV <span>·</span> Painel</div></div>
+  <div class="c">
+    <div style="margin-bottom:1rem">
+      <div class="h-greet-sub" id="greeting">Bom dia</div>
+      <div class="h-greet-name">Marcus <b>Valério</b></div>
     </div>
-  </div>
-  <div class="content">
-    <div class="home-header">
-      <div class="home-time" id="greeting">Bom dia</div>
-      <div class="home-name">Marcus <b>Valério</b></div>
+    <div class="gc postit">
+      <div class="postit-lbl">📌 Nota rápida</div>
+      <textarea class="postit-inp" id="postit-inp" placeholder="Anote algo importante..." rows="2" oninput="savePostit()"></textarea>
     </div>
-
-    <!-- Post-it -->
-    <div class="gcard postit">
-      <div class="postit-label">📌 Nota rápida</div>
-      <textarea class="postit-input" id="postit-input" placeholder="Anote algo importante..." rows="2" oninput="savePostit()"></textarea>
+    <div class="sg">
+      <div class="gc" style="padding:1rem"><div class="sc-num" id="s0">0</div><div class="sc-lbl">Briefings</div></div>
+      <div class="gc" style="padding:1rem"><div class="sc-num" id="s1">0</div><div class="sc-lbl">Propostas</div></div>
+      <div class="gc" style="padding:1rem"><div class="sc-num" id="s2">0</div><div class="sc-lbl">Projetos</div></div>
+      <div class="gc" style="padding:1rem"><div class="sc-num" id="s3" style="color:var(--red)">0</div><div class="sc-lbl">Urgentes</div></div>
     </div>
-
-    <!-- Summary -->
-    <div class="sum-grid">
-      <div class="gcard sum-card"><div class="sum-num" id="s-briefings">0</div><div class="sum-lbl">Briefings</div></div>
-      <div class="gcard sum-card"><div class="sum-num" id="s-propostas">0</div><div class="sum-lbl">Propostas</div></div>
-      <div class="gcard sum-card"><div class="sum-num" id="s-projetos">0</div><div class="sum-lbl">Projetos</div></div>
-      <div class="gcard sum-card"><div class="sum-num" id="s-urgentes" style="color:var(--red)">0</div><div class="sum-lbl">Urgentes</div></div>
+    <!-- TOTAL VALOR -->
+    <div class="gc" style="padding:1rem;margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between">
+      <div><div class="sc-lbl">Potencial em carteira</div><div id="total-val" style="font-family:'Oswald',sans-serif;font-weight:700;font-size:1.5rem;color:var(--orange);line-height:1.1;margin-top:.15rem">R$ 0</div></div>
+      <div style="text-align:right"><div class="sc-lbl">Projetos ativos</div><div id="total-proj-val" style="font-family:'Oswald',sans-serif;font-weight:700;font-size:1.5rem;color:var(--green);line-height:1.1;margin-top:.15rem">R$ 0</div></div>
     </div>
-
-    <!-- Charts -->
-    <div class="chart-row">
-      <div class="gcard chart-card">
-        <div class="chart-title">Briefings / mês</div>
-        <div class="bar-chart" id="bar-chart"></div>
-      </div>
-      <div class="gcard chart-card">
-        <div class="chart-title">Serviços</div>
-        <div class="donut-wrap">
-          <svg width="52" height="52" viewBox="0 0 52 52" id="donut-svg"><circle cx="26" cy="26" r="20" fill="none" stroke="var(--border)" stroke-width="8"/></svg>
-          <div class="donut-legend" id="donut-legend"></div>
-        </div>
-      </div>
+    <div class="dash-row">
+      <div class="gc dash-card"><div class="dash-title">Briefings / mês</div><div class="bar-chart" id="barchart"></div></div>
+      <div class="gc dash-card"><div class="dash-title">Serviços</div><div class="donut-wrap"><svg width="50" height="50" viewBox="0 0 50 50" id="donut"><circle cx="25" cy="25" r="19" fill="none" stroke="var(--border)" stroke-width="8"/></svg><div id="dleg"></div></div></div>
     </div>
-
-    <div class="sec-label">Prazos próximos</div>
-    <div id="home-prazos"><div class="empty"><div class="empty-icon">📋</div><div class="empty-text">Nenhum prazo.</div></div></div>
-
-    <div class="sec-label">Próximos eventos</div>
-    <div id="home-eventos"><div class="empty"><div class="empty-icon">📅</div><div class="empty-text">Nenhum evento.</div></div></div>
+    <div class="sl">Prazos próximos</div>
+    <div id="h-prazos"></div>
+    <div class="sl">Próximos eventos</div>
+    <div id="h-eventos"></div>
   </div>
 </div>
 
-<!-- ══ SCREEN: BPP ══ -->
+<!-- BPP -->
 <div class="screen" id="sc-bpp">
   <div class="topbar">
-    <div class="topbar-left">
-      <div class="logo-mark"><div class="logo-mark-text">MV</div></div>
-      <div class="topbar-title" id="bpp-title">Briefings</div>
-    </div>
-    <button class="topbar-action" id="bpp-add-btn" onclick="bppAdd()">+</button>
+    <div class="topbar-title" id="bpp-t">Briefings</div>
+    <div class="topbar-r"><button class="tb-btn" id="bpp-add" onclick="bppAdd()">+</button></div>
   </div>
   <div class="sub-nav">
-    <button class="sub-btn active" onclick="bppTab('briefings',this)">Briefings</button>
-    <button class="sub-btn" onclick="bppTab('propostas',this)">Propostas</button>
-    <button class="sub-btn" onclick="bppTab('projetos',this)">Projetos</button>
+    <button class="sb active" onclick="bppTab('briefings',this)">Briefings</button>
+    <button class="sb" onclick="bppTab('propostas',this)">Propostas</button>
+    <button class="sb" onclick="bppTab('projetos',this)">Projetos</button>
   </div>
-  <!-- Pipeline visual -->
-  <div class="pipeline-vis">
-    <div class="pip-step"><div class="pip-dot active" id="pip-0"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg></div><div class="pip-lbl active" id="pip-lbl-0">Briefing</div></div>
-    <div class="pip-line" id="pip-line-0"></div>
-    <div class="pip-step"><div class="pip-dot" id="pip-1"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.15 12 19.79 19.79 0 0 1 1.07 3.37a2 2 0 0 1 2-2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.82a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.01z"/></svg></div><div class="pip-lbl" id="pip-lbl-1">Proposta</div></div>
-    <div class="pip-line" id="pip-line-1"></div>
-    <div class="pip-step"><div class="pip-dot" id="pip-2"><svg viewBox="0 0 24 24"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg></div><div class="pip-lbl" id="pip-lbl-2">Projeto</div></div>
+  <div class="pip-vis">
+    <div class="pip-s"><div class="pip-d on" id="pd0"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg></div><div class="pip-l-lbl on" id="pl0">Brief.</div></div>
+    <div class="pip-ln" id="pln0"></div>
+    <div class="pip-s"><div class="pip-d" id="pd1"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.15 12 19.79 19.79 0 0 1 1.07 3.37a2 2 0 0 1 2-2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.82a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.01z"/></svg></div><div class="pip-l-lbl" id="pl1">Prop.</div></div>
+    <div class="pip-ln" id="pln1"></div>
+    <div class="pip-s"><div class="pip-d" id="pd2"><svg viewBox="0 0 24 24"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg></div><div class="pip-l-lbl" id="pl2">Projeto</div></div>
   </div>
-  <div class="content" style="padding-top:.4rem">
-    <div id="bpp-briefings"><div class="empty"><div class="empty-icon">📨</div><div class="empty-text">Nenhum briefing. Toque em + para adicionar.</div></div></div>
-    <div id="bpp-propostas" style="display:none"><div class="empty"><div class="empty-icon">📤</div><div class="empty-text">Nenhuma proposta.</div></div></div>
-    <div id="bpp-projetos" style="display:none"><div class="empty"><div class="empty-icon">⚡</div><div class="empty-text">Nenhum projeto em andamento.</div></div></div>
+  <div class="c" style="padding-top:.3rem">
+    <div id="bpp-briefings"></div>
+    <div id="bpp-propostas" style="display:none"></div>
+    <div id="bpp-projetos" style="display:none"></div>
   </div>
 </div>
 
-<!-- ══ SCREEN: AGENDA ══ -->
+<!-- AGENDA -->
 <div class="screen" id="sc-agenda">
-  <div class="topbar">
-    <div class="topbar-left">
-      <div class="logo-mark"><div class="logo-mark-text">MV</div></div>
-      <div class="topbar-title">Agenda</div>
-    </div>
-    <button class="topbar-action" onclick="openModal('m-evento')">+</button>
-  </div>
-  <div class="content">
-    <div class="cal-header">
-      <div class="cal-month" id="cal-label"></div>
-      <div class="cal-nav-wrap">
-        <button class="cal-nav-btn" onclick="calMove(-1)">‹</button>
-        <button class="cal-nav-btn" onclick="calMove(1)">›</button>
-      </div>
-    </div>
-    <div class="cal-grid" id="cal-grid"></div>
-    <div class="sec-label" id="cal-day-label">Eventos</div>
-    <div id="cal-events"><div class="empty"><div class="empty-icon">📅</div><div class="empty-text">Nenhum evento neste dia.</div></div></div>
+  <div class="topbar"><div class="topbar-title">Agenda</div><div class="topbar-r"><button class="tb-btn" onclick="openModal('m-evento')">+</button></div></div>
+  <div class="c">
+    <div class="cal-h"><div class="cal-m" id="cal-lbl"></div><div class="cal-nav"><button class="cal-nb" onclick="calMv(-1)">‹</button><button class="cal-nb" onclick="calMv(1)">›</button></div></div>
+    <div class="cg" id="cal-grid"></div>
+    <div class="sl" id="cal-day-lbl">Eventos</div>
+    <div id="cal-evs"></div>
   </div>
 </div>
 
-<!-- ══ SCREEN: NOTAS ══ -->
+<!-- NOTAS -->
 <div class="screen" id="sc-notas">
-  <div class="topbar">
-    <div class="topbar-left">
-      <div class="logo-mark"><div class="logo-mark-text">MV</div></div>
-      <div class="topbar-title">Notas</div>
-    </div>
-    <button class="topbar-action" onclick="openModal('m-nota')">+</button>
-  </div>
-  <div id="notas-list-view">
-    <div class="content">
-      <div id="notas-list"><div class="empty"><div class="empty-icon">📝</div><div class="empty-text">Nenhuma nota. Toque em + para criar.</div></div></div>
-    </div>
-  </div>
-  <div class="nota-editor" id="nota-editor">
-    <div class="nota-ed-header">
-      <button class="btn-back" onclick="closeNota()">← Voltar</button>
-      <div class="nota-ed-title" id="ned-title"></div>
-      <button class="btn-del" onclick="deleteNota()">🗑</button>
-    </div>
-    <textarea class="nota-ed-body" id="ned-body" placeholder="Escreva suas ideias e observações..." oninput="saveNotaBody()"></textarea>
-    <div class="nota-read-toggle">
-      <label for="nota-read-sw">Revisado</label>
-      <div class="toggle-sw"><input type="checkbox" id="nota-read-sw" onchange="toggleNotaRead()"><div class="toggle-track"></div></div>
-    </div>
+  <div class="topbar"><div class="topbar-title">Notas</div><div class="topbar-r"><button class="tb-btn" onclick="openModal('m-nota')">+</button></div></div>
+  <div id="nlv"><div class="c"><div id="nlist"></div></div></div>
+  <div class="ned" id="ned">
+    <div class="ned-h"><button class="btn-back" onclick="closeNota()">← Voltar</button><div class="ned-t" id="ned-t"></div><button class="btn-del" onclick="deleteNota()">🗑</button></div>
+    <textarea class="ned-body" id="ned-b" placeholder="Escreva aqui..." oninput="saveNB()"></textarea>
+    <div class="ned-foot"><label for="nsw">Revisado</label><div class="tsw"><input type="checkbox" id="nsw" onchange="toggleNR()"><div class="ttrack"></div></div></div>
   </div>
 </div>
 
-<!-- ══ SCREEN: INSIGHTS ══ -->
+<!-- INSIGHTS -->
 <div class="screen" id="sc-insights">
-  <div class="topbar">
-    <div class="topbar-left">
-      <div class="logo-mark"><div class="logo-mark-text">MV</div></div>
-      <div class="topbar-title">Insights</div>
-    </div>
-  </div>
-  <div class="content">
-    <button class="btn-insight-day" onclick="showRandomInsight()">✦ Insight do dia</button>
+  <div class="topbar"><div class="topbar-title">Insights</div></div>
+  <div class="c">
+    <button class="btn-ins-day" onclick="randInsight()">✦ Insight do dia</button>
+    <div id="rand-ins"></div>
 
-    <!-- Pirâmide -->
-    <div class="sec-label">Pirâmide do Marketing</div>
-    <div class="gcard pyramid-wrap" style="padding:1.1rem">
-      <div class="pyramid" id="pyramid"></div>
+    <div class="sl">Pirâmide do Marketing</div>
+    <div class="gc" style="padding:1.1rem;margin-bottom:.65rem">
+      <div class="pyr" id="pyr"></div>
+      <div id="pyr-detail"></div>
     </div>
 
-    <div class="sec-label">Biblioteca estratégica</div>
-    <div id="insights-list"></div>
+    <div class="sl">Funil de Marketing</div>
+    <div class="gc" style="padding:1.1rem;margin-bottom:.65rem">
+      <div class="funnel" id="funnel"></div>
+      <div id="fun-detail"></div>
+    </div>
+
+    <div class="sl">Biblioteca Estratégica</div>
+    <div id="ilib"></div>
   </div>
 </div>
 
-<!-- ══ BOTTOM NAV ══ -->
-<nav class="bottom-nav">
-  <div class="nav-pill-wrap">
-    <button class="nav-btn active" onclick="goScreen('home',this)">
-      <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg></div>
-      <div class="nav-label">Home</div>
-    </button>
-    <button class="nav-btn" onclick="goScreen('bpp',this)">
-      <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
-      <div class="nav-label">BPP</div>
-    </button>
-    <button class="nav-btn" onclick="goScreen('agenda',this)">
-      <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
-      <div class="nav-label">Agenda</div>
-    </button>
-    <button class="nav-btn" onclick="goScreen('notas',this)">
-      <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
-      <div class="nav-label">Notas</div>
-    </button>
-    <button class="nav-btn" onclick="goScreen('insights',this)">
-      <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
-      <div class="nav-label">Insights</div>
-    </button>
+<!-- BOTTOM NAV -->
+<nav class="bnav">
+  <div class="npill">
+    <button class="nbtn active" onclick="goS('home',this)"><div class="nicon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg></div><div class="nlbl">Home</div></button>
+    <button class="nbtn" onclick="goS('bpp',this)"><div class="nicon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><div class="nlbl">BPP</div></button>
+    <button class="nbtn" onclick="goS('agenda',this)"><div class="nicon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="nlbl">Agenda</div></button>
+    <button class="nbtn" onclick="goS('notas',this)"><div class="nicon"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div><div class="nlbl">Notas</div></button>
+    <button class="nbtn" onclick="goS('insights',this)"><div class="nicon"><svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7z"/><line x1="9" y1="21" x2="15" y2="21"/><line x1="9.5" y1="18" x2="14.5" y2="18"/></svg></div><div class="nlbl">Insights</div></button>
   </div>
 </nav>
 </div>
 
-<!-- ══ MODALS ══ -->
-<div class="modal-overlay" id="m-briefing" onclick="closeOut(event,'m-briefing')">
-  <div class="modal"><div class="modal-handle"></div>
-    <div class="modal-head"><div class="modal-title">Novo Briefing</div><button class="modal-close" onclick="closeModal('m-briefing')">✕</button></div>
-    <div class="modal-body">
-      <div class="ff"><label>Nome do cliente *</label><input type="text" id="b-nome" placeholder="Nome ou marca"></div>
-      <div class="ff"><label>Data de envio *</label><input type="date" id="b-data"></div>
-      <div class="ff"><label>Valor estimado (R$)</label><input type="number" id="b-valor" placeholder="0"></div>
-      <div class="ff"><label>Serviços</label><div class="tag-sel" id="b-tags"></div></div>
-      <button class="btn-save" onclick="saveBriefing()">Salvar briefing</button>
-    </div>
-  </div>
+<!-- MODALS -->
+<div class="mo" id="m-briefing" onclick="closeOut(event,'m-briefing')">
+  <div class="modal"><div class="mh"></div><div class="mhead"><div class="mtitle" id="mb-title">Novo Briefing</div><button class="mclose" onclick="closeModal('m-briefing')">✕</button></div>
+  <div class="mbody">
+    <input type="hidden" id="b-id">
+    <div class="ff"><label>Nome do cliente *</label><input type="text" id="b-nome" placeholder="Nome ou marca"></div>
+    <div class="ff"><label>Data de envio *</label><input type="date" id="b-data"></div>
+    <div class="ff"><label>Valor estimado (R$)</label><input type="number" id="b-valor" placeholder="0"></div>
+    <div class="ff"><label>Observações</label><textarea id="b-obs" placeholder="Anotações iniciais, contexto..."></textarea></div>
+    <div class="ff"><label>Serviços</label><div class="tsel" id="b-tags"></div></div>
+    <button class="btn-save" onclick="saveBriefing()">Salvar</button>
+  </div></div>
 </div>
 
-<div class="modal-overlay" id="m-proposta" onclick="closeOut(event,'m-proposta')">
-  <div class="modal"><div class="modal-handle"></div>
-    <div class="modal-head"><div class="modal-title">Nova Proposta</div><button class="modal-close" onclick="closeModal('m-proposta')">✕</button></div>
-    <div class="modal-body">
-      <div class="ff"><label>Nome do cliente *</label><input type="text" id="p-nome" placeholder="Nome ou marca"></div>
-      <div class="ff"><label>Status</label><select id="p-status"><option value="entregue">Entregue</option><option value="avaliacao">Em avaliação</option><option value="aguardando">Aguardando resposta</option></select></div>
-      <div class="ff"><label>Valor (R$)</label><input type="number" id="p-valor" placeholder="0"></div>
-      <div class="ff"><label>Serviços</label><div class="tag-sel" id="p-tags"></div></div>
-      <button class="btn-save" onclick="saveProposta()">Salvar proposta</button>
-    </div>
-  </div>
+<div class="mo" id="m-proposta" onclick="closeOut(event,'m-proposta')">
+  <div class="modal"><div class="mh"></div><div class="mhead"><div class="mtitle" id="mp-title">Nova Proposta</div><button class="mclose" onclick="closeModal('m-proposta')">✕</button></div>
+  <div class="mbody">
+    <input type="hidden" id="p-id">
+    <div class="ff"><label>Nome do cliente *</label><input type="text" id="p-nome" placeholder="Nome ou marca"></div>
+    <div class="ff"><label>Status</label><select id="p-status"><option value="entregue">Entregue</option><option value="avaliacao">Em avaliação</option><option value="aguardando">Aguardando resposta</option></select></div>
+    <div class="ff"><label>Valor (R$)</label><input type="number" id="p-valor" placeholder="0"></div>
+    <div class="ff"><label>Observações</label><textarea id="p-obs" placeholder="Notas, contexto da negociação..."></textarea></div>
+    <div class="ff"><label>Serviços</label><div class="tsel" id="p-tags"></div></div>
+    <button class="btn-save" onclick="saveProposta()">Salvar</button>
+  </div></div>
 </div>
 
-<div class="modal-overlay" id="m-projeto" onclick="closeOut(event,'m-projeto')">
-  <div class="modal"><div class="modal-handle"></div>
-    <div class="modal-head"><div class="modal-title">Novo Projeto</div><button class="modal-close" onclick="closeModal('m-projeto')">✕</button></div>
-    <div class="modal-body">
-      <div class="ff"><label>Nome do cliente *</label><input type="text" id="pr-nome" placeholder="Nome ou marca"></div>
-      <div class="ff"><label>Data de início *</label><input type="date" id="pr-data"></div>
-      <div class="ff"><label>Valor (R$)</label><input type="number" id="pr-valor" placeholder="0"></div>
-      <div class="ff"><label>Etapa atual</label><select id="pr-etapa"><option value="diagnostico">Diagnóstico</option><option value="identidade">Identidade visual</option><option value="estrategia">Estratégia</option><option value="conteudo">Conteúdo</option><option value="revisao">Revisão</option><option value="entrega">Entrega final</option></select></div>
-      <div class="ff"><label>Serviços</label><div class="tag-sel" id="pr-tags"></div></div>
-      <button class="btn-save" onclick="saveProjeto()">Salvar projeto</button>
-    </div>
-  </div>
+<div class="mo" id="m-projeto" onclick="closeOut(event,'m-projeto')">
+  <div class="modal"><div class="mh"></div><div class="mhead"><div class="mtitle" id="mpr-title">Novo Projeto</div><button class="mclose" onclick="closeModal('m-projeto')">✕</button></div>
+  <div class="mbody">
+    <input type="hidden" id="pr-id">
+    <div class="ff"><label>Nome do cliente *</label><input type="text" id="pr-nome" placeholder="Nome ou marca"></div>
+    <div class="ff"><label>Data de início *</label><input type="date" id="pr-data"></div>
+    <div class="ff"><label>Valor (R$)</label><input type="number" id="pr-valor" placeholder="0"></div>
+    <div class="ff"><label>Etapa atual</label><select id="pr-etapa"><option value="diagnostico">Diagnóstico</option><option value="identidade">Identidade visual</option><option value="estrategia">Estratégia</option><option value="conteudo">Conteúdo</option><option value="revisao">Revisão</option><option value="entrega">Entrega final</option></select></div>
+    <div class="ff"><label>Observações</label><textarea id="pr-obs" placeholder="Briefing evoluiu, mudanças, contexto..."></textarea></div>
+    <div class="ff"><label>Serviços</label><div class="tsel" id="pr-tags"></div></div>
+    <button class="btn-save" onclick="saveProjeto()">Salvar</button>
+  </div></div>
 </div>
 
-<div class="modal-overlay" id="m-evento" onclick="closeOut(event,'m-evento')">
-  <div class="modal"><div class="modal-handle"></div>
-    <div class="modal-head"><div class="modal-title">Novo Evento</div><button class="modal-close" onclick="closeModal('m-evento')">✕</button></div>
-    <div class="modal-body">
-      <div class="ff"><label>Título *</label><input type="text" id="e-titulo" placeholder="Ex: Reunião com cliente"></div>
-      <div class="ff"><label>Data *</label><input type="date" id="e-data"></div>
-      <div class="ff"><label>Horário</label><input type="time" id="e-hora"></div>
-      <button class="btn-save" onclick="saveEvento()">Salvar evento</button>
-    </div>
-  </div>
+<div class="mo" id="m-evento" onclick="closeOut(event,'m-evento')">
+  <div class="modal"><div class="mh"></div><div class="mhead"><div class="mtitle">Novo Evento</div><button class="mclose" onclick="closeModal('m-evento')">✕</button></div>
+  <div class="mbody">
+    <div class="ff"><label>Título *</label><input type="text" id="e-titulo" placeholder="Ex: Reunião com cliente"></div>
+    <div class="ff"><label>Data *</label><input type="date" id="e-data"></div>
+    <div class="ff"><label>Horário</label><input type="time" id="e-hora"></div>
+    <button class="btn-save" onclick="saveEvento()">Salvar</button>
+  </div></div>
 </div>
 
-<div class="modal-overlay" id="m-nota" onclick="closeOut(event,'m-nota')">
-  <div class="modal"><div class="modal-handle"></div>
-    <div class="modal-head"><div class="modal-title">Nova Nota</div><button class="modal-close" onclick="closeModal('m-nota')">✕</button></div>
-    <div class="modal-body">
-      <div class="ff"><label>Nome (cliente ou tema) *</label><input type="text" id="n-nome" placeholder="Ex: Matheus Personal"></div>
-      <button class="btn-save" onclick="saveNota()">Criar nota</button>
-    </div>
-  </div>
+<div class="mo" id="m-nota" onclick="closeOut(event,'m-nota')">
+  <div class="modal"><div class="mh"></div><div class="mhead"><div class="mtitle">Nova Nota</div><button class="mclose" onclick="closeModal('m-nota')">✕</button></div>
+  <div class="mbody">
+    <div class="ff"><label>Nome (cliente ou tema) *</label><input type="text" id="n-nome" placeholder="Ex: Matheus Personal"></div>
+    <button class="btn-save" onclick="saveNota()">Criar nota</button>
+  </div></div>
 </div>
 
 <script>
+// ── BRASÍLIA TIME ──
+function nowBRT(){return new Date(new Date().toLocaleString('en-US',{timeZone:'America/Sao_Paulo'}));}
+function todayStr(){const d=nowBRT();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+
+function updateGreeting(){
+  const h=nowBRT().getHours();
+  const g=h>=5&&h<12?'Bom dia ☀️':h>=12&&h<18?'Boa tarde 🌤':h>=18&&h<22?'Boa noite 🌙':'Boa madrugada 🌙';
+  const el=document.getElementById('greeting');if(el)el.textContent=g;
+}
+
 // ── DATA ──
-const SERVICES = ['Identidade visual','Posicionamento','Instagram','Tom de voz','Conteúdo','Proposta de valor','Auditoria'];
-let DB = JSON.parse(localStorage.getItem('mv3') || '{"briefings":[],"propostas":[],"projetos":[],"eventos":[],"notas":[],"postit":""}');
-const save = () => localStorage.setItem('mv3', JSON.stringify(DB));
-const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,6);
-
-// ── TIME (Brasília UTC-3) ──
-function nowBRT() {
-  const now = new Date();
-  const brt = new Date(now.toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' }));
-  return brt;
-}
-
-function todayBRT() {
-  const d = nowBRT(); d.setHours(0,0,0,0); return d;
-}
-
-function todayStr() {
-  const d = nowBRT();
-  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
-}
-
-function updateGreeting() {
-  const h = nowBRT().getHours();
-  const g = h < 12 ? 'Bom dia ☀️' : h < 18 ? 'Boa tarde 🌤' : 'Boa noite 🌙';
-  document.getElementById('greeting').textContent = g;
-}
+const SVCS=['Identidade visual','Posicionamento','Instagram','Tom de voz','Conteúdo','Proposta de valor','Auditoria'];
+let DB=JSON.parse(localStorage.getItem('mv4')||'{"briefings":[],"propostas":[],"projetos":[],"eventos":[],"notas":[],"postit":""}');
+const save=()=>localStorage.setItem('mv4',JSON.stringify(DB));
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 
 // ── BUSINESS DAYS ──
-function addBD(dateStr, days) {
-  const d = new Date(dateStr + 'T12:00:00'); let added = 0;
-  while (added < days) { d.setDate(d.getDate()+1); if (d.getDay()!==0 && d.getDay()!==6) added++; }
-  return d.toISOString().split('T')[0];
+function addBD(s,n){const d=new Date(s+'T12:00:00');let a=0;while(a<n){d.setDate(d.getDate()+1);if(d.getDay()!==0&&d.getDay()!==6)a++;}return d.toISOString().split('T')[0];}
+function bdUntil(t){
+  const today=nowBRT();today.setHours(0,0,0,0);
+  const target=new Date(t+'T12:00:00');
+  if(target<=today){let c=0;const d=new Date(target);while(d<today){d.setDate(d.getDate()+1);if(d.getDay()!==0&&d.getDay()!==6)c++;}return -c;}
+  let c=0;const d=new Date(today);while(d<target){d.setDate(d.getDate()+1);if(d.getDay()!==0&&d.getDay()!==6)c++;}return c;
 }
-
-function bdUntil(targetStr) {
-  const today = todayBRT(); today.setHours(0,0,0,0);
-  const target = new Date(targetStr + 'T12:00:00');
-  if (target <= today) {
-    let count = 0; const d = new Date(target);
-    while (d < today) { d.setDate(d.getDate()+1); if (d.getDay()!==0 && d.getDay()!==6) count++; }
-    return -count;
-  }
-  let count = 0; const d = new Date(today);
-  while (d < target) { d.setDate(d.getDate()+1); if (d.getDay()!==0 && d.getDay()!==6) count++; }
-  return count;
-}
-
-function fmtDate(str) {
-  const d = new Date(str+'T12:00:00');
-  return d.toLocaleDateString('pt-BR',{day:'2-digit',month:'short'});
-}
-
-function prazoClass(dias) { return dias < 0 ? 'prazo-urgent' : dias <= 2 ? 'prazo-warn' : 'prazo-ok'; }
-function prazoTxt(dias) { return dias < 0 ? `Vencido há ${Math.abs(dias)}du` : dias === 0 ? 'Vence hoje' : `${dias}du restantes`; }
-function prazoColor(dias) { return dias < 0 ? 'var(--red)' : dias <= 2 ? 'var(--yellow)' : 'var(--green)'; }
+function fmtDate(s){return new Date(s+'T12:00:00').toLocaleDateString('pt-BR',{day:'2-digit',month:'short'});}
+function ptc(d){return d<0?'pt-u':d<=2?'pt-w':'pt-ok';}
+function ptt(d){return d<0?`Vencido há ${Math.abs(d)}du`:d===0?'Vence hoje':`${d}du restantes`;}
+function ptcol(d){return d<0?'var(--red)':d<=2?'var(--yellow)':'var(--green)';}
+const fmtVal=v=>v?'R$'+Number(v).toLocaleString('pt-BR'):'';
 
 // ── NAV ──
-let currentScreen = 'home';
-let bppCurrent = 'briefings';
-
-function goScreen(id, btn) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('sc-' + id).classList.add('active');
-  btn.classList.add('active');
-  currentScreen = id;
-  if (id === 'home') renderHome();
-  if (id === 'bpp') { renderBPP(); }
-  if (id === 'agenda') renderCal();
-  if (id === 'notas') renderNotas();
-  if (id === 'insights') renderInsights();
+let bppCur='briefings';
+function goS(id,btn){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nbtn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sc-'+id).classList.add('active');btn.classList.add('active');
+  if(id==='home')renderHome();
+  if(id==='bpp')renderBPP();
+  if(id==='agenda')renderCal();
+  if(id==='notas')renderNotas();
+  if(id==='insights')renderInsights();
 }
 
-// ── BPP TAB ──
-function bppTab(tab, btn) {
-  bppCurrent = tab;
-  document.querySelectorAll('.sub-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  ['briefings','propostas','projetos'].forEach(t => {
-    document.getElementById('bpp-'+t).style.display = t === tab ? 'block' : 'none';
-  });
-  document.getElementById('bpp-title').textContent = tab.charAt(0).toUpperCase() + tab.slice(1);
-  // pipeline indicator
-  const idx = ['briefings','propostas','projetos'].indexOf(tab);
-  [0,1,2].forEach(i => {
-    const dot = document.getElementById('pip-'+i);
-    const lbl = document.getElementById('pip-lbl-'+i);
-    if (i <= idx) { dot.classList.add('active'); lbl.classList.add('active'); }
-    else { dot.classList.remove('active'); lbl.classList.remove('active'); }
-    if (i < 2) {
-      const line = document.getElementById('pip-line-'+i);
-      if (i < idx) line.classList.add('done'); else line.classList.remove('done');
-    }
+// ── BPP TABS ──
+function bppTab(tab,btn){
+  bppCur=tab;
+  document.querySelectorAll('.sb').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+  ['briefings','propostas','projetos'].forEach(t=>document.getElementById('bpp-'+t).style.display=t===tab?'block':'none');
+  document.getElementById('bpp-t').textContent=tab.charAt(0).toUpperCase()+tab.slice(1);
+  const idx=['briefings','propostas','projetos'].indexOf(tab);
+  [0,1,2].forEach(i=>{
+    document.getElementById('pd'+i).classList.toggle('on',i<=idx);
+    document.getElementById('pl'+i).classList.toggle('on',i<=idx);
+    if(i<2)document.getElementById('pln'+i).classList.toggle('done',i<idx);
   });
 }
-
-function bppAdd() {
-  if (bppCurrent === 'briefings') openModal('m-briefing');
-  else if (bppCurrent === 'propostas') openModal('m-proposta');
-  else openModal('m-projeto');
+function bppAdd(){
+  if(bppCur==='briefings')openModal('m-briefing',null,'b');
+  else if(bppCur==='propostas')openModal('m-proposta',null,'p');
+  else openModal('m-projeto',null,'pr');
 }
 
 // ── TAG SELECTORS ──
-function buildTagSel(containerId) {
-  const c = document.getElementById(containerId);
-  if (!c) return;
-  c.innerHTML = SERVICES.map(s => `<button class="ts-btn" onclick="this.classList.toggle('on')">${s}</button>`).join('');
-}
-
-function getSelTags(containerId) {
-  return [...document.querySelectorAll('#'+containerId+' .ts-btn.on')].map(b=>b.textContent);
-}
-
-function resetModal(id) {
-  document.querySelectorAll('#'+id+' input').forEach(i=>i.value='');
-  document.querySelectorAll('#'+id+' .ts-btn').forEach(b=>b.classList.remove('on'));
-  document.querySelectorAll('#'+id+' select').forEach(s=>s.selectedIndex=0);
-}
+function buildTS(cid){const c=document.getElementById(cid);if(!c)return;c.innerHTML=SVCS.map(s=>`<button class="tsb" onclick="this.classList.toggle('on')">${s}</button>`).join('');}
+function getTS(cid){return[...document.querySelectorAll('#'+cid+' .tsb.on')].map(b=>b.textContent);}
+function setTS(cid,tags){document.querySelectorAll('#'+cid+' .tsb').forEach(b=>b.classList.toggle('on',tags.includes(b.textContent)));}
 
 // ── MODALS ──
-function openModal(id) {
-  buildTagSel(id.replace('m-','') === 'briefing' ? 'b-tags' : id.replace('m-','') === 'proposta' ? 'p-tags' : 'pr-tags');
+function openModal(id,item,prefix){
+  buildTS(prefix+'-tags');
+  const isEdit=!!item;
+  if(id==='m-briefing')document.getElementById('mb-title').textContent=isEdit?'Editar Briefing':'Novo Briefing';
+  if(id==='m-proposta')document.getElementById('mp-title').textContent=isEdit?'Editar Proposta':'Nova Proposta';
+  if(id==='m-projeto')document.getElementById('mpr-title').textContent=isEdit?'Editar Projeto':'Novo Projeto';
+  if(item){
+    // fill fields
+    const fields={b:['nome','data','valor','obs'],p:['nome','status','valor','obs'],pr:['nome','data','valor','etapa','obs']};
+    (fields[prefix]||[]).forEach(f=>{const el=document.getElementById(prefix+'-'+f);if(el)el.value=item[f]||'';});
+    document.getElementById(prefix+'-id').value=item.id||'';
+    setTS(prefix+'-tags',item.tags||[]);
+  } else {
+    document.querySelectorAll('#'+id+' input:not([type=hidden])').forEach(i=>i.value='');
+    document.querySelectorAll('#'+id+' textarea').forEach(i=>i.value='');
+    document.querySelectorAll('#'+id+' .tsb').forEach(b=>b.classList.remove('on'));
+    document.querySelectorAll('#'+id+' select').forEach(s=>s.selectedIndex=0);
+    document.getElementById(prefix+'-id').value='';
+    const t=todayStr();
+    document.querySelectorAll('#'+id+' input[type="date"]').forEach(i=>{if(!i.value)i.value=t;});
+  }
   document.getElementById(id).classList.add('show');
-  const t = todayStr();
-  document.querySelectorAll('#'+id+' input[type="date"]').forEach(i=>{ if(!i.value) i.value=t; });
 }
-
-function closeModal(id) { document.getElementById(id).classList.remove('show'); }
-function closeOut(e,id) { if(e.target.classList.contains('modal-overlay')) closeModal(id); }
+function closeModal(id){document.getElementById(id).classList.remove('show');}
+function closeOut(e,id){if(e.target.classList.contains('mo'))closeModal(id);}
 
 // ── BRIEFINGS ──
-function saveBriefing() {
-  const nome = document.getElementById('b-nome').value.trim();
-  const data = document.getElementById('b-data').value;
-  if (!nome||!data) return;
-  const valor = parseFloat(document.getElementById('b-valor').value)||0;
-  const prazo = addBD(data, 7);
-  const tags = getSelTags('b-tags');
-  DB.briefings.push({id:uid(),nome,data,prazo,valor,tags,createdAt:Date.now()});
-  save(); closeModal('m-briefing'); resetModal('m-briefing'); renderBPP(); renderHome();
+function saveBriefing(){
+  const nome=document.getElementById('b-nome').value.trim();
+  const data=document.getElementById('b-data').value;
+  if(!nome||!data)return;
+  const valor=parseFloat(document.getElementById('b-valor').value)||0;
+  const obs=document.getElementById('b-obs').value;
+  const tags=getTS('b-tags');
+  const prazo=addBD(data,7);
+  const eid=document.getElementById('b-id').value;
+  if(eid){const b=DB.briefings.find(x=>x.id===eid);if(b){Object.assign(b,{nome,data,valor,obs,tags,prazo});}}
+  else DB.briefings.push({id:uid(),nome,data,valor,obs,tags,prazo,createdAt:Date.now()});
+  save();closeModal('m-briefing');renderBPP();renderHome();
 }
-
-function deleteBriefing(id) { DB.briefings = DB.briefings.filter(b=>b.id!==id); save(); renderBPP(); renderHome(); }
-
-function moveToProposta(id) {
-  const b = DB.briefings.find(b=>b.id===id);
-  if (!b) return;
-  DB.propostas.push({id:uid(),nome:b.nome,status:'entregue',valor:b.valor,tags:b.tags,data:todayStr(),createdAt:Date.now()});
-  DB.briefings = DB.briefings.filter(x=>x.id!==id);
-  save(); renderBPP(); renderHome();
-  // switch to propostas tab
-  const btn = document.querySelector('.sub-btn:nth-child(2)');
-  if(btn) bppTab('propostas',btn);
+function delB(id){DB.briefings=DB.briefings.filter(b=>b.id!==id);save();renderBPP();renderHome();}
+function moveToP(id){
+  const b=DB.briefings.find(b=>b.id===id);if(!b)return;
+  DB.propostas.push({id:uid(),nome:b.nome,status:'entregue',valor:b.valor,obs:b.obs||'',tags:b.tags,data:todayStr(),createdAt:Date.now()});
+  DB.briefings=DB.briefings.filter(x=>x.id!==id);
+  save();renderBPP();renderHome();
+  const btn=document.querySelector('.sb:nth-child(2)');if(btn)bppTab('propostas',btn);
 }
 
 // ── PROPOSTAS ──
-function saveProposta() {
-  const nome = document.getElementById('p-nome').value.trim();
-  if (!nome) return;
-  const status = document.getElementById('p-status').value;
-  const valor = parseFloat(document.getElementById('p-valor').value)||0;
-  const tags = getSelTags('p-tags');
-  DB.propostas.push({id:uid(),nome,status,valor,tags,data:todayStr(),createdAt:Date.now()});
-  save(); closeModal('m-proposta'); resetModal('m-proposta'); renderBPP(); renderHome();
+function saveProposta(){
+  const nome=document.getElementById('p-nome').value.trim();if(!nome)return;
+  const status=document.getElementById('p-status').value;
+  const valor=parseFloat(document.getElementById('p-valor').value)||0;
+  const obs=document.getElementById('p-obs').value;
+  const tags=getTS('p-tags');
+  const eid=document.getElementById('p-id').value;
+  if(eid){const p=DB.propostas.find(x=>x.id===eid);if(p){Object.assign(p,{nome,status,valor,obs,tags});}}
+  else DB.propostas.push({id:uid(),nome,status,valor,obs,tags,data:todayStr(),createdAt:Date.now()});
+  save();closeModal('m-proposta');renderBPP();renderHome();
 }
-
-function deleteProposta(id) { DB.propostas = DB.propostas.filter(p=>p.id!==id); save(); renderBPP(); renderHome(); }
-
-function moveToProjeto(id) {
-  const p = DB.propostas.find(p=>p.id===id);
-  if (!p) return;
-  DB.projetos.push({id:uid(),nome:p.nome,data:todayStr(),prazo:addBD(todayStr(),15),valor:p.valor,tags:p.tags,etapa:'diagnostico',createdAt:Date.now()});
-  DB.propostas = DB.propostas.filter(x=>x.id!==id);
-  save(); renderBPP(); renderHome();
-  const btn = document.querySelector('.sub-btn:nth-child(3)');
-  if(btn) bppTab('projetos',btn);
+function delP(id){DB.propostas=DB.propostas.filter(p=>p.id!==id);save();renderBPP();renderHome();}
+function moveToPR(id){
+  const p=DB.propostas.find(p=>p.id===id);if(!p)return;
+  const d=todayStr();
+  DB.projetos.push({id:uid(),nome:p.nome,data:d,prazo:addBD(d,15),valor:p.valor,obs:p.obs||'',tags:p.tags,etapa:'diagnostico',createdAt:Date.now()});
+  DB.propostas=DB.propostas.filter(x=>x.id!==id);
+  save();renderBPP();renderHome();
+  const btn=document.querySelector('.sb:nth-child(3)');if(btn)bppTab('projetos',btn);
 }
 
 // ── PROJETOS ──
-function saveProjeto() {
-  const nome = document.getElementById('pr-nome').value.trim();
-  const data = document.getElementById('pr-data').value;
-  if (!nome||!data) return;
-  const valor = parseFloat(document.getElementById('pr-valor').value)||0;
-  const etapa = document.getElementById('pr-etapa').value;
-  const prazo = addBD(data, 15);
-  const tags = getSelTags('pr-tags');
-  DB.projetos.push({id:uid(),nome,data,prazo,valor,etapa,tags,createdAt:Date.now()});
-  save(); closeModal('m-projeto'); resetModal('m-projeto'); renderBPP(); renderHome();
+function saveProjeto(){
+  const nome=document.getElementById('pr-nome').value.trim();
+  const data=document.getElementById('pr-data').value;if(!nome||!data)return;
+  const valor=parseFloat(document.getElementById('pr-valor').value)||0;
+  const etapa=document.getElementById('pr-etapa').value;
+  const obs=document.getElementById('pr-obs').value;
+  const tags=getTS('pr-tags');
+  const prazo=addBD(data,15);
+  const eid=document.getElementById('pr-id').value;
+  if(eid){const p=DB.projetos.find(x=>x.id===eid);if(p){Object.assign(p,{nome,data,valor,etapa,obs,tags,prazo});}}
+  else DB.projetos.push({id:uid(),nome,data,valor,etapa,obs,tags,prazo,createdAt:Date.now()});
+  save();closeModal('m-projeto');renderBPP();renderHome();
 }
-
-function deleteProjeto(id) { DB.projetos = DB.projetos.filter(p=>p.id!==id); save(); renderBPP(); renderHome(); }
+function delPR(id){DB.projetos=DB.projetos.filter(p=>p.id!==id);save();renderBPP();renderHome();}
 
 // ── RENDER BPP ──
-const etapaMap = {diagnostico:'Diagnóstico',identidade:'Identidade visual',estrategia:'Estratégia',conteudo:'Conteúdo',revisao:'Revisão',entrega:'Entrega final'};
-const statusMap = {entregue:['green','Entregue'],avaliacao:['blue','Em avaliação'],aguardando:['yellow','Aguardando']};
+const etapaM={diagnostico:'Diagnóstico',identidade:'Identidade visual',estrategia:'Estratégia',conteudo:'Conteúdo',revisao:'Revisão',entrega:'Entrega final'};
+const statusM={entregue:['g','Entregue'],avaliacao:['b','Em avaliação'],aguardando:['y','Aguardando']};
 
-function renderBPP() {
+function renderBPP(){
   // Briefings
-  const bEl = document.getElementById('bpp-briefings');
-  if (!DB.briefings.length) {
-    bEl.innerHTML = '<div class="empty"><div class="empty-icon">📨</div><div class="empty-text">Nenhum briefing. Toque em + para adicionar.</div></div>';
-  } else {
-    bEl.innerHTML = DB.briefings.map(b => {
-      const dias = bdUntil(b.prazo);
-      const pct = Math.max(0,Math.min(100,((7-Math.max(0,dias))/7)*100));
-      const tagsH = b.tags.map(t=>`<span class="tag">${t}</span>`).join('');
-      return `<div class="gcard pipe-item">
-        <div class="pipe-header">
-          <div><div class="pipe-name">${b.nome}</div><div class="pipe-date">Enviado ${fmtDate(b.data)}${b.valor?` · R$${b.valor.toLocaleString('pt-BR')}`:''}  </div></div>
-          <button class="btn-del" onclick="deleteBriefing('${b.id}')">✕</button>
-        </div>
-        ${b.tags.length?`<div class="pipe-tags">${tagsH}</div>`:''}
-        <div class="pipe-footer">
-          <span class="prazo-txt ${prazoClass(dias)}">${prazoTxt(dias)}</span>
-          <span style="font-family:'Titillium Web',sans-serif;font-size:.58rem;color:var(--muted)">Prazo: ${fmtDate(b.prazo)}</span>
-        </div>
-        <div class="prazo-bar"><div class="prazo-fill" style="width:${pct}%;background:${prazoColor(dias)}"></div></div>
-        <div class="pipe-actions"><button class="btn-move" onclick="moveToProposta('${b.id}')">→ Mover para Proposta</button></div>
-      </div>`;
-    }).join('');
-  }
+  const bEl=document.getElementById('bpp-briefings');
+  bEl.innerHTML=DB.briefings.length?DB.briefings.map(b=>{
+    const d=bdUntil(b.prazo);const pct=Math.max(0,Math.min(100,((7-Math.max(0,d))/7)*100));
+    const tagsH=b.tags.map(t=>`<span class="tag">${t}</span>`).join('');
+    return`<div class="gc pi">
+      <div class="pi-head">
+        <div><div class="pi-name">${b.nome}</div><div class="pi-date">Enviado ${fmtDate(b.data)}${b.valor?' · '+fmtVal(b.valor):''}</div>${b.obs?`<div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">${b.obs}</div>`:''}</div>
+        <button class="btn-del" onclick="delB('${b.id}')">✕</button>
+      </div>
+      ${tagsH?`<div class="pi-tags">${tagsH}</div>`:''}
+      <div class="pi-foot"><span class="pt ${ptc(d)}">${ptt(d)}</span><span style="font-family:'Titillium Web',sans-serif;font-size:.56rem;color:var(--muted)">Prazo: ${fmtDate(b.prazo)}</span></div>
+      <div class="pbar"><div class="pbar-f" style="width:${pct}%;background:${ptcol(d)}"></div></div>
+      <div class="pi-actions">
+        <button class="btn-edit" onclick='openModal("m-briefing",${JSON.stringify(b)},"b")'>✏ Editar</button>
+        <button class="btn-mv" onclick="moveToP('${b.id}')">→ Proposta</button>
+      </div>
+    </div>`;
+  }).join(''):'<div class="empty"><div class="ei">📨</div><div class="et">Nenhum briefing. Toque em + para adicionar.</div></div>';
 
   // Propostas
-  const pEl = document.getElementById('bpp-propostas');
-  if (!DB.propostas.length) {
-    pEl.innerHTML = '<div class="empty"><div class="empty-icon">📤</div><div class="empty-text">Nenhuma proposta.</div></div>';
-  } else {
-    pEl.innerHTML = DB.propostas.map(p => {
-      const [sc,sl] = statusMap[p.status]||['',''];
-      const tagsH = p.tags.map(t=>`<span class="tag">${t}</span>`).join('');
-      return `<div class="gcard pipe-item">
-        <div class="pipe-header">
-          <div><div class="pipe-name">${p.nome}</div><div class="pipe-date">${fmtDate(p.data)}${p.valor?` · R$${p.valor.toLocaleString('pt-BR')}`:''}  </div></div>
-          <div style="display:flex;align-items:center;gap:.4rem"><span class="tag ${sc}">${sl}</span><button class="btn-del" onclick="deleteProposta('${p.id}')">✕</button></div>
-        </div>
-        ${p.tags.length?`<div class="pipe-tags">${tagsH}</div>`:''}
-        <div class="pipe-actions"><button class="btn-move" onclick="moveToProjeto('${p.id}')">→ Mover para Projeto</button></div>
-      </div>`;
-    }).join('');
-  }
+  const pEl=document.getElementById('bpp-propostas');
+  pEl.innerHTML=DB.propostas.length?DB.propostas.map(p=>{
+    const[sc,sl]=statusM[p.status]||['',''];
+    const tagsH=p.tags.map(t=>`<span class="tag">${t}</span>`).join('');
+    return`<div class="gc pi">
+      <div class="pi-head">
+        <div><div class="pi-name">${p.nome}</div><div class="pi-date">${fmtDate(p.data)}${p.valor?' · '+fmtVal(p.valor):''}</div>${p.obs?`<div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">${p.obs}</div>`:''}</div>
+        <div style="display:flex;align-items:center;gap:.35rem"><span class="tag ${sc}">${sl}</span><button class="btn-del" onclick="delP('${p.id}')">✕</button></div>
+      </div>
+      ${tagsH?`<div class="pi-tags">${tagsH}</div>`:''}
+      <div class="pi-actions">
+        <button class="btn-edit" onclick='openModal("m-proposta",${JSON.stringify(p)},"p")'>✏ Editar</button>
+        <button class="btn-mv" onclick="moveToPR('${p.id}')">→ Projeto</button>
+      </div>
+    </div>`;
+  }).join(''):'<div class="empty"><div class="ei">📤</div><div class="et">Nenhuma proposta.</div></div>';
 
   // Projetos
-  const prEl = document.getElementById('bpp-projetos');
-  if (!DB.projetos.length) {
-    prEl.innerHTML = '<div class="empty"><div class="empty-icon">⚡</div><div class="empty-text">Nenhum projeto em andamento.</div></div>';
-  } else {
-    prEl.innerHTML = DB.projetos.map(p => {
-      const dias = bdUntil(p.prazo);
-      const tagsH = p.tags.map(t=>`<span class="tag">${t}</span>`).join('');
-      return `<div class="gcard pipe-item">
-        <div class="pipe-header">
-          <div><div class="pipe-name">${p.nome}</div><div class="pipe-date">Início ${fmtDate(p.data)}${p.valor?` · R$${p.valor.toLocaleString('pt-BR')}`:''}  </div></div>
-          <div style="display:flex;align-items:center;gap:.4rem"><span class="tag blue">${etapaMap[p.etapa]||p.etapa}</span><button class="btn-del" onclick="deleteProjeto('${p.id}')">✕</button></div>
-        </div>
-        ${p.tags.length?`<div class="pipe-tags">${tagsH}</div>`:''}
-        <div class="pipe-footer">
-          <span class="prazo-txt ${prazoClass(dias)}">${prazoTxt(dias)}</span>
-          <span style="font-family:'Titillium Web',sans-serif;font-size:.58rem;color:var(--muted)">Entrega: ${fmtDate(p.prazo)}</span>
-        </div>
-      </div>`;
-    }).join('');
-  }
+  const prEl=document.getElementById('bpp-projetos');
+  prEl.innerHTML=DB.projetos.length?DB.projetos.map(p=>{
+    const d=bdUntil(p.prazo);const tagsH=p.tags.map(t=>`<span class="tag">${t}</span>`).join('');
+    return`<div class="gc pi">
+      <div class="pi-head">
+        <div><div class="pi-name">${p.nome}</div><div class="pi-date">Início ${fmtDate(p.data)}${p.valor?' · '+fmtVal(p.valor):''}</div>${p.obs?`<div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">${p.obs}</div>`:''}</div>
+        <div style="display:flex;align-items:center;gap:.35rem"><span class="tag b">${etapaM[p.etapa]||p.etapa}</span><button class="btn-del" onclick="delPR('${p.id}')">✕</button></div>
+      </div>
+      ${tagsH?`<div class="pi-tags">${tagsH}</div>`:''}
+      <div class="pi-foot"><span class="pt ${ptc(d)}">${ptt(d)}</span><span style="font-family:'Titillium Web',sans-serif;font-size:.56rem;color:var(--muted)">Entrega: ${fmtDate(p.prazo)}</span></div>
+      <div class="pi-actions"><button class="btn-edit" onclick='openModal("m-projeto",${JSON.stringify(p)},"pr")'>✏ Editar</button></div>
+    </div>`;
+  }).join(''):'<div class="empty"><div class="ei">⚡</div><div class="et">Nenhum projeto em andamento.</div></div>';
 }
 
 // ── AGENDA ──
-let calDate = nowBRT();
-let selectedDay = todayStr();
-
-function renderCal() {
-  const months = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-  document.getElementById('cal-label').textContent = months[calDate.getMonth()] + ' ' + calDate.getFullYear();
-  const grid = document.getElementById('cal-grid');
-  const tStr = todayStr();
-  const first = new Date(calDate.getFullYear(), calDate.getMonth(), 1);
-  const last = new Date(calDate.getFullYear(), calDate.getMonth()+1, 0);
-  let h = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'].map(d=>`<div class="cal-lbl">${d}</div>`).join('');
-  for (let i=0;i<first.getDay();i++) h+='<div></div>';
-  for (let d=1;d<=last.getDate();d++) {
-    const iso = calDate.getFullYear()+'-'+String(calDate.getMonth()+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
-    const isToday = iso===tStr;
-    const isSel = iso===selectedDay;
-    const hasEv = DB.eventos.some(e=>e.data===iso);
-    h+=`<div class="cal-day${isToday?' today':''}${isSel&&!isToday?' selected':''}${hasEv?' has-event':''}" onclick="selectDay('${iso}')">${d}</div>`;
+let calDate=nowBRT();let selDay=todayStr();
+function renderCal(){
+  const M=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  document.getElementById('cal-lbl').textContent=M[calDate.getMonth()]+' '+calDate.getFullYear();
+  const first=new Date(calDate.getFullYear(),calDate.getMonth(),1);
+  const last=new Date(calDate.getFullYear(),calDate.getMonth()+1,0);
+  const tStr=todayStr();
+  let h=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'].map(d=>`<div class="cdl">${d}</div>`).join('');
+  for(let i=0;i<first.getDay();i++)h+='<div></div>';
+  for(let d=1;d<=last.getDate();d++){
+    const iso=calDate.getFullYear()+'-'+String(calDate.getMonth()+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+    const isT=iso===tStr;const isS=iso===selDay;const hasE=DB.eventos.some(e=>e.data===iso);
+    h+=`<div class="cd${isT?' today':''}${isS&&!isT?' sel':''}${hasE?' hev':''}" onclick="selDay('${iso}')">${d}</div>`;
   }
-  grid.innerHTML = h;
-  renderDayEvs(selectedDay);
+  document.getElementById('cal-grid').innerHTML=h;renderDayEvs(selDay);
 }
-
-function calMove(d) { calDate.setMonth(calDate.getMonth()+d); renderCal(); }
-
-function selectDay(iso) {
-  selectedDay = iso;
+function calMv(d){calDate.setMonth(calDate.getMonth()+d);renderCal();}
+function selDay(iso){selDay=iso;renderCal();}
+function renderDayEvs(iso){
+  const d=new Date(iso+'T12:00:00');
+  document.getElementById('cal-day-lbl').textContent=d.toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long'});
+  const evs=DB.eventos.filter(e=>e.data===iso);
+  document.getElementById('cal-evs').innerHTML=evs.length?evs.map(e=>`<div class="gc ev-item"><div class="ev-dot"></div><div class="ev-name">${e.titulo}</div><div class="ev-time">${e.hora||''}</div><button class="btn-del" onclick="delEv('${e.id}')" style="margin-left:.4rem">✕</button></div>`).join(''):'<div style="padding:.3rem 0;font-size:.8rem;color:var(--muted)">Nenhum evento neste dia.</div>';
+}
+function saveEvento(){
+  const titulo=document.getElementById('e-titulo').value.trim();
+  const data=document.getElementById('e-data').value;if(!titulo||!data)return;
+  const hora=document.getElementById('e-hora').value;
+  DB.eventos.push({id:uid(),titulo,data,hora,createdAt:Date.now()});
+  save();closeModal('m-evento');
+  document.getElementById('e-titulo').value='';document.getElementById('e-hora').value='';
   renderCal();
 }
-
-function renderDayEvs(iso) {
-  const d = new Date(iso+'T12:00:00');
-  document.getElementById('cal-day-label').textContent = d.toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long'});
-  const evs = DB.eventos.filter(e=>e.data===iso);
-  const el = document.getElementById('cal-events');
-  if (!evs.length) { el.innerHTML='<div style="padding:.4rem 0;font-size:.82rem;color:var(--muted)">Nenhum evento neste dia.</div>'; return; }
-  el.innerHTML = evs.map(e=>`<div class="gcard event-item">
-    <div class="event-dot"></div>
-    <div class="event-name">${e.titulo}</div>
-    <div class="event-time">${e.hora||''}</div>
-    <button class="btn-del" onclick="deleteEvento('${e.id}')" style="margin-left:.4rem">✕</button>
-  </div>`).join('');
-}
-
-function saveEvento() {
-  const titulo = document.getElementById('e-titulo').value.trim();
-  const data = document.getElementById('e-data').value;
-  if (!titulo||!data) return;
-  const hora = document.getElementById('e-hora').value;
-  DB.eventos.push({id:uid(),titulo,data,hora,createdAt:Date.now()});
-  save(); closeModal('m-evento'); resetModal('m-evento'); renderCal();
-}
-
-function deleteEvento(id) { DB.eventos=DB.eventos.filter(e=>e.id!==id); save(); renderCal(); }
+function delEv(id){DB.eventos=DB.eventos.filter(e=>e.id!==id);save();renderCal();}
 
 // ── NOTAS ──
-let currentNota = null;
-
-function renderNotas() {
-  document.getElementById('notas-list-view').style.display='flex';
-  document.getElementById('notas-list-view').style.flexDirection='column';
-  document.getElementById('notas-list-view').style.flex='1';
-  document.getElementById('nota-editor').classList.remove('show');
-  const el = document.getElementById('notas-list');
-  if (!DB.notas.length) { el.innerHTML='<div class="empty"><div class="empty-icon">📝</div><div class="empty-text">Nenhuma nota. Toque em + para criar.</div></div>'; return; }
-  el.innerHTML = DB.notas.map(n=>`<div class="gcard nota-list-item" onclick="openNota('${n.id}')">
-    <div style="display:flex;align-items:center;justify-content:space-between">
-      <div class="nota-item-name">${n.nome}</div>
-      ${n.revisado?'<span class="tag green">Revisado</span>':''}
-    </div>
-    <div class="nota-item-prev">${n.conteudo||'Sem conteúdo ainda...'}</div>
-    <div class="nota-item-meta">${fmtDate(n.data)}</div>
-  </div>`).join('');
+let curNota=null;
+function renderNotas(){
+  document.getElementById('nlv').style.display='flex';document.getElementById('nlv').style.flexDirection='column';document.getElementById('nlv').style.flex='1';
+  document.getElementById('ned').classList.remove('show');
+  document.getElementById('nlist').innerHTML=DB.notas.length?DB.notas.map(n=>`<div class="gc nota-li" onclick="openNota('${n.id}')"><div style="display:flex;align-items:center;justify-content:space-between"><div class="nota-li-name">${n.nome}</div>${n.revisado?'<span class="tag g">Revisado</span>':''}</div><div class="nota-li-prev">${n.conteudo||'Sem conteúdo ainda...'}</div><div class="nota-li-meta">${fmtDate(n.data)}</div></div>`).join(''):'<div class="empty"><div class="ei">📝</div><div class="et">Nenhuma nota. Toque em + para criar.</div></div>';
 }
-
-function saveNota() {
-  const nome = document.getElementById('n-nome').value.trim();
-  if (!nome) return;
-  DB.notas.push({id:uid(),nome,conteudo:'',data:todayStr(),revisado:false,createdAt:Date.now()});
-  save(); closeModal('m-nota'); resetModal('m-nota'); renderNotas();
-}
-
-function openNota(id) {
-  currentNota = DB.notas.find(n=>n.id===id);
-  if (!currentNota) return;
-  document.getElementById('ned-title').textContent = currentNota.nome;
-  document.getElementById('ned-body').value = currentNota.conteudo||'';
-  document.getElementById('nota-read-sw').checked = currentNota.revisado||false;
-  document.getElementById('notas-list-view').style.display='none';
-  document.getElementById('nota-editor').classList.add('show');
-}
-
-function closeNota() { renderNotas(); }
-
-function saveNotaBody() {
-  if (!currentNota) return;
-  const n = DB.notas.find(n=>n.id===currentNota.id);
-  if (n) { n.conteudo = document.getElementById('ned-body').value; save(); }
-}
-
-function toggleNotaRead() {
-  if (!currentNota) return;
-  const n = DB.notas.find(n=>n.id===currentNota.id);
-  if (n) { n.revisado = document.getElementById('nota-read-sw').checked; save(); }
-}
-
-function deleteNota() {
-  if (!currentNota) return;
-  if (!confirm('Deletar esta nota?')) return;
-  DB.notas = DB.notas.filter(n=>n.id!==currentNota.id);
-  save(); currentNota=null; renderNotas();
-}
+function saveNota(){const nome=document.getElementById('n-nome').value.trim();if(!nome)return;DB.notas.push({id:uid(),nome,conteudo:'',data:todayStr(),revisado:false,createdAt:Date.now()});save();closeModal('m-nota');document.getElementById('n-nome').value='';renderNotas();}
+function openNota(id){curNota=DB.notas.find(n=>n.id===id);if(!curNota)return;document.getElementById('ned-t').textContent=curNota.nome;document.getElementById('ned-b').value=curNota.conteudo||'';document.getElementById('nsw').checked=curNota.revisado||false;document.getElementById('nlv').style.display='none';document.getElementById('ned').classList.add('show');}
+function closeNota(){renderNotas();}
+function saveNB(){if(!curNota)return;const n=DB.notas.find(n=>n.id===curNota.id);if(n){n.conteudo=document.getElementById('ned-b').value;save();}}
+function toggleNR(){if(!curNota)return;const n=DB.notas.find(n=>n.id===curNota.id);if(n){n.revisado=document.getElementById('nsw').checked;save();}}
+function deleteNota(){if(!curNota)return;if(!confirm('Deletar esta nota?'))return;DB.notas=DB.notas.filter(n=>n.id!==curNota.id);save();curNota=null;renderNotas();}
 
 // ── POSTIT ──
-function savePostit() { DB.postit = document.getElementById('postit-input').value; save(); }
+function savePostit(){DB.postit=document.getElementById('postit-inp').value;save();}
 
 // ── HOME ──
-function renderHome() {
+function renderHome(){
   updateGreeting();
-  document.getElementById('postit-input').value = DB.postit||'';
-  document.getElementById('s-briefings').textContent = DB.briefings.length;
-  document.getElementById('s-propostas').textContent = DB.propostas.length;
-  document.getElementById('s-projetos').textContent = DB.projetos.length;
-  const urg = DB.briefings.filter(b=>bdUntil(b.prazo)<=2).length + DB.projetos.filter(p=>bdUntil(p.prazo)<=3).length;
-  document.getElementById('s-urgentes').textContent = urg;
+  document.getElementById('postit-inp').value=DB.postit||'';
+  document.getElementById('s0').textContent=DB.briefings.length;
+  document.getElementById('s1').textContent=DB.propostas.length;
+  document.getElementById('s2').textContent=DB.projetos.length;
+  const urg=DB.briefings.filter(b=>bdUntil(b.prazo)<=2).length+DB.projetos.filter(p=>bdUntil(p.prazo)<=3).length;
+  document.getElementById('s3').textContent=urg;
 
-  // Bar chart (last 4 months)
-  const months=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-  const now = nowBRT();
-  const bars = [];
-  for (let i=3;i>=0;i--) {
-    const m = new Date(now.getFullYear(), now.getMonth()-i, 1);
-    const key = m.getFullYear()+'-'+String(m.getMonth()+1).padStart(2,'0');
-    const count = DB.briefings.filter(b=>b.data&&b.data.startsWith(key)).length;
-    bars.push({label:months[m.getMonth()],count});
-  }
-  const maxB = Math.max(...bars.map(b=>b.count),1);
-  document.getElementById('bar-chart').innerHTML = bars.map(b=>`<div class="bar-item">
-    <div class="bar-fill" style="height:${Math.max(4,(b.count/maxB)*44)}px"></div>
-    <div class="bar-lbl">${b.label}</div>
-  </div>`).join('');
+  // Totais de valor
+  const totAll=[...DB.briefings,...DB.propostas,...DB.projetos].reduce((s,i)=>s+(i.valor||0),0);
+  const totProj=DB.projetos.reduce((s,p)=>s+(p.valor||0),0);
+  document.getElementById('total-val').textContent='R$ '+totAll.toLocaleString('pt-BR',{minimumFractionDigits:0});
+  document.getElementById('total-proj-val').textContent='R$ '+totProj.toLocaleString('pt-BR',{minimumFractionDigits:0});
 
-  // Donut (services)
-  const tagCount = {};
-  [...DB.briefings,...DB.propostas,...DB.projetos].forEach(item=>(item.tags||[]).forEach(t=>{ tagCount[t]=(tagCount[t]||0)+1; }));
-  const colors=['#ED4B00','#0a84ff','#34c759','#ff9f0a','#bf5af2','#ff3b30','#5ac8fa'];
-  const entries = Object.entries(tagCount).slice(0,5);
-  const total = entries.reduce((s,[,v])=>s+v,0)||1;
-  let offset = 0; let donutSegs = '';
-  const circ = 2*Math.PI*20;
-  entries.forEach(([k,v],i)=>{
-    const pct = v/total; const len = pct*circ;
-    donutSegs+=`<circle cx="26" cy="26" r="20" fill="none" stroke="${colors[i%colors.length]}" stroke-width="8" stroke-dasharray="${len} ${circ-len}" stroke-dashoffset="${-offset}" transform="rotate(-90 26 26)" opacity=".85"/>`;
-    offset+=len;
-  });
-  document.getElementById('donut-svg').innerHTML = `<circle cx="26" cy="26" r="20" fill="none" stroke="var(--border)" stroke-width="8"/>${donutSegs}`;
-  document.getElementById('donut-legend').innerHTML = entries.slice(0,3).map(([k,v],i)=>`<div class="donut-leg-item"><div class="donut-dot" style="background:${colors[i%colors.length]}"></div><div class="donut-leg-label">${k}</div></div>`).join('');
+  // Bar chart (4 meses)
+  const M=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+  const now=nowBRT();
+  const bars=[];
+  for(let i=3;i>=0;i--){const m=new Date(now.getFullYear(),now.getMonth()-i,1);const key=m.getFullYear()+'-'+String(m.getMonth()+1).padStart(2,'0');const cnt=DB.briefings.filter(b=>b.data&&b.data.startsWith(key)).length;bars.push({l:M[m.getMonth()],c:cnt});}
+  const mx=Math.max(...bars.map(b=>b.c),1);
+  document.getElementById('barchart').innerHTML=bars.map(b=>`<div class="bi"><div class="bn">${b.c||''}</div><div class="bf" style="height:${Math.max(3,(b.c/mx)*38)}px"></div><div class="bl">${b.l}</div></div>`).join('');
+
+  // Donut
+  const tc={};[...DB.briefings,...DB.propostas,...DB.projetos].forEach(item=>(item.tags||[]).forEach(t=>{tc[t]=(tc[t]||0)+1;}));
+  const cols=['#ED4B00','#0a84ff','#34c759','#ff9f0a','#bf5af2'];
+  const ents=Object.entries(tc).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const tot=ents.reduce((s,[,v])=>s+v,0)||1;
+  const circ=2*Math.PI*19;let off=0;let segs='';
+  ents.forEach(([k,v],i)=>{const l=(v/tot)*circ;segs+=`<circle cx="25" cy="25" r="19" fill="none" stroke="${cols[i%5]}" stroke-width="8" stroke-dasharray="${l} ${circ-l}" stroke-dashoffset="${-off}" transform="rotate(-90 25 25)" opacity=".85"/>`;off+=l;});
+  document.getElementById('donut').innerHTML=`<circle cx="25" cy="25" r="19" fill="none" stroke="var(--border)" stroke-width="8"/>${segs}`;
+  document.getElementById('dleg').innerHTML=ents.slice(0,3).map(([k,v],i)=>`<div class="dleg-item"><div class="ddot" style="background:${cols[i%5]}"></div><div class="dleg-lbl">${k}</div></div>`).join('');
 
   // Prazos
-  const all=[...DB.briefings.map(b=>({nome:b.nome,prazo:b.prazo,tipo:'Briefing'})),...DB.projetos.map(p=>({nome:p.nome,prazo:p.prazo,tipo:'Projeto'}))].sort((a,b)=>a.prazo.localeCompare(b.prazo)).slice(0,4);
-  const pEl=document.getElementById('home-prazos');
-  pEl.innerHTML = all.length ? all.map(p=>{const d=bdUntil(p.prazo);return`<div class="gcard event-item"><div class="event-dot" style="${d<=2?'background:var(--red)':''}"></div><div class="event-name">${p.nome} <span style="font-size:.72rem;color:var(--muted)">(${p.tipo})</span></div><span class="prazo-txt ${prazoClass(d)}" style="font-size:.6rem">${prazoTxt(d)}</span></div>`;}).join('') : '<div class="empty"><div class="empty-icon">📋</div><div class="empty-text">Nenhum prazo.</div></div>';
+  const all=[...DB.briefings.map(b=>({n:b.nome,p:b.prazo,t:'Brief.'})),...DB.projetos.map(p=>({n:p.nome,p:p.prazo,t:'Projeto'}))].sort((a,b)=>a.p.localeCompare(b.p)).slice(0,4);
+  document.getElementById('h-prazos').innerHTML=all.length?all.map(p=>{const d=bdUntil(p.p);return`<div class="gc ev-item"><div class="ev-dot" style="${d<=2?'background:var(--red)':''}"></div><div class="ev-name">${p.n} <span style="font-size:.7rem;color:var(--muted)">(${p.t})</span></div><span class="pt ${ptc(d)}" style="font-size:.57rem">${ptt(d)}</span></div>`;}).join(''):'<div class="empty"><div class="ei">📋</div><div class="et">Nenhum prazo.</div></div>';
 
   // Eventos
   const tStr=todayStr();
   const evs=DB.eventos.filter(e=>e.data>=tStr).sort((a,b)=>a.data.localeCompare(b.data)).slice(0,3);
-  const eEl=document.getElementById('home-eventos');
-  eEl.innerHTML = evs.length ? evs.map(e=>`<div class="gcard event-item"><div class="event-dot"></div><div class="event-name">${e.titulo}</div><div class="event-time">${fmtDate(e.data)}${e.hora?' · '+e.hora:''}</div></div>`).join('') : '<div class="empty"><div class="empty-icon">📅</div><div class="empty-text">Nenhum evento.</div></div>';
+  document.getElementById('h-eventos').innerHTML=evs.length?evs.map(e=>`<div class="gc ev-item"><div class="ev-dot"></div><div class="ev-name">${e.titulo}</div><div class="ev-time">${fmtDate(e.data)}${e.hora?' · '+e.hora:''}</div></div>`).join(''):'<div class="empty"><div class="ei">📅</div><div class="et">Nenhum evento.</div></div>';
 }
 
 // ── INSIGHTS ──
-const PYRAMID = [
-  {label:'Consciência',color:'#ED4B00',w:'100%'},
-  {label:'Interesse',color:'#e85d28',w:'86%'},
-  {label:'Desejo',color:'#c44a1e',w:'72%'},
-  {label:'Ação',color:'#a33a18',w:'58%'},
-  {label:'Retenção',color:'#7a2b12',w:'44%'},
+const PYR=[
+  {l:'Consciência',c:'#ED4B00',w:'100%',desc:'A base de tudo. O cliente precisa saber que você existe antes de qualquer coisa.',apply:'Como aplicar: presença constante, conteúdo de topo de funil, SEO, redes sociais. O objetivo aqui não é vender, é aparecer.'},
+  {l:'Interesse',c:'#e8560a',w:'85%',desc:'O cliente já te conhece e começa a se perguntar se você tem algo a ver com ele.',apply:'Como aplicar: conteúdo que mostra como você resolve um problema específico. Depoimentos, cases, bastidores. Começa a construir relacionamento.'},
+  {l:'Consideração',c:'#c44520',w:'70%',desc:'O cliente está comparando você com alternativas. Aqui a marca precisa ser mais forte que o preço.',apply:'Como aplicar: diferenciais claros, proposta de valor sólida, autoridade demonstrada. É aqui que uma boa identidade de marca separa quem fecha de quem fica só "na lista".'},
+  {l:'Intenção',c:'#a33518',w:'55%',desc:'O cliente já decidiu que quer resolver o problema. A questão agora é com quem.',apply:'Como aplicar: facilitar o contato, ter um briefing ou proposta acessível, resposta rápida. Reduzir atrito.'},
+  {l:'Conversão',c:'#7a2812',w:'40%',desc:'O cliente fechou. Mas a venda real começa aqui, com a entrega e a experiência.',apply:'Como aplicar: onboarding claro, comunicação constante, entregar mais do que prometeu. É aqui que se cria um cliente que indica.'},
+  {l:'Lealdade',c:'#521b0d',w:'26%',desc:'O topo. O cliente não só voltou como te recomenda. É o marketing mais poderoso que existe.',apply:'Como aplicar: acompanhamento pós-entrega, checar resultados com o cliente, criar vínculo humano além do projeto.'},
 ];
 
-const INSIGHTS = [
-  {author:'Philip Kotler',book:'Administração de Marketing',text:'Marketing não é a arte de encontrar formas inteligentes de descartar o que você faz. É a arte de criar valor genuíno para os clientes.'},
-  {author:'Philip Kotler',book:'Marketing 4.0',text:'Na era digital, o caminho para o coração dos consumidores passa pela criação de conteúdo que educa, inspira e entretém.'},
-  {author:'Philip Kotler',book:'Marketing de A a Z',text:'A melhor propaganda é feita por clientes satisfeitos. A pior, por clientes insatisfeitos.'},
-  {author:'Al Ries & Jack Trout',book:'Posicionamento',text:'Posicionamento não é o que você faz com um produto. É o que você faz com a mente do cliente potencial.'},
-  {author:'Al Ries & Jack Trout',book:'As 22 Consagradas Leis do Marketing',text:'É melhor ser o primeiro do que ser o melhor. É muito mais fácil entrar na mente primeiro do que convencer alguém de que você tem um produto melhor do que o que chegou lá antes.'},
-  {author:'Al Ries & Jack Trout',book:'Posicionamento',text:'A batalha do marketing é uma batalha de percepções, não de produtos.'},
-  {author:'Marty Neumeier',book:'The Brand Gap',text:'Uma marca não é um logo. Não é uma identidade corporativa. Não é um produto. Uma marca é o sentimento visceral de uma pessoa sobre um produto, serviço ou empresa.'},
-  {author:'Marty Neumeier',book:'Zag',text:'Quando todos seguem em zigue, você deve seguir em zague. A diferenciação radical é o único antídoto para a irrelevância.'},
-  {author:'Marty Neumeier',book:'The Brand Gap',text:'Confiança é criada não por meio de discurso, mas por comportamento consistente ao longo do tempo.'},
-  {author:'Seth Godin',book:'This Is Marketing',text:'O marketing não é mais sobre o que você faz, mas sobre as histórias que você conta.'},
-  {author:'Seth Godin',book:'Purple Cow',text:'Ser seguro é arriscado. O extraordinário, o notável, o surpreendente — esses são os únicos que as pessoas comentam.'},
-  {author:'David Aaker',book:'Construindo Marcas Fortes',text:'Uma marca forte é um ativo estratégico. Ela representa uma promessa ao cliente e um conjunto de valores que cria diferenciação sustentável.'},
+const FUNNEL=[
+  {l:'Topo (ToFu)',c:'#0a84ff',w:'100%',desc:'Atração. O objetivo é gerar tráfego e visibilidade para o maior número de pessoas possível.',apply:'Como aplicar: conteúdo educativo, redes sociais, SEO, posts sobre dores comuns do seu público. Não fale de você, fale dos problemas que seu público tem.'},
+  {l:'Meio (MoFu)',c:'#0070d8',w:'78%',desc:'Engajamento. Pessoas que já te conhecem e estão considerando. Hora de aprofundar a relação.',apply:'Como aplicar: newsletter, conteúdo mais denso, cases de resultado, comparativos. Mostre autoridade e crie confiança.'},
+  {l:'Fundo (BoFu)',c:'#0058a8',w:'56%',desc:'Conversão. Pessoas prontas para decidir. Seu trabalho é remover a última objeção.',apply:'Como aplicar: proposta personalizada, depoimentos específicos, sessão de diagnóstico gratuita, briefing bem estruturado.'},
+  {l:'Pós-venda',c:'#003d78',w:'36%',desc:'Retenção e indicação. O cliente que ficou satisfeito é seu melhor canal de aquisição.',apply:'Como aplicar: check-ins de resultado, pesquisa de satisfação, programa de indicação. Um cliente satisfeito vale mais do que qualquer anúncio.'},
 ];
 
-let lastInsight = -1;
+let selPyr=-1;let selFun=-1;
 
-function showRandomInsight() {
-  let idx;
-  do { idx = Math.floor(Math.random()*INSIGHTS.length); } while (idx===lastInsight&&INSIGHTS.length>1);
-  lastInsight = idx;
-  const ins = INSIGHTS[idx];
-  const el = document.getElementById('insights-list');
-  const card = document.createElement('div');
-  card.className = 'gcard insight-card';
-  card.style.cssText = 'border-left:3px solid var(--orange);animation:fadeInUp .4s ease forwards';
-  card.innerHTML = `<div class="insight-author">${ins.author}</div><div class="insight-text">"${ins.text}"</div><div class="insight-source">${ins.book}</div>`;
-  el.insertBefore(card, el.firstChild);
+function renderPyr(){
+  document.getElementById('pyr').innerHTML=PYR.map((p,i)=>`<div class="pyr-row${selPyr===i?' sel':''}" style="width:${p.w};background:${p.c}" onclick="selectPyr(${i})">${p.l}</div>`).join('');
+  const det=document.getElementById('pyr-detail');
+  if(selPyr>=0){const p=PYR[selPyr];det.innerHTML=`<div class="ins-detail" style="margin-top:.75rem"><div class="ins-detail-title">${p.l}</div><div class="ins-detail-body">${p.desc}</div><div class="ins-detail-apply">${p.apply}</div></div>`;}
+  else det.innerHTML='<div style="text-align:center;padding:.5rem;font-size:.78rem;color:var(--muted)">Toque em um nível para saber mais.</div>';
+}
+function selectPyr(i){selPyr=selPyr===i?-1:i;renderPyr();}
+
+function renderFunnel(){
+  document.getElementById('funnel').innerHTML=FUNNEL.map((f,i)=>`<div class="fun-row${selFun===i?' sel':''}" style="width:${f.w};background:${f.c}" onclick="selectFun(${i})">${f.l}</div>`).join('');
+  const det=document.getElementById('fun-detail');
+  if(selFun>=0){const f=FUNNEL[selFun];det.innerHTML=`<div class="ins-detail" style="margin-top:.75rem"><div class="ins-detail-title">${f.l}</div><div class="ins-detail-body">${f.desc}</div><div class="ins-detail-apply">${f.apply}</div></div>`;}
+  else det.innerHTML='<div style="text-align:center;padding:.5rem;font-size:.78rem;color:var(--muted)">Toque em um nível para saber mais.</div>';
+}
+function selectFun(i){selFun=selFun===i?-1:i;renderFunnel();}
+
+const ILIB=[
+  {author:'Philip Kotler',book:'Administração de Marketing',text:'O que é marketing?',context:'Kotler define marketing não como uma técnica de vendas, mas como um processo de criação de valor. A empresa que entende o que o cliente precisa antes de criar o produto já está à frente.',apply:'Para o seu trabalho: antes de criar qualquer identidade visual ou estratégia de conteúdo, o primeiro passo é entender o que o negócio do cliente realmente entrega de valor. O briefing existe exatamente para isso.'},
+  {author:'Philip Kotler',book:'Marketing 4.0',text:'Da influência vertical para a horizontal',context:'No marketing moderno, a recomendação de outro consumidor vale mais do que qualquer anúncio. As pessoas confiam mais em quem é parecido com elas do que em marcas.',apply:'Para o seu trabalho: construir uma marca que gera defensores naturais vale mais do que uma campanha paga. Quando você cria identidade e posicionamento sólidos, o cliente se torna embaixador da marca sem precisar ser pedido.'},
+  {author:'Al Ries & Jack Trout',book:'Posicionamento',text:'A batalha pelo espaço mental',context:'Posicionamento não é sobre o produto, é sobre a percepção. O cliente não compra o produto mais técnico ou mais barato — ele compra o que ocupa o lugar certo na sua mente.',apply:'Para o seu trabalho: o exercício de posicionamento com um cliente começa sempre pela pergunta certa. "O que você quer que as pessoas pensem quando ouvem o nome da sua marca?" A resposta para essa pergunta guia tudo.'},
+  {author:'Al Ries & Jack Trout',book:'As 22 Consagradas Leis do Marketing',text:'A Lei da Liderança',context:'É melhor ser o primeiro do que ser o melhor. Quem chega primeiro na mente do consumidor tem uma vantagem enorme que é quase impossível de recuperar com superioridade de produto.',apply:'Para o seu trabalho: ajude seus clientes a encontrar uma categoria onde podem ser primeiros, mesmo que seja uma categoria menor e mais específica. Ser o melhor personal trainer para executivos de 40 anos é mais poderoso do que ser "mais um personal trainer".'},
+  {author:'Marty Neumeier',book:'The Brand Gap',text:'O que é uma marca de verdade?',context:'Uma marca não é um logo, não é uma identidade corporativa, não é um produto. Uma marca é o sentimento visceral que uma pessoa tem sobre um produto, serviço ou empresa. Você não controla sua marca, quem a controla é o cliente.',apply:'Para o seu trabalho: seu papel como estrategista é criar as condições para que esse sentimento seja o certo. Você não pode forçar percepção, mas pode criar consistência, tom, visual e posicionamento que orientam essa percepção na direção desejada.'},
+  {author:'Marty Neumeier',book:'Zag',text:'Diferenciação radical',context:'Quando todos no mercado fazem a mesma coisa, a única forma de se destacar é ir na direção oposta. Não é sobre ser diferente por ser diferente, é sobre encontrar o espaço em branco que ninguém está ocupando.',apply:'Para o seu trabalho: quando um cliente diz que quer ser "moderno, acessível e de qualidade", esse não é um posicionamento, é uma descrição genérica. O trabalho estratégico é encontrar o que realmente diferencia esse negócio de qualquer outro.'},
+  {author:'Seth Godin',book:'Purple Cow',text:'O extraordinário como estratégia',context:'Em um campo cheio de vacas marrons, uma vaca roxa seria notada. No mercado saturado de hoje, ser meramente bom não é suficiente. O notável é o único que as pessoas falam.',apply:'Para o seu trabalho: pergunte ao cliente qual é a "vaca roxa" do negócio dele. O que é tão incomum, tão específico, tão próprio que faria alguém parar e comentar? Essa resposta é onde a estratégia começa.'},
+  {author:'David Aaker',book:'Construindo Marcas Fortes',text:'Identidade de marca vs imagem de marca',context:'A identidade de marca é o que a empresa quer ser. A imagem é o que o consumidor percebe. O trabalho de branding é fechar esse gap, fazendo com que a percepção se aproxime da intenção.',apply:'Para o seu trabalho: o diagnóstico de marca começa por mapear esse gap. Como o dono vê o negócio versus como os clientes descrevem. Frequentemente são coisas completamente diferentes — e essa distância é exatamente onde a estratégia age.'},
+];
+
+let lastIns=-1;
+function randInsight(){
+  let i;do{i=Math.floor(Math.random()*ILIB.length);}while(i===lastIns&&ILIB.length>1);
+  lastIns=i;const ins=ILIB[i];
+  const el=document.getElementById('rand-ins');
+  el.innerHTML=`<div class="gc icard" style="border-left:3px solid var(--orange);margin-bottom:1rem">
+    <div class="icard-author">${ins.author} · ${ins.book}</div>
+    <div class="icard-text">${ins.text}</div>
+    <div class="icard-context">${ins.context}</div>
+    <div class="icard-apply"><b>Como aplicar:</b> ${ins.apply.replace('Para o seu trabalho: ','')}</div>
+  </div>`;
 }
 
-function renderInsights() {
-  // Pyramid
-  document.getElementById('pyramid').innerHTML = PYRAMID.map(p=>`<div class="pyr-row" style="width:${p.w};background:${p.color}">${p.label}</div>`).join('');
-  // Initial insights
-  if (!document.getElementById('insights-list').children.length) {
-    document.getElementById('insights-list').innerHTML = INSIGHTS.slice(0,4).map(ins=>`<div class="gcard insight-card" style="border-left:3px solid var(--orange)"><div class="insight-author">${ins.author}</div><div class="insight-text">"${ins.text}"</div><div class="insight-source">${ins.book}</div></div>`).join('');
-  }
+function renderInsights(){
+  renderPyr();renderFunnel();
+  document.getElementById('ilib').innerHTML=ILIB.map(ins=>`<div class="gc icard">
+    <div class="icard-author">${ins.author}</div>
+    <div class="icard-text">${ins.text}</div>
+    <div class="icard-context">${ins.context}</div>
+    <div class="icard-apply"><b>Como aplicar:</b> ${ins.apply.replace('Para o seu trabalho: ','')}</div>
+    <div class="icard-book">${ins.book}</div>
+  </div>`).join('');
 }
 
 // ── INIT ──
-document.addEventListener('DOMContentLoaded', ()=>{
-  updateGreeting();
-  renderHome();
-  renderBPP();
-  renderCal();
-  renderNotas();
-  renderInsights();
-  setInterval(updateGreeting, 60000);
-  // build tag selectors on page load
-  ['b-tags','p-tags','pr-tags'].forEach(buildTagSel);
+document.addEventListener('DOMContentLoaded',()=>{
+  updateGreeting();renderHome();renderBPP();renderCal();renderNotas();renderInsights();
+  ['b-tags','p-tags','pr-tags'].forEach(buildTS);
+  setInterval(updateGreeting,60000);
 });
 </script>
 </body>
